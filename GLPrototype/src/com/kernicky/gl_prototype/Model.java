@@ -6,6 +6,7 @@ import java.nio.FloatBuffer;
 
 import android.opengl.GLES20;
 
+
 abstract class Model {
 	private int mProgram;
 	private FloatBuffer vertexBuffer, normalBuffer, ambientBuffer,
@@ -18,14 +19,14 @@ abstract class Model {
 	private final int COORDS_PER_VERTEX = 3;
 	private final int vertexStride = COORDS_PER_VERTEX * 4;
 
-	public Model(float[] coords, float[] normals, float[] amb, float[] diff,
+	public void setData(float[] coords, float[] normals, float[] amb, float[] diff,
 			float[] spec, float[] shine) {
-		this.coords = coords;
-		this.normals = normals;
-		this.amb = amb;
-		this.diff = diff;
-		this.spec = spec;
-		this.shine = shine;
+		this.setCoords(coords);
+		this.setNormals(normals);
+		this.setAmb(amb);
+		this.setDiff(diff);
+		this.setSpec(spec);
+		this.setShine(shine);
 		initBuffers();
 		createShaderProgram();
 	}
@@ -34,55 +35,54 @@ abstract class Model {
 		// initialize vertex byte buffer for shape coordinates
 		ByteBuffer bbp = ByteBuffer.allocateDirect(
 		// (# of coordinate values * 4 bytes per float)
-				coords.length * 4);
+				getCoords().length * 4);
 		bbp.order(ByteOrder.nativeOrder());
 		vertexBuffer = bbp.asFloatBuffer();
-		vertexBuffer.put(coords);
+		vertexBuffer.put(getCoords());
 		vertexBuffer.position(0);
 
-		ByteBuffer bbn = ByteBuffer.allocateDirect(normals.length * 4);
+		ByteBuffer bbn = ByteBuffer.allocateDirect(getNormals().length * 4);
 		bbn.order(ByteOrder.nativeOrder());
 		normalBuffer = bbn.asFloatBuffer();
-		normalBuffer.put(normals);
+		normalBuffer.put(getNormals());
 		normalBuffer.position(0);
 
-		ByteBuffer bba = ByteBuffer.allocateDirect(amb.length * 4);
+		ByteBuffer bba = ByteBuffer.allocateDirect(getAmb().length * 4);
 		bba.order(ByteOrder.nativeOrder());
 		ambientBuffer = bba.asFloatBuffer();
-		ambientBuffer.put(amb);
+		ambientBuffer.put(getAmb());
 		ambientBuffer.position(0);
 
-		ByteBuffer bbd = ByteBuffer.allocateDirect(diff.length * 4);
+		ByteBuffer bbd = ByteBuffer.allocateDirect(getDiff().length * 4);
 		bbd.order(ByteOrder.nativeOrder());
 		diffuseBuffer = bbd.asFloatBuffer();
-		diffuseBuffer.put(diff);
+		diffuseBuffer.put(getDiff());
 		diffuseBuffer.position(0);
 
-		ByteBuffer bbsp = ByteBuffer.allocateDirect(spec.length * 4);
+		ByteBuffer bbsp = ByteBuffer.allocateDirect(getSpec().length * 4);
 		bbsp.order(ByteOrder.nativeOrder());
 		specularBuffer = bbsp.asFloatBuffer();
-		specularBuffer.put(spec);
+		specularBuffer.put(getSpec());
 		specularBuffer.position(0);
 
-		ByteBuffer bbsh = ByteBuffer.allocateDirect(shine.length * 4);
+		ByteBuffer bbsh = ByteBuffer.allocateDirect(getShine().length * 4);
 		bbsh.order(ByteOrder.nativeOrder());
 		shininessBuffer = bbsp.asFloatBuffer();
-		shininessBuffer.put(shine);
+		shininessBuffer.put(getShine());
 		shininessBuffer.position(0);
 	}
 
 	public void createShaderProgram() {
 		// prepare shaders and OpenGL program
 		int vertexShader = MyGLRenderer.loadShader(GLES20.GL_VERTEX_SHADER,
-				vertexShaderCode);
+				ShaderData.vertexShaderCode);
 		int fragmentShader = MyGLRenderer.loadShader(GLES20.GL_FRAGMENT_SHADER,
-				fragmentShaderCode);
+				ShaderData.fragmentShaderCode);
 
 		mProgram = GLES20.glCreateProgram(); // create empty OpenGL Program
-		GLES20.glAttachShader(mProgram, vertexShader); // add the vertex shader
-														// to program
-		GLES20.glAttachShader(mProgram, fragmentShader); // add the fragment
-															// shader to program
+		GLES20.glAttachShader(mProgram, vertexShader); // add vertex shader									
+		GLES20.glAttachShader(mProgram, fragmentShader); // add fragment shader
+															
 		GLES20.glBindAttribLocation(mProgram, 1, "a_Position");
 		GLES20.glBindAttribLocation(mProgram, 2, "a_Normal");
 		GLES20.glBindAttribLocation(mProgram, 3, "a_Ambient");
@@ -186,9 +186,58 @@ abstract class Model {
 		mLightPosHandle = GLES20.glGetUniformLocation(mProgram, "u_LightPos");
 		GLES20.glUniform3fv(mLightPosHandle, 3, mLightPos, 0);
 
-		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, coords.length / 3);
+		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, getCoords().length / 3);
 		// Disable vertex array
 		GLES20.glDisableVertexAttribArray(mPositionHandle);
 		// GLES20.glDisableVertexAttribArray(mNormalHandle);
 	}
+
+	protected float[] getCoords() {
+		return coords;
+	}
+
+	protected void setCoords(float coords[]) {
+		this.coords = coords;
+	}
+
+	protected float[] getNormals() {
+		return normals;
+	}
+
+	protected void setNormals(float normals[]) {
+		this.normals = normals;
+	}
+
+	protected float[] getSpec() {
+		return spec;
+	}
+
+	protected void setSpec(float spec[]) {
+		this.spec = spec;
+	}
+
+	protected float[] getDiff() {
+		return diff;
+	}
+
+	protected void setDiff(float diff[]) {
+		this.diff = diff;
+	}
+
+	protected float[] getAmb() {
+		return amb;
+	}
+
+	protected void setAmb(float amb[]) {
+		this.amb = amb;
+	}
+
+	protected float[] getShine() {
+		return shine;
+	}
+
+	protected void setShine(float shine[]) {
+		this.shine = shine;
+	}
+	
 }
