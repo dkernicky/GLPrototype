@@ -5,6 +5,7 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 import android.opengl.GLES20;
+import android.opengl.Matrix;
 
 
 abstract class Model {
@@ -92,28 +93,19 @@ abstract class Model {
 		GLES20.glLinkProgram(mProgram); // create OpenGL program executables
 	}
 
+	public void initHandles() {
+		
+	}
+	
 	public void draw(float[] mvMatrix, float[] mvpMatrix, float[] mLightPos) {
 		// Add program to OpenGL environment
 		GLES20.glUseProgram(mProgram);
 
 		vertexBuffer.position(0);
-		mPositionHandle = GLES20.glGetAttribLocation(mProgram, "a_Position"); // get
-																				// handle
-																				// to
-																				// vertex
-																				// shader's
-																				// vPosition
-																				// member
-		// System.out.println("P**************" + mPositionHandle);
-		GLES20.glEnableVertexAttribArray(mPositionHandle); // Enable a handle to
-															// the triangle
-															// vertices
+		mPositionHandle = GLES20.glGetAttribLocation(mProgram, "a_Position");
+		GLES20.glEnableVertexAttribArray(mPositionHandle);
 		GLES20.glVertexAttribPointer(mPositionHandle, COORDS_PER_VERTEX,
-				GLES20.GL_FLOAT, false, vertexStride, vertexBuffer); // Prepare
-																		// the
-																		// triangle
-																		// coordinate
-																		// data
+				GLES20.GL_FLOAT, false, vertexStride, vertexBuffer);
 
 		mNormalHandle = GLES20.glGetAttribLocation(mProgram, "a_Normal");
 		// System.out.println("N**************" + mNormalHandle);
@@ -121,7 +113,6 @@ abstract class Model {
 		GLES20.glVertexAttribPointer(mNormalHandle, COORDS_PER_VERTEX,
 				GLES20.GL_FLOAT, false, vertexStride, normalBuffer);
 		MyGLRenderer.checkGlError("normal");
-		// System.out.println("sdlakfhlaskdjfhklsjadhilfjkdhaslkfjsdfsadfsd");
 
 		mAmbHandle = GLES20.glGetAttribLocation(mProgram, "a_Ambient");
 		// System.out.println("A**************" + mAmbHandle);
@@ -151,45 +142,23 @@ abstract class Model {
 				GLES20.GL_FLOAT, false, 4, shininessBuffer);
 		MyGLRenderer.checkGlError("shininess");
 
-		mMVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "u_MVPMatrix"); // get
-																					// handle
-																					// to
-																					// shape's
-																					// transformation
-																					// matrix
+		mMVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "u_MVPMatrix");
 		// System.out.println("M**************" + mMVPMatrixHandle);
 		MyGLRenderer.checkGlError("glGetUniformLocation");
-		GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mvpMatrix, 0); // Apply
-																				// the
-																				// projection
-																				// and
-																				// view
-																				// transformation
+		GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mvpMatrix, 0);
 		MyGLRenderer.checkGlError("glUniformMatrix4fv");
 
-		mMVMatrixHandle = GLES20.glGetUniformLocation(mProgram, "u_MVMatrix"); // get
-																				// handle
-																				// to
-																				// shape's
-																				// transformation
-																				// matrix
+		mMVMatrixHandle = GLES20.glGetUniformLocation(mProgram, "u_MVMatrix");
 		// System.out.println("M**************" + mMVPMatrixHandle);
 		MyGLRenderer.checkGlError("glGetUniformLocation");
-		GLES20.glUniformMatrix4fv(mMVMatrixHandle, 1, false, mvMatrix, 0); // Apply
-																			// the
-																			// projection
-																			// and
-																			// view
-																			// transformation
+		GLES20.glUniformMatrix4fv(mMVMatrixHandle, 1, false, mvMatrix, 0);
 		MyGLRenderer.checkGlError("glUniformMatrix4fv");
 
 		mLightPosHandle = GLES20.glGetUniformLocation(mProgram, "u_LightPos");
 		GLES20.glUniform3fv(mLightPosHandle, 3, mLightPos, 0);
 
 		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, getCoords().length / 3);
-		// Disable vertex array
 		GLES20.glDisableVertexAttribArray(mPositionHandle);
-		// GLES20.glDisableVertexAttribArray(mNormalHandle);
 	}
 
 	protected float[] getCoords() {
