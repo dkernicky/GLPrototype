@@ -15,7 +15,7 @@ public class Scene {
 	private float[] mLightModel = new float[16];
 	
 	private float[] mELightPos = new float[9];
-	private final float[] mLightPos = {0.0f, 1.0f, 1.0f, 1.0f};
+	private final float[] mLightPos = {0.0f, 0.0f, 0.0f, 1.0f};
 	
 
 	private float[] mViewerPos = { 0.0f, 0.0f, 2.0f };
@@ -42,8 +42,7 @@ public class Scene {
 				mUpV[0], mUpV[1], mUpV[2]);
 		Matrix.setIdentityM(mModel, 0);
 		Matrix.setIdentityM(mModelView, 0);
-		Matrix.setIdentityM(mLightModel, 0);
-		Matrix.setIdentityM(mModel, 0);
+		//Matrix.setIdentityM(mLightModel, 0);
 		Matrix.rotateM(mModel, 0, rot, 0, 1, 0);
 //		Matrix.rotateM(mModel, 0, 90, 1, 0, 0);
 		Matrix.translateM(mModel, 0, -0.5f, 0.0f, 0.0f);
@@ -53,6 +52,11 @@ public class Scene {
 		Matrix.multiplyMM(mModelViewProj, 0, mProj, 0, mModelView, 0);
 		Matrix.multiplyMV(mELightPos, 0, mModelView, 0, mLightPos, 0);
 		
+		for(float p: mELightPos) {
+			System.out.print(p + " ");
+
+		}
+		System.out.println();
 		for(Model m: modelList) {
 			m.draw2(mView, mProj, mELightPos);
 			//m.draw(mModelView, mModelViewProj, mELightPos);

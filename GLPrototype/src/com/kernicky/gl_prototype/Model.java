@@ -150,7 +150,7 @@ abstract class Model {
 	
 	public float[] applyTransforms(float[] mModel) {
 		//Matrix.rotateM(mModel, 0, rot, 0, 1, 0);
-		Matrix.rotateM(mModel, 0, 90, 1, 0, 0);
+		//Matrix.rotateM(mModel, 0, 90, 1, 0, 0);
 		//Matrix.scaleM(mModel, 0, 0.5f, 0.5f, 0.5f);
 		//rot += 1;
 		return mModel;

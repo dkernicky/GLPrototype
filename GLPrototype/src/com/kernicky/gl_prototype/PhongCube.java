@@ -1,5 +1,7 @@
 package com.kernicky.gl_prototype;
 
+import android.opengl.Matrix;
+
 
 public class PhongCube extends Model {
 
@@ -19,4 +21,10 @@ public class PhongCube extends Model {
 
 		this.setData(coords, normals, amb, diff, spec, shine);
 	}
+	
+	//@Override
+//	public float[] applyTransforms(float[] mModel) {
+		//Matrix.rotateM(mModel, 0, 180, 1, 0, 0);
+//		return mModel;
+	//} 
 }
