@@ -32,6 +32,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     private static final String TAG = "MyGLRenderer";
     private Triangle mTriangle;
+    private Ship mShip;
+    private Scene s = new Scene();
 
     private final float[] mMVPMatrix = new float[16];
     private final float[] mProjMatrix = new float[16];
@@ -48,33 +50,39 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
         mTriangle = new Triangle();
+        mShip = new Ship();
+        
     }
 
+	
     @Override
     public void onDrawFrame(GL10 unused) {
 
         // Draw background color
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+                GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+        
+                // Set the camera position (View matrix)
+//                Matrix.setLookAtM(mVMatrix, 0, 0, 0, -3, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
+//                Matrix.setLookAtM(rm, rmOffset, eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ)
+//        
+//               // Calculate the projection and view transformation
+//                Matrix.multiplyMM(mMVPMatrix, 0, mProjMatrix, 0, mVMatrix, 0);
+//        
+//                // Draw square
+//        
+//        
+//                // Create a rotation for the triangle
+//        //        long time = SystemClock.uptimeMillis() % 4000L;
+//        //        float angle = 0.090f * ((int) time);
+//                Matrix.setRotateM(mRotationMatrix, 0, mAngle, 0, 0, -1.0f);
+//        
+//               // Combine the rotation matrix with the projection and camera view
+//                Matrix.multiplyMM(mMVPMatrix, 0, mRotationMatrix, 0, mMVPMatrix, 0);
+//                mTriangle.draw(mMVPMatrix);
+        
+        s.draw(mShip);
 
-        // Set the camera position (View matrix)
-        Matrix.setLookAtM(mVMatrix, 0, 0, 0, -3, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
-
-        // Calculate the projection and view transformation
-        Matrix.multiplyMM(mMVPMatrix, 0, mProjMatrix, 0, mVMatrix, 0);
-
-        // Draw square
-
-
-        // Create a rotation for the triangle
-//        long time = SystemClock.uptimeMillis() % 4000L;
-//        float angle = 0.090f * ((int) time);
-        Matrix.setRotateM(mRotationMatrix, 0, mAngle, 0, 0, -1.0f);
-
-        // Combine the rotation matrix with the projection and camera view
-        Matrix.multiplyMM(mMVPMatrix, 0, mRotationMatrix, 0, mMVPMatrix, 0);
-
-        // Draw triangle
-        mTriangle.draw(mMVPMatrix);
     }
 
     @Override
@@ -87,7 +95,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         // this projection matrix is applied to object coordinates
         // in the onDrawFrame() method
-        Matrix.frustumM(mProjMatrix, 0, -ratio, ratio, -1, 1, 3, 7);
+        Matrix.frustumM(mProjMatrix, 0, -ratio, ratio, -1, 1, 3, 15);
+        s.setMProj(mProjMatrix);
 
     }
 
