@@ -14,20 +14,25 @@ public class Scene {
 	private float[] mLightModel = new float[16];
 	
 	private float[] mELightPos = new float[9];
-	private final float[] mLightPos = {0.0f, 0.0f, 1.0f, 1.0f};
+	private final float[] mLightPos = {0.0f, 1.0f, 1.0f, 1.0f};
 	
 
-	private float[] mViewerPos = { 0.0f, 0.0f, 10.0f };
+	private float[] mViewerPos = { 0.0f, 0.0f, 2.0f };
 	private float[] mCenterPos = { 0.0f, 0.0f, 0.0f };
 	private float[] mUpV = { 0.0f, 1.0f, 0.0f };
+	
+	private float rot = 0.0f;
 	
 	private ArrayList<Model> modelList = new ArrayList<Model>();
 
 	public Scene() {
-		//modelList.add(new Ship());
+		PhongCube cube = new PhongCube();
+		GoldenShip ship = new GoldenShip();
+		//modelList.add(cube);
+		modelList.add(ship);
 	}
 	
-	public void draw(Model m) {
+	public void draw() {
 		Matrix.setLookAtM(mView, 0, mViewerPos[0], mViewerPos[1],
 				mViewerPos[2], mCenterPos[0], mCenterPos[1], mCenterPos[2],
 				mUpV[0], mUpV[1], mUpV[2]);
@@ -35,12 +40,19 @@ public class Scene {
 		Matrix.setIdentityM(mModelView, 0);
 		Matrix.setIdentityM(mLightModel, 0);
 		Matrix.setIdentityM(mModel, 0);
+		Matrix.rotateM(mModel, 0, rot, 0, 1, 0);
+		Matrix.rotateM(mModel, 0, 90, 1, 0, 0);
+		//Matrix.scaleM(mModel, 0, 0.5f, 0.5f, 0.5f);
+
+		rot += 1;
 		Matrix.multiplyMM(mModelView, 0, mView, 0, mModel, 0);
 		Matrix.multiplyMM(mModelViewProj, 0, mProj, 0, mModelView, 0);
 		Matrix.multiplyMV(mELightPos, 0, mModelView, 0, mLightPos, 0);
 		
-		m.draw(mModelView, mModelViewProj, mELightPos);
-	}
+		for(Model m: modelList) {
+			m.draw(mModelView, mModelViewProj, mELightPos);
+		}
+	}	
 	
 	public void setMProj(float[] mProj) {
 		this.mProj = mProj;
