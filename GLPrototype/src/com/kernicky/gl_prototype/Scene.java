@@ -2,6 +2,7 @@ package com.kernicky.gl_prototype;
 
 import java.util.ArrayList;
 
+
 import android.opengl.Matrix;
 
 public class Scene {

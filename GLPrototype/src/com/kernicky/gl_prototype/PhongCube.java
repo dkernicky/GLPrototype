@@ -1,5 +1,6 @@
 package com.kernicky.gl_prototype;
 
+
 public class PhongCube extends Model {
 
 	public PhongCube() {

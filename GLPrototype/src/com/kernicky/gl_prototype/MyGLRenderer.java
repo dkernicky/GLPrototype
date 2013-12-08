@@ -16,10 +16,6 @@ package com.kernicky.gl_prototype;
  * limitations under the License.
  */
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
