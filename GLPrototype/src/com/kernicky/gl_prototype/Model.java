@@ -49,13 +49,13 @@ abstract class Model {
 					"  normalize(v_Normal);" +
 					"  vec3 lc = vec3(1.0, 1.0, 1.0);" +
 					"  vec3 lp = normalize(u_LightPos - v_Position);" +
-					"  vec3 h = (normalize(v)+normalize(lp))/normalize(v+lp);" +
-					//"  vec3 h = normalize(v+lp);" +
+					//"  vec3 h = (v+lp)/normalize(v+lp);" +
+					"  vec3 h = normalize(v+lp);" +
 					"  float d = length(u_LightPos- v_Position);" +
 					"  float att = min((.5 + .5/d+ .5/(d*d)), 1.0);" +
 					"  vec3 amb = v_Ambient*lc;" +
 					"  vec3 diff = att*v_Diffuse*lc*max(dot(v_Normal, lp), 0.0);" +
-					"  vec3 spec = att*v_Specular*lc*pow(max(cos(dot(normalize(v_Normal), h)), 0.0),v_Shininess);" +
+					"  vec3 spec = att*v_Specular*lc*pow(max(dot(v_Normal, h), 0.0),v_Shininess);" +
 					"  gl_FragColor = vec4(amb+diff+spec, 0.0);" + 
 					"}";
 			

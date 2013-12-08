@@ -44,18 +44,13 @@ public class Scene {
 		Matrix.setIdentityM(mModelView, 0);
 		//Matrix.setIdentityM(mLightModel, 0);
 		Matrix.rotateM(mModel, 0, rot, 0, 1, 0);
-//		Matrix.rotateM(mModel, 0, 90, 1, 0, 0);
 		Matrix.translateM(mModel, 0, -0.5f, 0.0f, 0.0f);
-//		//Matrix.scaleM(mModel, 0, 0.5f, 0.5f, 0.5f);
 		rot += 1;
+		
 		Matrix.multiplyMM(mModelView, 0, mView, 0, mModel, 0);
 		Matrix.multiplyMM(mModelViewProj, 0, mProj, 0, mModelView, 0);
 		Matrix.multiplyMV(mELightPos, 0, mModelView, 0, mLightPos, 0);
-		
-		for(float p: mELightPos) {
-			System.out.print(p + " ");
 
-		}
 		System.out.println();
 		for(Model m: modelList) {
 			m.draw2(mView, mProj, mELightPos);
