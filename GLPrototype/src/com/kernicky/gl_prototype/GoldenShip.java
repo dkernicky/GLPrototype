@@ -1,5 +1,7 @@
 package com.kernicky.gl_prototype;
 
+import android.opengl.Matrix;
+
 public class GoldenShip extends Model {
 	private float rot = 0.0f;
 
@@ -13,4 +15,12 @@ public class GoldenShip extends Model {
 
 		this.setData(coords, normals, amb, diff, spec, shine);
 	}
+	
+	@Override
+	public float[] applyTransforms(float[] mModel) {
+		Matrix.rotateM(mModel, 0, 90, 1, 0, 0);
+		Matrix.scaleM(mModel, 0, 0.5f, 0.5f, 0.5f);
+		rot = (rot+1)%360;
+		return mModel;
+	} 	
 }

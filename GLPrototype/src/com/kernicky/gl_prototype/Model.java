@@ -9,9 +9,7 @@ import android.opengl.Matrix;
 
 
 abstract class Model {
-	public static final String vertexShaderCode =
-			// This matrix member variable provides a hook to manipulate
-			// the coordinates of the objects that use this vertex shader
+	private final String vertexShaderCode =
 			"uniform mat4 u_MVPMatrix;" +
 			"uniform mat4 u_MVMatrix;" +
 			"attribute vec4 a_Position;" +
@@ -33,11 +31,10 @@ abstract class Model {
 			"  v_Diffuse = a_Diffuse;" +
 			"  v_Specular = a_Specular;" +
 			"  v_Shininess = a_Shininess;" +
-			"  gl_Position = u_MVPMatrix * a_Position;" + // the matrix must be included as a modifier of gl_Position
-
+			"  gl_Position = u_MVPMatrix * a_Position;" +
 			"}";
 
-			public static final String fragmentShaderCode = 
+			private final String fragmentShaderCode = 
 					"precision mediump float;" + 
 					"uniform vec3 u_LightPos;" +
 					"varying vec3 v_Position;" +
@@ -47,26 +44,20 @@ abstract class Model {
 					"varying vec3 v_Specular;" +
 					"varying float v_Shininess;" +
 					"void main() {  "+ 
-					"  vec3 v = vec3(0.0, 2.0, 3.0) - v_Position;" +
-					"  vec3 ka = vec3(0.6941, 0.1059, 0.3451);" +
-					"  vec3 kd = vec3(0.6941, 0.1059, 0.3451);" +
-					"  vec3 ks = vec3(0.3500, 0.3500, 0.3500);" +
+					"  vec3 v = normalize(vec3(0.0, 0.0, 0.0) - v_Position);" +
+					"  normalize(v_Normal);" +
 					"  vec3 lc = vec3(1.0, 1.0, 1.0);" +
-					"  vec3 lp = u_LightPos - v_Position;" +
-					"  float Ns = 32.0;" +
+					"  vec3 lp = normalize(u_LightPos - v_Position);" +
 					"  vec3 h = (normalize(v)+normalize(lp))/normalize(v+lp);" +
+					//"  vec3 h = normalize(v+lp);" +
 					"  float d = length(u_LightPos- v_Position);" +
-					//"  float att = .05*(d*d)+ .05*d;" +
 					"  float att = min((.5 + .5/d+ .5/(d*d)), 1.0);" +
-					//"  vec3 amb = vec3(0.1, 0.1, 0.1);" +
-					//"  vec3 diff = vec3(0.1, 0.1, 0.1);" +
-					//"  vec3 spec = vec3(0.1, 0.1, 0.1);" +
 					"  vec3 amb = v_Ambient*lc;" +
-					"  vec3 diff = att*v_Diffuse*lc;" +
-					//"  vec3 spec = att*v_Specular*lc;" +
+					"  vec3 diff = att*v_Diffuse*lc*max(dot(v_Normal, lp), 0.0);" +
 					"  vec3 spec = att*v_Specular*lc*pow(max(cos(dot(normalize(v_Normal), h)), 0.0),v_Shininess);" +
 					"  gl_FragColor = vec4(amb+diff+spec, 0.0);" + 
 					"}";
+			
 	private int mProgram;
 	private FloatBuffer vertexBuffer, normalBuffer, ambientBuffer,
 			diffuseBuffer, specularBuffer, shininessBuffer;
@@ -154,6 +145,90 @@ abstract class Model {
 
 	public void initHandles() {
 		
+	}
+	
+	public float[] applyTransforms(float[] mModel) {
+		//Matrix.rotateM(mModel, 0, rot, 0, 1, 0);
+		Matrix.rotateM(mModel, 0, 90, 1, 0, 0);
+		//Matrix.scaleM(mModel, 0, 0.5f, 0.5f, 0.5f);
+		//rot += 1;
+		return mModel;
+	}
+	
+	public void draw2(float[] mView, float[] mProj, float[] mLightPos) {
+		
+		float[] mModel = new float[16];
+		float[] mModelView = new float[16];
+		float[] mModelViewProj = new float[16];
+		
+		Matrix.setIdentityM(mModel, 0);
+		mModel = applyTransforms(mModel);
+
+		Matrix.multiplyMM(mModelView, 0, mView, 0, mModel, 0);
+		Matrix.multiplyMM(mModelViewProj, 0, mProj, 0, mModelView, 0);		
+
+		GLES20.glUseProgram(mProgram);
+
+		vertexBuffer.position(0);
+		mPositionHandle = GLES20.glGetAttribLocation(mProgram, "a_Position");
+		GLES20.glEnableVertexAttribArray(mPositionHandle);
+		GLES20.glVertexAttribPointer(mPositionHandle, COORDS_PER_VERTEX,
+				GLES20.GL_FLOAT, false, vertexStride, vertexBuffer);
+		MyGLRenderer.checkGlError("position");
+
+		mNormalHandle = GLES20.glGetAttribLocation(mProgram, "a_Normal");
+		//System.out.println("N**************" + mNormalHandle);
+		GLES20.glEnableVertexAttribArray(mNormalHandle);
+		GLES20.glVertexAttribPointer(mNormalHandle, COORDS_PER_VERTEX,
+				GLES20.GL_FLOAT, false, vertexStride, normalBuffer);
+		MyGLRenderer.checkGlError("normal");
+
+		mAmbHandle = GLES20.glGetAttribLocation(mProgram, "a_Ambient");
+		// System.out.println("A**************" + mAmbHandle);
+		GLES20.glEnableVertexAttribArray(mAmbHandle);
+		GLES20.glVertexAttribPointer(mAmbHandle, COORDS_PER_VERTEX,
+				GLES20.GL_FLOAT, false, vertexStride, ambientBuffer);
+		MyGLRenderer.checkGlError("ambient");
+
+		mDiffHandle = GLES20.glGetAttribLocation(mProgram, "a_Diffuse");
+		// System.out.println("D**************" + mDiffHandle);
+		GLES20.glEnableVertexAttribArray(mDiffHandle);
+		GLES20.glVertexAttribPointer(mDiffHandle, COORDS_PER_VERTEX,
+				GLES20.GL_FLOAT, false, vertexStride, diffuseBuffer);
+		MyGLRenderer.checkGlError("diffuse");
+
+		mSpecHandle = GLES20.glGetAttribLocation(mProgram, "a_Specular");
+		// System.out.println("S**************" + mSpecHandle);
+		GLES20.glEnableVertexAttribArray(mSpecHandle);
+		GLES20.glVertexAttribPointer(mSpecHandle, COORDS_PER_VERTEX,
+				GLES20.GL_FLOAT, false, vertexStride, specularBuffer);
+		MyGLRenderer.checkGlError("specular");
+
+		mShinHandle = GLES20.glGetAttribLocation(mProgram, "a_Shininess");
+		// System.out.println("Sh**************" + mShinHandle);
+		GLES20.glEnableVertexAttribArray(mShinHandle);
+		GLES20.glVertexAttribPointer(mShinHandle, COORDS_PER_VERTEX,
+				GLES20.GL_FLOAT, false, 4, shininessBuffer);
+		MyGLRenderer.checkGlError("shininess");
+
+		mMVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "u_MVPMatrix");
+		// System.out.println("M**************" + mMVPMatrixHandle);
+		MyGLRenderer.checkGlError("glGetUniformLocation");
+		GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mModelViewProj, 0);
+		MyGLRenderer.checkGlError("glUniformMatrix4fv");
+
+		mMVMatrixHandle = GLES20.glGetUniformLocation(mProgram, "u_MVMatrix");
+		// System.out.println("M**************" + mMVPMatrixHandle);
+		MyGLRenderer.checkGlError("glGetUniformLocation");
+		GLES20.glUniformMatrix4fv(mMVMatrixHandle, 1, false, mModelView, 0);
+		MyGLRenderer.checkGlError("glUniformMatrix4fv");
+
+		mLightPosHandle = GLES20.glGetUniformLocation(mProgram, "u_LightPos");
+		//GLES20.glUniform3fv(mLightPosHandle, 3, mLightPos, 0);
+		GLES20.glUniform3f(mLightPosHandle, mLightPos[0] , mLightPos[1], mLightPos[2]);
+
+		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, getCoords().length / 3);
+		GLES20.glDisableVertexAttribArray(mPositionHandle);
 	}
 	
 	public void draw(float[] mvMatrix, float[] mvpMatrix, float[] mLightPos) {

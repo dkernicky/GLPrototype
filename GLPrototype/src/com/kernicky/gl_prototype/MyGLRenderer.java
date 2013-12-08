@@ -59,8 +59,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 	public void onDrawFrame(GL10 unused) {
 
 		// Draw background color
-		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
-		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
+		//GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+		GLES20.glEnable( GLES20.GL_DEPTH_TEST );
 
 		//s.draw(mShip);
 		s.draw();

@@ -28,8 +28,11 @@ public class Scene {
 	public Scene() {
 		PhongCube cube = new PhongCube();
 		GoldenShip ship = new GoldenShip();
-		//modelList.add(cube);
+		Lamp l1 = new Lamp();
+
+		modelList.add(cube);
 		modelList.add(ship);
+		modelList.add(l1);
 	}
 	
 	public void draw() {
@@ -41,16 +44,17 @@ public class Scene {
 		Matrix.setIdentityM(mLightModel, 0);
 		Matrix.setIdentityM(mModel, 0);
 		Matrix.rotateM(mModel, 0, rot, 0, 1, 0);
-		Matrix.rotateM(mModel, 0, 90, 1, 0, 0);
-		//Matrix.scaleM(mModel, 0, 0.5f, 0.5f, 0.5f);
-
+//		Matrix.rotateM(mModel, 0, 90, 1, 0, 0);
+		Matrix.translateM(mModel, 0, -0.5f, 0.0f, 0.0f);
+//		//Matrix.scaleM(mModel, 0, 0.5f, 0.5f, 0.5f);
 		rot += 1;
 		Matrix.multiplyMM(mModelView, 0, mView, 0, mModel, 0);
 		Matrix.multiplyMM(mModelViewProj, 0, mProj, 0, mModelView, 0);
 		Matrix.multiplyMV(mELightPos, 0, mModelView, 0, mLightPos, 0);
 		
 		for(Model m: modelList) {
-			m.draw(mModelView, mModelViewProj, mELightPos);
+			m.draw2(mView, mProj, mELightPos);
+			//m.draw(mModelView, mModelViewProj, mELightPos);
 		}
 	}	
 	
