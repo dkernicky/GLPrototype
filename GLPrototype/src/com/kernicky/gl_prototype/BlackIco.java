@@ -48,7 +48,7 @@ public class BlackIco extends Model {
 	@Override
 	public float[] applyTransforms(float[] mModel) {
 		rot = (rot+15)%360;
-		Matrix.rotateM(mModel, 0, rot, 0, 1, 1);
+		//Matrix.rotateM(mModel, 0, rot, 0, 1, 1);
 		Matrix.scaleM(mModel, 0, .75f, .75f, .75f);
 		return mModel;
 	} 

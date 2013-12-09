@@ -34,7 +34,6 @@ abstract class Model {
 			"  v_Shininess = a_Shininess;" +
 			"  gl_Position = u_MVPMatrix * a_Position;" +
 			"}";
-
 			private final String fragmentShaderCode = 
 					"precision mediump float;" + 
 					"uniform vec3 u_LightPos;" +
@@ -46,19 +45,52 @@ abstract class Model {
 					"varying float v_Shininess;" +
 					"void main() {  "+ 
 					"  vec3 v = normalize(vec3(0.0, 0.0, 0.0) - v_Position);" +
+					"  vec3 lightDir = u_LightPos - v_Position;" +
+					"  float distance = length(lightDir);" +
+					"  lightDir = lightDir/distance;" +
+					"  distance = distance*distance;" +
+					
 					"  normalize(v_Normal);" +
+					"  float NdotL = dot(v_Normal, lightDir);" +
+					"  float intensity = min(NdotL, 1.0);" +
+					"  intensity = max(NdotL, 0.0);" +
+					
 					"  vec3 lc = vec3(1.0, 1.0, 1.0);" +
-					"  vec3 lp = normalize(u_LightPos - v_Position);" +
-					//"  vec3 h = (v+lp)/normalize(v+lp);" +
-					"  vec3 h = normalize(v+lp);" +
-					"  float d = length(u_LightPos- v_Position);" +
-					"  float att = min((.5 + .5/d+ .5/(d*d)), 1.0);" +
+					"  vec3 diff = intensity*lc/distance;" +
+					"  vec3 H = normalize(v+lightDir);" +
+					"  float NdotH = dot(v_Normal, H);" +
+					"  intensity = min(NdotH, 1.0);" +
+					"  intensity = max(NdotH, 0.0);" +
+					"  intensity = pow(intensity, v_Shininess);" +
+					"  vec3 spec = intensity*lc/distance;" +
 					"  vec3 amb = v_Ambient*lc;" +
-					"  vec3 diff = att*v_Diffuse*lc*max(dot(v_Normal, lp), 0.0);" +
-					"  vec3 spec = att*v_Specular*lc*pow(max(dot(v_Normal, h), 0.0),v_Shininess);" +
-					//"  vec3 spec = vec3(0.0, 0.0, 0.0);" +
 					"  gl_FragColor = vec4(amb+diff+spec, 0.0);" + 
 					"}";
+
+//			private final String fragmentShaderCode = 
+//					"precision mediump float;" + 
+//					"uniform vec3 u_LightPos;" +
+//					"varying vec3 v_Position;" +
+//					"varying vec3 v_Normal;" +
+//					"varying vec3 v_Ambient;" +
+//					"varying vec3 v_Diffuse;" +
+//					"varying vec3 v_Specular;" +
+//					"varying float v_Shininess;" +
+//					"void main() {  "+ 
+//					"  vec3 v = normalize(vec3(0.0, 0.0, 0.0) - v_Position);" +
+//					"  normalize(v_Normal);" +
+//					"  vec3 lc = vec3(1.0, 1.0, 1.0);" +
+//					"  vec3 lp = normalize(u_LightPos - v_Position);" +
+//					//"  vec3 h = (v+lp)/normalize(v+lp);" +
+//					"  vec3 h = normalize(v+lp);" +
+//					"  float d = length(u_LightPos- v_Position);" +
+//					"  float att = min((.5 + .5/d+ .5/(d*d)), 1.0);" +
+//					"  vec3 amb = v_Ambient*lc;" +
+//					"  vec3 diff = att*v_Diffuse*lc*max(dot(v_Normal, lp), 0.0);" +
+//					"  vec3 spec = att*v_Specular*lc*pow(max(dot(v_Normal, h), 0.0),v_Shininess);" +
+//					//"  vec3 spec = vec3(0.0, 0.0, 0.0);" +
+//					"  gl_FragColor = vec4(amb+diff+spec, 0.0);" + 
+//					"}";
 			
 	private int mProgram;
 	private FloatBuffer vertexBuffer, normalBuffer, ambientBuffer,

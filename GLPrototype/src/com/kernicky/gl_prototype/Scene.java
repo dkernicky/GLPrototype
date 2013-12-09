@@ -34,9 +34,9 @@ public class Scene {
 		BlackIco b = new BlackIco();
 
 		modelList.add(cube);
-		modelList.add(ship);
+		//modelList.add(ship);
 		//modelList.add(b);
-		modelList.add(l1);
+		//modelList.add(l1);
 	}
 	
 	public void draw() {
@@ -46,8 +46,9 @@ public class Scene {
 		Matrix.setIdentityM(mModel, 0);
 		Matrix.setIdentityM(mModelView, 0);
 		//Matrix.setIdentityM(mLightModel, 0);
-		Matrix.rotateM(mModel, 0, rot, 0, 1, 0);
-		Matrix.translateM(mModel, 0, -0.5f, 0.0f, 0.0f);
+		//Matrix.rotateM(mModel, 0, rot, 0, 1, 0);
+		//Matrix.translateM(mModel, 0, -0.5f, 0.0f, 0.0f);
+		Matrix.translateM(mModel, 0, 0.0f, 0.9f, 0.0f);
 		rot += 1;
 		
 		Matrix.multiplyMM(mModelView, 0, mView, 0, mModel, 0);

@@ -20,7 +20,7 @@ public class GoldenShip extends Model {
 	@Override
 	public float[] applyTransforms(float[] mModel) {
 		Matrix.rotateM(mModel, 0, 90, 1, 0, 0);
-		Matrix.scaleM(mModel, 0, 0.5f, 0.5f, 0.5f);
+		//Matrix.scaleM(mModel, 0, 0.5f, 0.5f, 0.5f);
 		rot = (rot+1)%360;
 		return mModel;
 	} 	
