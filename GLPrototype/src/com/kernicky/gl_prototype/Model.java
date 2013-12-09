@@ -56,6 +56,7 @@ abstract class Model {
 					"  vec3 amb = v_Ambient*lc;" +
 					"  vec3 diff = att*v_Diffuse*lc*max(dot(v_Normal, lp), 0.0);" +
 					"  vec3 spec = att*v_Specular*lc*pow(max(dot(v_Normal, h), 0.0),v_Shininess);" +
+					//"  vec3 spec = vec3(0.0, 0.0, 0.0);" +
 					"  gl_FragColor = vec4(amb+diff+spec, 0.0);" + 
 					"}";
 			

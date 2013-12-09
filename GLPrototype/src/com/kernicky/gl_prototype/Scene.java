@@ -25,14 +25,17 @@ public class Scene {
 	private float rot = 0.0f;
 	
 	private ArrayList<Model> modelList = new ArrayList<Model>();
+	private ArrayList<Model> lightList = new ArrayList<Model>();
 
 	public Scene() {
 		PhongCube cube = new PhongCube();
 		GoldenShip ship = new GoldenShip();
 		Lamp l1 = new Lamp();
+		BlackIco b = new BlackIco();
 
 		modelList.add(cube);
 		modelList.add(ship);
+		//modelList.add(b);
 		modelList.add(l1);
 	}
 	
