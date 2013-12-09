@@ -15,7 +15,12 @@ public class Scene {
 	private float[] mLightModel = new float[16];
 	
 	private float[] mELightPos = new float[9];
-	private final float[] mLightPos = {0.0f, 0.0f, 0.0f, 1.0f};
+	private float[] mELightPos_1 = new float[4];
+	private float[] mELightPos_2 = new float[4];
+	private float[] mELightPos_3 = new float[4];
+	private final float[] mLightPos_1 = {0.0f, 0.0f, 0.0f, 1.0f};
+	private final float[] mLightPos_2 = {0.0f, 0.0f, 0.0f, 1.0f};
+	private final float[] mLightPos_3 = {0.0f, 0.0f, 0.0f, 1.0f};
 	
 
 	private float[] mViewerPos = { 0.0f, 0.0f, 2.0f };
@@ -34,7 +39,7 @@ public class Scene {
 		BlackIco b = new BlackIco();
 
 		modelList.add(cube);
-		//modelList.add(ship);
+		modelList.add(ship);
 		//modelList.add(b);
 		//modelList.add(l1);
 	}
@@ -46,14 +51,48 @@ public class Scene {
 		Matrix.setIdentityM(mModel, 0);
 		Matrix.setIdentityM(mModelView, 0);
 		//Matrix.setIdentityM(mLightModel, 0);
-		//Matrix.rotateM(mModel, 0, rot, 0, 1, 0);
+		Matrix.rotateM(mModel, 0, rot, 0, 0, 1);
 		//Matrix.translateM(mModel, 0, -0.5f, 0.0f, 0.0f);
-		Matrix.translateM(mModel, 0, 0.0f, 0.9f, 0.0f);
-		rot += 1;
-		
+		Matrix.translateM(mModel, 0, 0.0f, 0.5f, 0.0f);
+
 		Matrix.multiplyMM(mModelView, 0, mView, 0, mModel, 0);
 		Matrix.multiplyMM(mModelViewProj, 0, mProj, 0, mModelView, 0);
-		Matrix.multiplyMV(mELightPos, 0, mModelView, 0, mLightPos, 0);
+		Matrix.multiplyMV(mELightPos_1, 0, mModelView, 0, mLightPos_1, 0);
+		
+		Matrix.setIdentityM(mModel, 0);
+		Matrix.setIdentityM(mModelView, 0);
+		Matrix.rotateM(mModel, 0, rot, 0, 0, 1);
+
+		//Matrix.translateM(mModel, 0, 0.35f, -0.15f, 0.0f);
+		Matrix.translateM(mModel, 0, .5f*0.9659f, .5f*-0.2588f, 0.0f);
+
+		Matrix.multiplyMM(mModelView, 0, mView, 0, mModel, 0);
+		Matrix.multiplyMM(mModelViewProj, 0, mProj, 0, mModelView, 0);
+		Matrix.multiplyMV(mELightPos_2, 0, mModelView, 0, mLightPos_1, 0);
+		
+		Matrix.setIdentityM(mModel, 0);
+		Matrix.setIdentityM(mModelView, 0);
+		Matrix.rotateM(mModel, 0, rot, 0, 0, 1);
+
+		//Matrix.translateM(mModel, 0, -0.35f, -0.15f, 0.0f);
+		Matrix.translateM(mModel, 0, .5f*-0.9659f, .5f*-0.2588f, 0.0f);
+
+		Matrix.multiplyMM(mModelView, 0, mView, 0, mModel, 0);
+		Matrix.multiplyMM(mModelViewProj, 0, mProj, 0, mModelView, 0);
+		Matrix.multiplyMV(mELightPos_3, 0, mModelView, 0, mLightPos_1, 0);
+		
+		rot += 1;	
+		
+		mELightPos[0] = mELightPos_1[0];
+		mELightPos[1] = mELightPos_1[1];
+		mELightPos[2] = mELightPos_1[2];
+		mELightPos[3] = mELightPos_2[0];
+		mELightPos[4] = mELightPos_2[1];
+		mELightPos[5] = mELightPos_2[2];
+		mELightPos[6] = mELightPos_3[0];
+		mELightPos[7] = mELightPos_3[1];
+		mELightPos[8] = mELightPos_3[2];
+		
 
 		System.out.println();
 		for(Model m: modelList) {

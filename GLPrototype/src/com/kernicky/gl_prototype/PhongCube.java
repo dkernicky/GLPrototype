@@ -49,6 +49,9 @@ public class PhongCube extends Model {
 		//Matrix.rotateM(mModel, 0, -1*rot, 0, 0, 1);
 		//rot = (rot+1)%360;
 		Matrix.scaleM(mModel, 0, 2.0f, 2.0f, 2.0f);
+
+		//Matrix.rotateM(mModel, 0, 45, 0, 0, 1);
+
 		return mModel;
 	} 
 }
