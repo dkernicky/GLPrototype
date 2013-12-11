@@ -28,6 +28,7 @@ public class Scene {
 	private float[] mUpV = { 0.0f, 1.0f, 0.0f };
 	
 	private float rot = 0.0f;
+	private float value = (float)(.5*Math.sqrt(3)/2.0);
 	
 	private ArrayList<Model> modelList = new ArrayList<Model>();
 	private ArrayList<Model> lightList = new ArrayList<Model>();
@@ -64,7 +65,7 @@ public class Scene {
 		Matrix.rotateM(mModel, 0, rot, 0, 0, 1);
 
 		//Matrix.translateM(mModel, 0, 0.35f, -0.15f, 0.0f);
-		Matrix.translateM(mModel, 0, .5f*0.9659f, .5f*-0.2588f, 0.0f);
+		Matrix.translateM(mModel, 0, value, -.25f, 0.0f);
 
 		Matrix.multiplyMM(mModelView, 0, mView, 0, mModel, 0);
 		Matrix.multiplyMM(mModelViewProj, 0, mProj, 0, mModelView, 0);
@@ -75,7 +76,7 @@ public class Scene {
 		Matrix.rotateM(mModel, 0, rot, 0, 0, 1);
 
 		//Matrix.translateM(mModel, 0, -0.35f, -0.15f, 0.0f);
-		Matrix.translateM(mModel, 0, .5f*-0.9659f, .5f*-0.2588f, 0.0f);
+		Matrix.translateM(mModel, 0, -1.0f*value, -.25f, 0.0f);
 
 		Matrix.multiplyMM(mModelView, 0, mView, 0, mModel, 0);
 		Matrix.multiplyMM(mModelViewProj, 0, mProj, 0, mModelView, 0);
