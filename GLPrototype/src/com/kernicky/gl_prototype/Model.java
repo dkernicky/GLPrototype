@@ -27,7 +27,7 @@ abstract class Model {
 			"varying float v_Shininess;" +
 			"void main() {" +
 			"  v_Position = vec3(u_MVMatrix * a_Position);" +
-			"  v_Normal = normalize(vec3(u_MVMatrix * vec4(a_Normal, 0.0)));" +
+			"  v_Normal = normalize(vec3(u_MVMatrix * vec4(normalize(a_Normal), 0.0)));" +
 			"  v_Ambient = a_Ambient;" +
 			"  v_Diffuse = a_Diffuse;" +
 			"  v_Specular = a_Specular;" +
