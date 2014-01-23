@@ -1,15 +1,18 @@
-package com.kernicky.gl_prototype;
+package com.kernicky.gl_prototype.models;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 
+import com.kernicky.gl_prototype.MyGLRenderer;
 
-abstract class Model {
+
+public abstract class Model {
 	private final String vertexShaderCode =
 			"uniform mat4 u_MVPMatrix;" +
 			"uniform mat4 u_MVMatrix;" +
@@ -73,66 +76,6 @@ abstract class Model {
 			"  }" +
 			"  gl_FragColor = vec4(amb+diff+spec, 0.0);" + 
 			"}";
-
-//			private final String fragmentShaderCode = 
-//					"precision mediump float;" + 
-//					"uniform vec3 u_LightPos;" +
-//					"varying vec3 v_Position;" +
-//					"varying vec3 v_Normal;" +
-//					"varying vec3 v_Ambient;" +
-//					"varying vec3 v_Diffuse;" +
-//					"varying vec3 v_Specular;" +
-//					"varying float v_Shininess;" +
-//					"void main() {  "+ 
-//					"  vec3 v = normalize(vec3(0.0, 0.0, 0.0) - v_Position);" +
-//					"  vec3 lightDir = u_LightPos - v_Position;" +
-//					"  float distance = length(lightDir);" +
-//					"  lightDir = lightDir/distance;" +
-//					"  distance = (distance*distance)/.5;" +
-//					
-//					"  normalize(v_Normal);" +
-//					"  float NdotL = dot(v_Normal, lightDir);" +
-//					"  float intensity = min(NdotL, 1.0);" +
-//					"  intensity = max(NdotL, 0.0);" +
-//					
-//					"  vec3 lc = vec3(1.0, 1.0, 1.0);" +
-//					"  vec3 v_Diff = vec3(.5, .5, .5);" +
-//					"  vec3 diff = intensity*lc*v_Diff/distance;" +
-//					"  vec3 H = normalize(v+lightDir);" +
-//					"  float NdotH = dot(v_Normal, H);" +
-//					"  intensity = min(NdotH, 1.0);" +
-//					"  intensity = max(NdotH, 0.0);" +
-//					"  vec3 v_Spec = vec3(.5, .5, .5);" +
-//					"  intensity = pow(intensity, v_Shininess);" +
-//					"  vec3 spec = intensity*lc*v_Spec/distance;" +
-//					"  vec3 amb = v_Ambient*lc;" +
-//					"  gl_FragColor = vec4(amb+diff+spec, 0.0);" + 
-//					"}";
-
-//			private final String fragmentShaderCode = 
-//					"precision mediump float;" + 
-//					"uniform vec3 u_LightPos;" +
-//					"varying vec3 v_Position;" +
-//					"varying vec3 v_Normal;" +
-//					"varying vec3 v_Ambient;" +
-//					"varying vec3 v_Diffuse;" +
-//					"varying vec3 v_Specular;" +
-//					"varying float v_Shininess;" +
-//					"void main() {  "+ 
-//					"  vec3 v = normalize(vec3(0.0, 0.0, 0.0) - v_Position);" +
-//					"  normalize(v_Normal);" +
-//					"  vec3 lc = vec3(1.0, 1.0, 1.0);" +
-//					"  vec3 lp = normalize(u_LightPos - v_Position);" +
-//					//"  vec3 h = (v+lp)/normalize(v+lp);" +
-//					"  vec3 h = normalize(v+lp);" +
-//					"  float d = length(u_LightPos- v_Position);" +
-//					"  float att = min((.5 + .5/d+ .5/(d*d)), 1.0);" +
-//					"  vec3 amb = v_Ambient*lc;" +
-//					"  vec3 diff = att*v_Diffuse*lc*max(dot(v_Normal, lp), 0.0);" +
-//					"  vec3 spec = att*v_Specular*lc*pow(max(dot(v_Normal, h), 0.0),v_Shininess);" +
-//					//"  vec3 spec = vec3(0.0, 0.0, 0.0);" +
-//					"  gl_FragColor = vec4(amb+diff+spec, 0.0);" + 
-//					"}";
 			
 	private int mProgram;
 	private FloatBuffer vertexBuffer, normalBuffer, ambientBuffer,
@@ -144,6 +87,10 @@ abstract class Model {
 
 	private final int COORDS_PER_VERTEX = 3;
 	private final int vertexStride = COORDS_PER_VERTEX * 4;
+	
+	protected ArrayList<Transformation> transList = new ArrayList<Transformation>();
+	private int currentTick = 0;
+	private int maxTick = 1;
 
 	public void setData(float[] coords, float[] normals, float[] amb, float[] diff,
 			float[] spec, float[] shine) {
@@ -223,15 +170,40 @@ abstract class Model {
 		
 	}
 	
+	public void updateMaxTick() {
+		Iterator<Transformation> i = transList.iterator();
+		if(i.hasNext()) {
+			maxTick = i.next().getEndTick();
+		}
+		while(i.hasNext()) {
+			int t = i.next().getEndTick();
+			maxTick = Math.max(t,  maxTick);
+//			if(maxTick > t) {
+//				if(maxTick%t != 0) {
+//					maxTick *= t;
+//				}
+//			}
+//			else if(maxTick < t) {
+//				if(t%maxTick != 0) {
+//					maxTick *= t;
+//				}
+//				else
+//					maxTick = t;
+//			}
+		}
+		System.out.println("******************" + maxTick);
+	}	
+	
 	public float[] applyTransforms(float[] mModel) {
-		//Matrix.rotateM(mModel, 0, rot, 0, 1, 0);
-		//Matrix.rotateM(mModel, 0, 90, 1, 0, 0);
-		//Matrix.scaleM(mModel, 0, 0.5f, 0.5f, 0.5f);
-		//rot += 1;
+		for(Transformation t: transList) {
+			mModel = t.apply(mModel, currentTick);
+		}
 		return mModel;
 	}
 	
-	public void draw2(float[] mView, float[] mProj, float[] mLightPos) {
+	
+	
+	public void draw(float[] mView, float[] mProj, float[] mLightPos) {
 		
 		float[] mModel = new float[16];
 		float[] mModelView = new float[16];
@@ -305,73 +277,16 @@ abstract class Model {
 
 		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, getCoords().length / 3);
 		GLES20.glDisableVertexAttribArray(mPositionHandle);
+		
+		currentTick = (currentTick + 1) % maxTick;
+		//System.out.println(currentTick);
 	}
 	
-	public void draw(float[] mvMatrix, float[] mvpMatrix, float[] mLightPos) {
-
-		GLES20.glUseProgram(mProgram);
-
-		vertexBuffer.position(0);
-		mPositionHandle = GLES20.glGetAttribLocation(mProgram, "a_Position");
-		GLES20.glEnableVertexAttribArray(mPositionHandle);
-		GLES20.glVertexAttribPointer(mPositionHandle, COORDS_PER_VERTEX,
-				GLES20.GL_FLOAT, false, vertexStride, vertexBuffer);
-		MyGLRenderer.checkGlError("position");
-
-		mNormalHandle = GLES20.glGetAttribLocation(mProgram, "a_Normal");
-		//System.out.println("N**************" + mNormalHandle);
-		GLES20.glEnableVertexAttribArray(mNormalHandle);
-		GLES20.glVertexAttribPointer(mNormalHandle, COORDS_PER_VERTEX,
-				GLES20.GL_FLOAT, false, vertexStride, normalBuffer);
-		MyGLRenderer.checkGlError("normal");
-
-		mAmbHandle = GLES20.glGetAttribLocation(mProgram, "a_Ambient");
-		// System.out.println("A**************" + mAmbHandle);
-		GLES20.glEnableVertexAttribArray(mAmbHandle);
-		GLES20.glVertexAttribPointer(mAmbHandle, COORDS_PER_VERTEX,
-				GLES20.GL_FLOAT, false, vertexStride, ambientBuffer);
-		MyGLRenderer.checkGlError("ambient");
-
-		mDiffHandle = GLES20.glGetAttribLocation(mProgram, "a_Diffuse");
-		// System.out.println("D**************" + mDiffHandle);
-		GLES20.glEnableVertexAttribArray(mDiffHandle);
-		GLES20.glVertexAttribPointer(mDiffHandle, COORDS_PER_VERTEX,
-				GLES20.GL_FLOAT, false, vertexStride, diffuseBuffer);
-		MyGLRenderer.checkGlError("diffuse");
-
-		mSpecHandle = GLES20.glGetAttribLocation(mProgram, "a_Specular");
-		// System.out.println("S**************" + mSpecHandle);
-		GLES20.glEnableVertexAttribArray(mSpecHandle);
-		GLES20.glVertexAttribPointer(mSpecHandle, COORDS_PER_VERTEX,
-				GLES20.GL_FLOAT, false, vertexStride, specularBuffer);
-		MyGLRenderer.checkGlError("specular");
-
-		mShinHandle = GLES20.glGetAttribLocation(mProgram, "a_Shininess");
-		// System.out.println("Sh**************" + mShinHandle);
-		GLES20.glEnableVertexAttribArray(mShinHandle);
-		GLES20.glVertexAttribPointer(mShinHandle, COORDS_PER_VERTEX,
-				GLES20.GL_FLOAT, false, 4, shininessBuffer);
-		MyGLRenderer.checkGlError("shininess");
-
-		mMVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "u_MVPMatrix");
-		// System.out.println("M**************" + mMVPMatrixHandle);
-		MyGLRenderer.checkGlError("glGetUniformLocation");
-		GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mvpMatrix, 0);
-		MyGLRenderer.checkGlError("glUniformMatrix4fv");
-
-		mMVMatrixHandle = GLES20.glGetUniformLocation(mProgram, "u_MVMatrix");
-		// System.out.println("M**************" + mMVPMatrixHandle);
-		MyGLRenderer.checkGlError("glGetUniformLocation");
-		GLES20.glUniformMatrix4fv(mMVMatrixHandle, 1, false, mvMatrix, 0);
-		MyGLRenderer.checkGlError("glUniformMatrix4fv");
-
-		mLightPosHandle = GLES20.glGetUniformLocation(mProgram, "u_LightPos");
-		//GLES20.glUniform3fv(mLightPosHandle, 3, mLightPos, 0);
-		GLES20.glUniform3f(mLightPosHandle, mLightPos[0] , mLightPos[1], mLightPos[2]);
-
-		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, getCoords().length / 3);
-		GLES20.glDisableVertexAttribArray(mPositionHandle);
+	public void addTransform(Transformation t) {
+		transList.add(t);
+		this.updateMaxTick();
 	}
+	
 
 	protected float[] getCoords() {
 		return coords;

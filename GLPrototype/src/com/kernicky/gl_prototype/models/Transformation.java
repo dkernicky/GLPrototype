@@ -1,4 +1,4 @@
-package com.kernicky.gl_prototype;
+package com.kernicky.gl_prototype.models;
 
 import android.opengl.Matrix;
 
@@ -12,9 +12,8 @@ public class Transformation {
 	private float y = 0.0f;
 	private float z = 0.0f;
 	private int start = 0;
-	private int end = 0;
-	
-	
+	private int end = 1;
+	private int duration = 1;
 	
 	public Transformation(float angle, float x, float y, float z) { // Static rotation
 		t1 = type.STATIC;
@@ -23,6 +22,8 @@ public class Transformation {
 		this.x = x;
 		this.y = y;
 		this.z = z;
+		//this.duration = end-start;
+		
 	}
 	public Transformation(float x, float y, float z) { // Static translation
 		t1 = type.STATIC;
@@ -30,6 +31,7 @@ public class Transformation {
 		this.x = x;
 		this.y = y;
 		this.z = z;
+		//this.duration = end-start;
 	}
 	public Transformation(float angle, float x, float y, float z, int start, int end) { // Dynamic rotation
 		t1 = type.DYNAMIC;
@@ -40,6 +42,7 @@ public class Transformation {
 		this.z = z;
 		this.start = start;
 		this.end = end;
+		this.duration = end-start;
 	}
 	public Transformation(float x, float y, float z, int start, int end) { // Dynamic translation
 		t1 = type.DYNAMIC;
@@ -49,23 +52,44 @@ public class Transformation {
 		this.z = z;
 		this.start = start;
 		this.end = end;
+		this.duration = end-start;
 	}
 	
-	public float[] apply(float[] mModel, int frame) {
+	public int getEndTick() {
+		return this.end;
+	}
+	
+	public float[] apply(float[] mModel, int currentTick) {
 		if(t1 == type.STATIC) {
 			if(t2 == type.ROTATION) {
-				Matrix.rotateM(mModel, 0, angle, 0, 1, 0);
+				Matrix.rotateM(mModel, 0, angle, x, y, z);
 			}
 			else {
 				Matrix.translateM(mModel, 0, x, y, z);
 			}
 		}
 		else {
-			if(t2 == type.ROTATION) {
-				
+			if(start <= currentTick && end >= currentTick) {
+
+				if(t2 == type.ROTATION) {
+					System.out.println("Current tick: " + currentTick + "vs" + end + " " + currentTick*angle/((float)duration));
+					Matrix.rotateM(mModel, 0, currentTick*angle/((float)duration), x, y, z);
+				}
+				else {
+					Matrix.translateM(mModel, 0, currentTick*x/((float)duration), currentTick*y/((float)duration), currentTick*z/((float)duration));
+
+				}
 			}
-			else {
-				
+			else if(end < currentTick) {
+				if(t2 == type.ROTATION) {
+					System.out.println("Current tick: " + currentTick + "vs" + end + " " + angle);
+
+					Matrix.rotateM(mModel, 0, angle, x, y, z);
+				}
+				else {
+					Matrix.translateM(mModel, 0, x, y, z);
+
+				}
 			}
 		}
 		return mModel;

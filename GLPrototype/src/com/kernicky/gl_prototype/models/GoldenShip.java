@@ -1,4 +1,4 @@
-package com.kernicky.gl_prototype;
+package com.kernicky.gl_prototype.models;
 
 import android.opengl.Matrix;
 
@@ -17,13 +17,19 @@ public class GoldenShip extends Model {
 		float shine[] = { 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96 };
 
 		this.setData(coords, normals, amb, diff, spec, shine);
+		
+		// rotate 360 degrees over 1 second
+//		this.transList.add(new Transformation(360.0f, 0, 1, 0, 0, 120));
+//		this.transList.add(new Transformation(360.0f, 1, 0, 0, 60, 120));
+//		this.transList.add(new Transformation(360.0f, 0, 0, 1, 0, 60));
+//		updateMaxTick();
 	}
 	
-	@Override
-	public float[] applyTransforms(float[] mModel) {
-		Matrix.rotateM(mModel, 0, 90, 1, 0, 0);
-		Matrix.scaleM(mModel, 0, 0.5f, 0.5f, 0.5f);
-		rot = (rot+1)%360;
-		return mModel;
-	} 	
+//	@Override
+//	public float[] applyTransforms(float[] mModel) {
+//		Matrix.rotateM(mModel, 0, 90, 1, 0, 0);
+//		Matrix.scaleM(mModel, 0, 0.5f, 0.5f, 0.5f);
+//		rot = (rot+1)%360;
+//		return mModel;
+//	} 	
 }

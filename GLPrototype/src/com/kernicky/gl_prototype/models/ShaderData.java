@@ -1,4 +1,4 @@
-package com.kernicky.gl_prototype;
+package com.kernicky.gl_prototype.models;
 
 public class ShaderData {
 	public static final String vertexShaderCode =

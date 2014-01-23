@@ -19,6 +19,8 @@ package com.kernicky.gl_prototype;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import com.kernicky.gl_prototype.models.PhongCube;
+
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
