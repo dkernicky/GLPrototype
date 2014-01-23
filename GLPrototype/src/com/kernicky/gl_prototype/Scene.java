@@ -46,18 +46,34 @@ public class Scene {
 		PhongCube cube = new PhongCube();
 		GoldenShip ship = new GoldenShip();
 
-		ship.addTransform(new Transformation(90.0f, 0, 1, 0, 0, 30));
-		//ship.addTransform(new Transformation(90.0f, 0, 1, 0, 60, 90));
-		ship.addTransform(new Transformation(0, 0, 0, 30, 120));
-		//ship.addTransform(new Transformation(0, 0, 0, 90, 120));
-		//ship.addTransform(new Transformation(90.0f, 0, 1, 0, 90, 120));
-		//ship.addTransform(new Transformation(0, -0.25f, 0.5f));
+		
+		
+		ship.addTransform(new Transformation(1.5f, 0.0f, 0.0f, 0, 30));
+		ship.addTransform(new Transformation(-3.0f, 0.0f, 0.0f, 30, 90));
+		ship.addTransform(new Transformation(1.5f, 0.0f, 0.0f, 90, 120));
+		
+		ship.addTransform(new Transformation(20.0f, 0, 1, 0, 0, 30));
+		ship.addTransform(new Transformation(-45.0f, 0, 1, 0, 30, 90));
+		ship.addTransform(new Transformation(20.0f, 0, 1, 0, 90, 120));
+		
+//		ship.addTransform(new Transformation(-40.0f, 0, 0, 1, 15, 30));
+//		ship.addTransform(new Transformation(40.0f, 0, 0, 1, 30, 45));
+//		ship.addTransform(new Transformation(40.0f, 0, 0, 1, 75, 90));
+//		ship.addTransform(new Transformation(-40.0f, 0, 0, 1, 90, 105));
+		
+		ship.addTransform(new Transformation(-180.0f, 0, 0, 1, 0, 30));
+		ship.addTransform(new Transformation(360.0f, 0, 0, 1, 30, 90));
+		ship.addTransform(new Transformation(-180.0f, 0, 0, 1, 90, 120));
+
+
+
+		ship.addTransform(new Transformation(0, 0f, 0.5f));
 		
 		
 		Lamp l1 = new Lamp();
 		BlackIco b = new BlackIco();
 
-		modelList.add(cube);
+		//modelList.add(cube);
 		modelList.add(ship);
 		//modelList.add(b);
 		//modelList.add(l1);
@@ -77,8 +93,9 @@ public class Scene {
 			//Matrix.setIdentityM(mLightModel, 0);
 			Matrix.rotateM(mModel, 0, rot, 0, 0, 1);
 			//Matrix.translateM(mModel, 0, -0.5f, 0.0f, 0.0f);
-			Matrix.translateM(mModel, 0, 0.0f, 0.5f, 0.0f);
+			Matrix.translateM(mModel, 0, 0.0f, 2*0.5f, 0.0f);
 	
+			
 			Matrix.multiplyMM(mModelView, 0, mView, 0, mModel, 0);
 			Matrix.multiplyMM(mModelViewProj, 0, mProj, 0, mModelView, 0);
 			Matrix.multiplyMV(mELightPos_1, 0, mModelView, 0, mLightPos_1, 0);
@@ -88,7 +105,7 @@ public class Scene {
 			Matrix.rotateM(mModel, 0, rot, 0, 0, 1);
 	
 			//Matrix.translateM(mModel, 0, 0.35f, -0.15f, 0.0f);
-			Matrix.translateM(mModel, 0, value, -.25f, 0.0f);
+			Matrix.translateM(mModel, 0, 2*value, 2*-.25f, 0.0f);
 	
 			Matrix.multiplyMM(mModelView, 0, mView, 0, mModel, 0);
 			Matrix.multiplyMM(mModelViewProj, 0, mProj, 0, mModelView, 0);
@@ -99,7 +116,7 @@ public class Scene {
 			Matrix.rotateM(mModel, 0, rot, 0, 0, 1);
 	
 			//Matrix.translateM(mModel, 0, -0.35f, -0.15f, 0.0f);
-			Matrix.translateM(mModel, 0, -1.0f*value, -.25f, 0.0f);
+			Matrix.translateM(mModel, 0, 2*-1.0f*value, 2*-.25f, 0.0f);
 	
 			Matrix.multiplyMM(mModelView, 0, mView, 0, mModel, 0);
 			Matrix.multiplyMM(mModelViewProj, 0, mProj, 0, mModelView, 0);

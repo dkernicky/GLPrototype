@@ -72,11 +72,11 @@ public class Transformation {
 			if(start <= currentTick && end >= currentTick) {
 
 				if(t2 == type.ROTATION) {
-					System.out.println("Current tick: " + currentTick + "vs" + end + " " + currentTick*angle/((float)duration));
-					Matrix.rotateM(mModel, 0, currentTick*angle/((float)duration), x, y, z);
+					//System.out.println("**Current tick: " + currentTick + "vs" + end + " " + (currentTick-start)*angle/((float)duration));
+					Matrix.rotateM(mModel, 0, (currentTick-start)*angle/((float)duration), x, y, z);
 				}
 				else {
-					Matrix.translateM(mModel, 0, currentTick*x/((float)duration), currentTick*y/((float)duration), currentTick*z/((float)duration));
+					Matrix.translateM(mModel, 0, (currentTick-start)*x/((float)duration), (currentTick-start)*y/((float)duration), (currentTick-start)*z/((float)duration));
 
 				}
 			}
@@ -92,6 +92,10 @@ public class Transformation {
 				}
 			}
 		}
+//		for(float f: mModel) {
+//			System.out.print(f + " ");
+//		}
+		System.out.println();
 		return mModel;
 	}
 }

@@ -191,13 +191,18 @@ public abstract class Model {
 //					maxTick = t;
 //			}
 		}
-		System.out.println("******************" + maxTick);
+		//System.out.println("******************" + maxTick);
 	}	
 	
 	public float[] applyTransforms(float[] mModel) {
-		for(Transformation t: transList) {
+		for(int n = 0; n < transList.size(); n ++) {
+			//System.out.println("Transform " + n);
+			Transformation t = transList.get(n);
 			mModel = t.apply(mModel, currentTick);
 		}
+//		for(Transformation t: transList) {
+//			mModel = t.apply(mModel, currentTick);
+//		}
 		return mModel;
 	}
 	
