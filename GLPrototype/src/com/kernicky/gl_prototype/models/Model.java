@@ -39,7 +39,7 @@ public abstract class Model {
 			"}";
 	private final String fragmentShaderCode = 
 			"precision mediump float;" + 
-			"uniform vec3 u_LightPos[3];" +
+			"uniform vec3 u_LightPos[4];" +
 			"varying vec3 v_Position;" +
 			"varying vec3 v_Normal;" +
 			"varying vec3 v_Ambient;" +
@@ -50,7 +50,7 @@ public abstract class Model {
 			"  vec3 amb = vec3(0.0, 0.0, 0.0);" +
 			"  vec3 diff = vec3(0.0, 0.0, 0.0);" +
 			"  vec3 spec = vec3(0.0, 0.0, 0.0);" +
-			"  for(int n = 0; n < 3; n ++) {" +
+			"  for(int n = 0; n < 4; n ++) {" +
 			"    vec3 v = normalize(vec3(0.0, 0.0, 0.0) - v_Position);" +
 			"    vec3 lightDir = u_LightPos[n] - v_Position;" +
 			"    float distance = length(lightDir);" +
@@ -288,7 +288,7 @@ public abstract class Model {
 		MyGLRenderer.checkGlError("glUniformMatrix4fv");
 
 		mLightPosHandle = GLES20.glGetUniformLocation(mProgram, "u_LightPos");
-		GLES20.glUniform3fv(mLightPosHandle, 3, mLightPos, 0);
+		GLES20.glUniform3fv(mLightPosHandle, 4, mLightPos, 0);
 		//GLES20.glUniform3f(mLightPosHandle, mLightPos[0] , mLightPos[1], mLightPos[2]);
 
 		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, getCoords().length / 3);
