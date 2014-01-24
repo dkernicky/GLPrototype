@@ -98,9 +98,11 @@ public abstract class Model {
 	protected final int COORDS_PER_VERTEX = 3;
 	protected final int vertexStride = COORDS_PER_VERTEX * 4;
 	
-	protected ArrayList<Transformation> transList = new ArrayList<Transformation>();
+	public ArrayList<Transformation> transList = new ArrayList<Transformation>();
 	protected int currentTick = 0;
 	protected int maxTick = 1;
+	
+	public float angle = 0.0f;
 
 	public void setData(float[] coords, float[] normals, float[] amb, float[] diff,
 			float[] spec, float[] shine) {
@@ -300,6 +302,10 @@ public abstract class Model {
 	
 	public void addTransform(Transformation t) {
 		transList.add(t);
+		this.updateMaxTick();
+	}
+	public void addTransformToFront(Transformation t) {
+		transList.add(0, t);
 		this.updateMaxTick();
 	}
 	

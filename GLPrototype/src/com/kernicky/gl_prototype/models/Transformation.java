@@ -104,7 +104,6 @@ public class Transformation {
 //		for(float f: mModel) {
 //			System.out.print(f + " ");
 //		}
-		System.out.println();
 		return mModel;
 	}
 }

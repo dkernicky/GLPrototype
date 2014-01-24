@@ -25,6 +25,7 @@ import android.view.MotionEvent;
 public class MainActivity extends Activity {
 
     private GLSurfaceView mGLView;
+    public float angle = 0.0f;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,6 +60,7 @@ public class MainActivity extends Activity {
 class MyGLSurfaceView extends GLSurfaceView {
 
     private final MyGLRenderer mRenderer;
+    public static float angle = 0.0f;
 
     public MyGLSurfaceView(Context context) {
         super(context);
@@ -92,20 +94,30 @@ class MyGLSurfaceView extends GLSurfaceView {
         switch (e.getAction()) {
             case MotionEvent.ACTION_MOVE:
 
-                float dx = x - mPreviousX;
-                float dy = y - mPreviousY;
-
-                // reverse direction of rotation above the mid-line
-                if (y > getHeight() / 2) {
-                  dx = dx * -1 ;
+                double dx = x - mPreviousX;
+                double dy = y - mPreviousY;
+                //dx = -1.0f;
+                //dy = 1.0f;
+                if(dx == 0) {
+                	dx = .000001f;
                 }
+                
+                double magnitude = Math.sqrt(dx*dx + dy*dy);
+                
+                dx /= Math.max(.000001, magnitude);
+                dy /= Math.max(.000001, magnitude);
 
-                // reverse direction of rotation to left of the mid-line
-                if (x < getWidth() / 2) {
-                  dy = dy * -1 ;
+
+                double angle = Math.atan(dy/dx);
+                angle *= (360/(2*Math.PI));
+                angle -= 90.0;
+
+                if((dx <= 0 && dy <= 0) || (dx <= 0 && dy >= 0)) {
+                	angle += 180.0;
                 }
+                this.angle = (float) ((float) 1.0f*angle);
+                //mRenderer.mAngle += (dx + dy) * TOUCH_SCALE_FACTOR;  // = 180.0f / 320
 
-                mRenderer.mAngle += (dx + dy) * TOUCH_SCALE_FACTOR;  // = 180.0f / 320
                 requestRender();
         }
 
