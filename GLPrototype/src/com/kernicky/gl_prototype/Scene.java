@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import android.opengl.Matrix;
 
 import com.kernicky.gl_prototype.models.BlackIco;
+import com.kernicky.gl_prototype.models.F;
 import com.kernicky.gl_prototype.models.GoldenShip;
 import com.kernicky.gl_prototype.models.Lamp;
 import com.kernicky.gl_prototype.models.Model;
+import com.kernicky.gl_prototype.models.O;
 import com.kernicky.gl_prototype.models.PhongCube;
 import com.kernicky.gl_prototype.models.Transformation;
 
@@ -48,25 +50,31 @@ public class Scene {
 	public Scene() {
 		PhongCube cube = new PhongCube();
 		GoldenShip ship = new GoldenShip();
+		F f1 = new F();
+		F f2 = new F();
+		O o = new O();
 
-		ship.addTransform(new Transformation(1.5f, 0.0f, 0.0f, 0, 30));
-		ship.addTransform(new Transformation(-3.0f, 0.0f, 0.0f, 30, 90));
-		ship.addTransform(new Transformation(1.5f, 0.0f, 0.0f, 90, 120));
+//		ship.addTransform(new Transformation(1.5f, 0.0f, 0.0f, 0, 30));
+//		ship.addTransform(new Transformation(-3.0f, 0.0f, 0.0f, 30, 90));
+//		ship.addTransform(new Transformation(1.5f, 0.0f, 0.0f, 90, 120));
 		
-		ship.addTransform(new Transformation(20.0f, 0, 1, 0, 0, 30));
-		ship.addTransform(new Transformation(-45.0f, 0, 1, 0, 30, 90));
-		ship.addTransform(new Transformation(20.0f, 0, 1, 0, 90, 120));
+//		ship.addTransform(new Transformation(20.0f, 0, 1, 0, 0, 30));
+//		ship.addTransform(new Transformation(-45.0f, 0, 1, 0, 30, 90));
+//		ship.addTransform(new Transformation(20.0f, 0, 1, 0, 90, 120));
 		
 //		ship.addTransform(new Transformation(-40.0f, 0, 0, 1, 15, 30));
 //		ship.addTransform(new Transformation(40.0f, 0, 0, 1, 30, 45));
 //		ship.addTransform(new Transformation(40.0f, 0, 0, 1, 75, 90));
 //		ship.addTransform(new Transformation(-40.0f, 0, 0, 1, 90, 105));
 		
-		ship.addTransform(new Transformation(-180.0f, 0, 0, 1, 0, 30));
-		ship.addTransform(new Transformation(360.0f, 0, 0, 1, 30, 90));
-		ship.addTransform(new Transformation(-180.0f, 0, 0, 1, 90, 120));
+//		ship.addTransform(new Transformation(-180.0f, 0, 0, 1, 0, 30));
+//		ship.addTransform(new Transformation(360.0f, 0, 0, 1, 30, 90));
+//		ship.addTransform(new Transformation(-180.0f, 0, 0, 1, 90, 120));
 
-		ship.addTransform(new Transformation(0, 0f, 0.5f));
+		
+
+		ship.addTransform(new Transformation(90.0f, 1, 0, 0));
+		ship.addTransform(new Transformation(0, 0, 0.25f));
 		
 		
 		
@@ -77,29 +85,44 @@ public class Scene {
 		
 		BlackIco b = new BlackIco();
 		
-		l1.addTransform(new Transformation(360.0f, 0, 0, 1, 0, 120));
-		l1.addTransform(new Transformation(0.5f, 0.0f, 0.0f));
+		//l1.addTransform(new Transformation(360.0f, 0, 1, 0, 0, 480));
+		
+		l1.addTransform(new Transformation(0.75f, 0.0f, 0.0f));
 		l1.addTransform(new Transformation(0.05f));
 		lightList.add(l1);
 		
-		l2.addTransform(new Transformation(360.0f, 0, 0, 1, 0, 120));
-		l2.addTransform(new Transformation(-0.5f, 0.0f, 0.0f));
+		l2.addTransform(new Transformation(-0.75f, 0.0f, 0.0f));
 		l2.addTransform(new Transformation(0.05f));
 		lightList.add(l2);
+
 		
-		l3.addTransform(new Transformation(360.0f, 0, 0, 1, 0, 120));
-		l3.addTransform(new Transformation(0.0f, 0.5f, 0.0f));
+		l3.addTransform(new Transformation(0.0f, 0.0f, 0.75f));
 		l3.addTransform(new Transformation(0.05f));
 		lightList.add(l3);
-
-		l4.addTransform(new Transformation(360.0f, 0, 0, 1, 0, 120));
-		l4.addTransform(new Transformation(0.0f, -0.5f, 0.0f));
+		
+		l4.addTransform(new Transformation(0.0f, 0.0f, -0.75f));
 		l4.addTransform(new Transformation(0.05f));
 		lightList.add(l4);
 		
 		//modelList.add(cube);
 
-		modelList.add(ship);
+		f1.addTransform(new Transformation(0.35f, -0.3f, 0.3f));
+		f1.addTransform(new Transformation(-360.0f, 0, 1, 0, 0, 240));
+		modelList.add(f1);
+		
+	
+		f2.addTransform(new Transformation(-0.35f, -0.3f, 0.3f));
+		f2.addTransform(new Transformation(360.0f, 0, 1, 0, 0, 240));
+		f2.addTransform(new Transformation(180.0f, 0, 1, 0));	
+		
+		modelList.add(f2);
+
+		o.addTransform(new Transformation(0.0f, -0.2f, 0.3f));
+		modelList.add(o);
+
+
+
+		//modelList.add(ship);
 		//modelList.add(b);
 		//modelList.add(l1);
 	}
