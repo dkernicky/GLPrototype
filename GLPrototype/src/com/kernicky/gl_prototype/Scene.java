@@ -75,34 +75,22 @@ public class Scene {
 		Lamp l3 = new Lamp(1.0f, 0.0f, 0.0f);
 		
 		BlackIco b = new BlackIco();
-
-
-//		Matrix.rotateM(mModel, 0, rot, 0, 0, 1);
-//		Matrix.translateM(mModel, 0, 0.0f, 2*0.5f, 0.0f);
+		
 		l1.addTransform(new Transformation(360.0f, 0, 0, 1, 0, 120));
 		l1.addTransform(new Transformation(0.5f, 0.0f, 0.0f));
 		l1.addTransform(new Transformation(0.05f));
 		lightList.add(l1);
-
-//		l2.addTransform(new Transformation(360.0f, 0, 0, 1, 0, 120));
-//		//l1.addTransform(new Transformation(0.0f, 0.5f, 0.0f));
-//		l2.addTransform(new Transformation(0.05f));
-//		lightList.add(l2);
-//		
-//		l3.addTransform(new Transformation(360.0f, 0, 0, 0, 1, 120));
-//		//l1.addTransform(new Transformation(0.0f, 0.5f, 0.0f));
-//		l3.addTransform(new Transformation(0.05f));
-//		lightList.add(l3);
 		
-//		l2.addTransform(new Transformation(360.0f, 0, 0, 1, 0, 120));
-//		l2.addTransform(new Transformation(value, -.25f, 0.0f));
-//		l2.addTransform(new Transformation(0.05f));
-//		lightList.add(l2);
-//
-//		l3.addTransform(new Transformation(360.0f, 0, 0, 1, 0, 120));
-//		l3.addTransform(new Transformation(-1.0f*value, -.25f, 0.0f));
-//		l3.addTransform(new Transformation(0.05f));
-//		lightList.add(l3);
+		l2.addTransform(new Transformation(360.0f, 0, 0, 1, 0, 120));
+		l2.addTransform(new Transformation(-0.5f, 0.0f, 0.0f));
+		l2.addTransform(new Transformation(0.05f));
+		lightList.add(l2);
+		
+		l3.addTransform(new Transformation(360.0f, 0, 0, 1, 0, 120));
+		l3.addTransform(new Transformation(0.5f, 0.0f, 0.0f));
+		l3.addTransform(new Transformation(0.05f));
+		lightList.add(l3);
+
 
 		
 		modelList.add(cube);
@@ -146,33 +134,35 @@ public class Scene {
 
 
 			//for(Lamp l: lightList) {
+			lightPosList.clear();
 			for(int n = 0; n < lightList.size(); n ++) {
 				lightList.get(n).draw(mView, mProj);
 				
-//				for(float f: l.getMELightPos()) {
-//					lightPosList.add(f);
+
+				for(float f: lightList.get(n).getMELightPos()) {
+					lightPosList.add(f);
 ////					//System.out.print(f + " ");
-//				}
+				}
 				//System.out.println();
 			}
 
-//			float[] lightPos = new float[lightPosList.size()];
-//			for(int n = 0; n < lightPos.length; n ++) {
-//				lightPos[n] = lightPosList.get(n);
+			float[] lightPos = new float[lightPosList.size()];
+			for(int n = 0; n < lightPos.length; n ++) {
+				lightPos[n] = lightPosList.get(n);
 //				//System.out.print(lightPos[n] + " ");
-//			}
+			}
 //			//System.out.println();
 			for(Model m: modelList) {
-				//m.draw(mView, mProj, lightPos);
-				m.draw(mView, mProj, mELightPos);
+				m.draw(mView, mProj, lightPos);
+				//m.draw(mView, mProj, mELightPos);
 			}
 			
-			float[] f = lightList.get(0).getMELightPos();
-			System.out.println("************");
-			System.out.println(f[0] + " vs " + mELightPos[0]);
-			System.out.println(f[1] + " vs " + mELightPos[1]);
-			System.out.println(f[2] + " vs " + mELightPos[2]);
-			System.out.println("************");
+//			float[] f = lightList.get(0).getMELightPos();
+//			System.out.println("************");
+//			System.out.println(f[0] + " vs " + mELightPos[0]);
+//			System.out.println(f[1] + " vs " + mELightPos[1]);
+//			System.out.println(f[2] + " vs " + mELightPos[2]);
+//			System.out.println("************");
 			
 			lastUpdate = currentTime;
 		}
