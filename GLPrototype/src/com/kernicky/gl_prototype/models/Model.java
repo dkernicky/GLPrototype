@@ -77,20 +77,30 @@ public abstract class Model {
 			"  gl_FragColor = vec4(amb+diff+spec, 0.0);" + 
 			"}";
 			
-	private int mProgram;
-	private FloatBuffer vertexBuffer, normalBuffer, ambientBuffer,
-			diffuseBuffer, specularBuffer, shininessBuffer;
-	private int mPositionHandle, mNormalHandle, mAmbHandle, mDiffHandle,
-			mSpecHandle, mShinHandle, mMVPMatrixHandle, mMVMatrixHandle,
-			mLightPosHandle;
+	protected int mProgram;
+	protected FloatBuffer vertexBuffer;
+	private FloatBuffer normalBuffer;
+	private FloatBuffer ambientBuffer;
+	private FloatBuffer diffuseBuffer;
+	private FloatBuffer specularBuffer;
+	private FloatBuffer shininessBuffer;
+	protected int mPositionHandle;
+	private int mNormalHandle;
+	private int mAmbHandle;
+	private int mDiffHandle;
+	private int mSpecHandle;
+	private int mShinHandle;
+	protected int mMVPMatrixHandle;
+	protected int mMVMatrixHandle;
+	private int mLightPosHandle;
 	private float coords[], normals[], spec[], diff[], amb[], shine[];
 
-	private final int COORDS_PER_VERTEX = 3;
-	private final int vertexStride = COORDS_PER_VERTEX * 4;
+	protected final int COORDS_PER_VERTEX = 3;
+	protected final int vertexStride = COORDS_PER_VERTEX * 4;
 	
 	protected ArrayList<Transformation> transList = new ArrayList<Transformation>();
-	private int currentTick = 0;
-	private int maxTick = 1;
+	protected int currentTick = 0;
+	protected int maxTick = 1;
 
 	public void setData(float[] coords, float[] normals, float[] amb, float[] diff,
 			float[] spec, float[] shine) {
@@ -219,6 +229,7 @@ public abstract class Model {
 
 		Matrix.multiplyMM(mModelView, 0, mView, 0, mModel, 0);
 		Matrix.multiplyMM(mModelViewProj, 0, mProj, 0, mModelView, 0);		
+		
 
 		GLES20.glUseProgram(mProgram);
 
