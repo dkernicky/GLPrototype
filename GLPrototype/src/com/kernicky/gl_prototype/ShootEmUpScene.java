@@ -67,35 +67,41 @@ public class ShootEmUpScene extends Scene {
 		Lamp l3 = new Lamp(0.0f, 0.0f, 0.0f);
 		Lamp l4 = new Lamp(0.0f, 0.0f, 0.0f);
 
-		BlackIco b = new BlackIco();
-		//Base b = new Base();
+		//BlackIco b = new BlackIco();
+		Base b = new Base();
 		//b.addTransform(new Transformation(0.0f, 0.0f, -4.0f));
-		b.addTransform(new Transformation(360.0f, 1, 0, 0, 0, 360));
+		b.addTransform(new Transformation(0.0f, 1, 0, 0, 0, 360));
+		b.addTransform(new Transformation(0.0f, 1, 0, 0, 0, 360));
+		//b.addTransform(new Transformation(360.0f, 1, 0, 0, 0, 360));
 		//b.addTransform(new Transformation(90.0f, 0, 0, 1));
-		b.addTransform(new Transformation(2.0f));
+		b.addTransform(new Transformation(1.9f));
 
-		l1.addTransform(new Transformation(360.0f, 0, 0, 1, 0, 120));
-		l1.addTransform(new Transformation(.5f, .5f, 1.0f));
+		//l1.addTransform(new Transformation(360.0f, 0, 0, 1, 0, 120));
+		l1.addTransform(new Transformation(0, 0, 0, 1));
+		l1.addTransform(new Transformation(.0f, .75f, 1.0f));
 		l1.addTransform(new Transformation(0.025f));
 		lightList.add(l1);
 
-		l2.addTransform(new Transformation(360.0f, 0, 0, 1, 0, 120));
-		l2.addTransform(new Transformation(.5f, -.5f, 1.0f));
+		//l2.addTransform(new Transformation(360.0f, 0, 0, 1, 0, 120));
+		l2.addTransform(new Transformation(0, 0, 0, 1));
+		l2.addTransform(new Transformation(.0f, -.75f, 1.0f));
 		l2.addTransform(new Transformation(0.025f));
 		lightList.add(l2);
 
-		l3.addTransform(new Transformation(360.0f, 0, 0, 1, 0, 120));
-		l3.addTransform(new Transformation(-.5f, .5f, 1.0f));
+		//l3.addTransform(new Transformation(360.0f, 0, 0, 1, 0, 120));
+		l3.addTransform(new Transformation(0, 0, 0, 1));
+		l3.addTransform(new Transformation(-.75f, -0.f, 1.0f));
 		l3.addTransform(new Transformation(0.025f));
 		lightList.add(l3);
 
-		l4.addTransform(new Transformation(360.0f, 0, 0, 1, 0, 120));
-		l4.addTransform(new Transformation(-.5f, -.5f, 1.0f));
+		//l4.addTransform(new Transformation(360.0f, 0, 0, 1, 0, 120));
+		l4.addTransform(new Transformation(0, 0, 0, 1));
+		l4.addTransform(new Transformation(.75f, -0.0f, 1.0f));
 		l4.addTransform(new Transformation(0.025f));
 		lightList.add(l4);
 
 		modelList.add(ship);
-		//modelList.add(b);
+		modelList.add(b);
 	}
 
 	public void draw() {
@@ -109,6 +115,7 @@ public class ShootEmUpScene extends Scene {
 			lightPosList.clear();
 
 			for (int n = 0; n < lightList.size(); n++) {
+				lightList.get(n).transList.set(0, new Transformation(MyGLSurfaceView.angleRight, 0, 0, 1));
 				lightList.get(n).draw(mView, mProj);
 
 				for (int m = 0; m < lightList.get(n).getMELightPos().length - 1; m++) {
@@ -122,32 +129,19 @@ public class ShootEmUpScene extends Scene {
 
 			for (Model m : modelList) {
 				if(m.getClass().equals(GoldenShip.class)) {
-					m.angle = MyGLSurfaceView.angle;
-					//m.transList.remove(0); 
-					//m.addTransformToFront((new Transformation(m.angle, 0, 0, 1)));
+					m.angle = MyGLSurfaceView.angleLeft;
 					m.transList.set(2,new Transformation(m.angle, 0, 0, 1));
-//					if(MyGLSurfaceView.dx > 0.0f && MyGLSurfaceView.dy > 0.0f) 
-//						m.transList.add(0, new Transformation(15.0f,MyGLSurfaceView.dx, MyGLSurfaceView.dy, 0));
 					float rotX = m.rotX;
 					float rotY = m.rotY;
-					m.transList.set(0, new Transformation(m.rotX = (m.rotX+MyGLSurfaceView.dx)%360.0f, 1, 0, 0));
-					m.transList.set(1, new Transformation(m.rotY = (m.rotY+MyGLSurfaceView.dy)%360.0f, 0, 1, 0));
+					//m.transList.set(0, new Transformation(m.rotX = (m.rotX+MyGLSurfaceView.dx)%360.0f, 1, 0, 0));
+					//m.transList.set(1, new Transformation(m.rotY = (m.rotY+MyGLSurfaceView.dy)%360.0f, 0, 1, 0));
 					
 
-					//m.addTransformToFront((new Transformation(m.angle, 0, 0, 1)));
 				}
-				if(m.getClass().equals(Base.class)) {
-//					m.transList.remove(0); 
-//					m.transList.remove(0); 
-//					
-//					m.addTransformToFront((new Transformation(360.0f, MyGLSurfaceView.dx, MyGLSurfaceView.dy, 0, 0, 360)));
-//					m.addTransformToFront((new Transformation(0.0f, 0.0f, -4.0f)));
-					//m.transList.set(1, new Transformation(360.0f, MyGLSurfaceView.dx, MyGLSurfaceView.dy, 0, 0, 360));
-					//m.transList.add(1, new Transformation(1.0f, MyGLSurfaceView.dx, MyGLSurfaceView.dy, 0));
+				if(m.getClass().equals(BlackIco.class) || m.getClass().equals(Base.class)) {
+					m.transList.set(0, new Transformation(m.rotX = (m.rotX-2*MyGLSurfaceView.dxLeft)%360.0f, 1, 0, 0));
+					m.transList.set(1, new Transformation(m.rotY = (m.rotY-2*MyGLSurfaceView.dyLeft)%360.0f, 0, 1, 0));
 
-
-
-					//m.addTransformToFront((new Transformation(m.angle, 0, 0, 1)));
 				}
 				m.draw(mView, mProj, lightPos);
 			}

@@ -60,9 +60,12 @@ public class MainActivity extends Activity {
 class MyGLSurfaceView extends GLSurfaceView {
 
     private final MyGLRenderer mRenderer;
-    public static float angle = 0.0f;
-    public static float dx = 0.0f;
-    public static float dy = 0.0f;
+    public static float angleLeft = 0.0f;
+    public static float dxLeft = 0.0f;
+    public static float dyLeft = 0.0f;
+    public static float angleRight = 0.0f;
+    public static float dxRight = 0.0f;
+    public static float dyRight = 0.0f;
 
     public MyGLSurfaceView(Context context) {
         super(context);
@@ -94,49 +97,50 @@ class MyGLSurfaceView extends GLSurfaceView {
 
         float x = e.getX();
         float y = e.getY();
-
+//        float[] result = mapToModelSpace(x, y);
+//        System.out.println(result[0] + "*****" + result[1]);
         switch (e.getAction()) {
         	case MotionEvent.ACTION_UP:
-        		this.dx = 0;
-        		this.dy = 0;
+        		this.dxLeft = 0;
+        		this.dyLeft = 0;
         		break;
             case MotionEvent.ACTION_MOVE:
             	
             	if(x > getWidth()/2) {
-//	                double dx = x - mPreviousXRight;
-//	                double dy = y - mPreviousYRight;
-//	                //dx = -1.0f;
-//	                //dy = 1.0f;
-//	                if(dx == 0) {
-//	                	dx = .000001f;
-//	                }
-//	                
-//	                double magnitude = Math.sqrt(dx*dx + dy*dy);
-//	                //System.out.println(magnitude);
-//	                
-//	                dx /= Math.max(.000001, magnitude);
-//	                dy /= Math.max(.000001, magnitude);
-//	
-//	
-//	                double angle = Math.atan(dy/dx);
-//	                angle *= (360/(2*Math.PI));
-//	                angle -= 90.0;
-//	
-//	                if((dx <= 0 && dy <= 0) || (dx <= 0 && dy >= 0)) {
-//	                	angle += 180.0;
-//	                }
-//	                
-//	                if(magnitude > 2) {
-//		                this.angle = (float) ((float) -1.0f*angle);
-//		                //mRenderer.mAngle += (dx + dy) * TOUCH_SCALE_FACTOR;  // = 180.0f / 320
-//		                
-//		                this.dx = (float) dx;
-//		                this.dy = (float) dy;
-//	                    mPreviousXRight = x;
-//	                    mPreviousYRight = y;
-//	                }
+	                double dx = x - mPreviousXRight;
+	                double dy = y - mPreviousYRight;
+	                //dx = -1.0f;
+	                //dy = 1.0f;
+	                if(dx == 0) {
+	                	dx = .000001f;
+	                }
+	                
+	                double magnitude = Math.sqrt(dx*dx + dy*dy);
+	                //System.out.println(magnitude);
+	                
+	                dx /= Math.max(.000001, magnitude);
+	                dy /= Math.max(.000001, magnitude);
+	
+	
+	                double angle = Math.atan(dy/dx);
+	                angle *= (360/(2*Math.PI));
+	                angle -= 90.0;
+	
+	                if((dx <= 0 && dy <= 0) || (dx <= 0 && dy >= 0)) {
+	                	angle += 180.0;
+	                }
+	                
+	                if(magnitude > 2) {
+		                this.angleRight = (float) ((float) -1.0f*angle);
+		                //mRenderer.mAngle += (dx + dy) * TOUCH_SCALE_FACTOR;  // = 180.0f / 320
+		                
+		                this.dxRight = (float) dx;
+		                this.dyRight = (float) dy;
+	                    mPreviousXRight = x;
+	                    mPreviousYRight = y;
+	                }
             	}
-            	else {
+            	if(x < getWidth()/2) {
             		double dx = x - mPreviousXLeft;
             		double dy = y - mPreviousYLeft;
  	                
@@ -158,11 +162,11 @@ class MyGLSurfaceView extends GLSurfaceView {
 	                	angle += 180.0;
 	                }
 	                if(magnitude > 3) {
-		                this.angle = (float) ((float) -1.0f*angle);
+		                this.angleLeft = (float) ((float) -1.0f*angle);
 		                //mRenderer.mAngle += (dx + dy) * TOUCH_SCALE_FACTOR;  // = 180.0f / 320
 		                
-		                this.dx = (float) dx;
-		                this.dy = (float) dy;
+		                this.dxLeft = (float) dx;
+		                this.dyLeft = (float) dy;
 		                
 		                mPreviousXLeft = x;
 		                mPreviousYLeft = y;
@@ -177,19 +181,21 @@ class MyGLSurfaceView extends GLSurfaceView {
         return true;
     }
     
-    public void mapToModelSpace(float x, float y) {
+    public float[] mapToModelSpace(float x, float y) {
+    	float[] result = new float[2];
     	float width = getWidth();
     	float height = getHeight();
     	float ratio = width/height;
-    	float u = (x/width)*(2*ratio)-ratio;
-    	float v = (y/height)*(-2) + 1;
+    	result[0] = (x/width)*(2*ratio)-ratio;
+    	result[1] = (y/height)*(-2) + 1;
+    	return result;
     }
     
     public void cross() {
-    	float x = -1.0f*this.dx;
-    	float y = this.dy;
-    	this.dx = y;
-    	this.dy = (float) (-1.0*x);
+    	float x = -1.0f*this.dxLeft;
+    	float y = this.dyLeft;
+    	this.dxLeft = y;
+    	this.dyLeft = (float) (-1.0*x);
     	
     }
 }
