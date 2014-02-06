@@ -40,6 +40,8 @@ public abstract class Model {
 	protected int maxTick = 1;
 	
 	public float angle = 0.0f;
+	public float rotX = 0.0f;
+	public float rotY = 0.0f;
 
 	public void setData(float[] coords, float[] normals, float[] amb, float[] diff,
 			float[] spec, float[] shine) {

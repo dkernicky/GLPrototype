@@ -108,7 +108,7 @@ class MyGLSurfaceView extends GLSurfaceView {
 	                }
 	                
 	                double magnitude = Math.sqrt(dx*dx + dy*dy);
-	                System.out.println(magnitude);
+	                //System.out.println(magnitude);
 	                
 	                dx /= Math.max(.000001, magnitude);
 	                dy /= Math.max(.000001, magnitude);
@@ -153,7 +153,7 @@ class MyGLSurfaceView extends GLSurfaceView {
 	                if((dx <= 0 && dy <= 0) || (dx <= 0 && dy >= 0)) {
 	                	angle += 180.0;
 	                }
-	                if(magnitude > 2) {
+	                if(true || magnitude > 2) {
 		                this.angle = (float) ((float) -1.0f*angle);
 		                //mRenderer.mAngle += (dx + dy) * TOUCH_SCALE_FACTOR;  // = 180.0f / 320
 		                
@@ -165,11 +165,28 @@ class MyGLSurfaceView extends GLSurfaceView {
 	                }
 	            
             	}
+            	cross();
                 requestRender();
         }
 
 
         return true;
+    }
+    
+    public void mapToModelSpace(float x, float y) {
+    	float width = getWidth();
+    	float height = getHeight();
+    	float ratio = width/height;
+    	float u = (x/width)*(2*ratio)-ratio;
+    	float v = (y/height)*(-2) + 1;
+    }
+    
+    public void cross() {
+    	float x = -1.0f*this.dx;
+    	float y = this.dy;
+    	this.dx = y;
+    	this.dy = (float) (-1.0*x);
+    	
     }
 }
 

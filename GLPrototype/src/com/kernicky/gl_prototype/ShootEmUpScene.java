@@ -22,7 +22,7 @@ public class ShootEmUpScene extends Scene {
 	private float[] mView = new float[16];
 	private float[] mProj = new float[16];
 
-	private float[] mViewerPos = { 0.0f, 0.0f, 2.0f };
+	private float[] mViewerPos = { 0.0f, 0.0f, 2.0f, 0.0f };
 	private float[] mCenterPos = { 0.0f, 0.0f, 0.0f };
 	private float[] mUpV = { 0.0f, 1.0f, 0.0f };
 
@@ -54,8 +54,10 @@ public class ShootEmUpScene extends Scene {
 		// ship.addTransform(new Transformation(360.0f, 0, 0, 1, 30, 90));
 		// ship.addTransform(new Transformation(-180.0f, 0, 0, 1, 90, 120));
 
-		ship.addTransformToFront((new Transformation(ship.angle, 0, 0, 1)));
-		ship.addTransform(new Transformation(0, 0, 1.0f));
+		ship.addTransform(new Transformation(0.0f, 1, 0, 0, 0, 360));
+		ship.addTransform(new Transformation(0.0f, 1, 0, 0, 0, 360));
+		ship.addTransform(new Transformation(ship.angle, 0, 0, 1));
+		ship.addTransform(new Transformation(0, 0, 1.f));
 		ship.addTransform(new Transformation(90.0f, 1, 0, 0));
 		ship.addTransform(new Transformation(0.25f));
 
@@ -65,13 +67,12 @@ public class ShootEmUpScene extends Scene {
 		Lamp l3 = new Lamp(0.0f, 0.0f, 0.0f);
 		Lamp l4 = new Lamp(0.0f, 0.0f, 0.0f);
 
-		//BlackIco b = new BlackIco();
-		Base b = new Base();
-		b.addTransform(new Transformation(0.0f, 0.0f, -4.0f));
+		BlackIco b = new BlackIco();
+		//Base b = new Base();
+		//b.addTransform(new Transformation(0.0f, 0.0f, -4.0f));
 		b.addTransform(new Transformation(360.0f, 1, 0, 0, 0, 360));
-
 		//b.addTransform(new Transformation(90.0f, 0, 0, 1));
-		b.addTransform(new Transformation(8.0f));
+		b.addTransform(new Transformation(2.0f));
 
 		l1.addTransform(new Transformation(360.0f, 0, 0, 1, 0, 120));
 		l1.addTransform(new Transformation(.5f, .5f, 1.0f));
@@ -124,8 +125,12 @@ public class ShootEmUpScene extends Scene {
 					m.angle = MyGLSurfaceView.angle;
 					//m.transList.remove(0); 
 					//m.addTransformToFront((new Transformation(m.angle, 0, 0, 1)));
-					m.transList.set(0,new Transformation(m.angle, 0, 0, 1));
-
+					m.transList.set(2,new Transformation(m.angle, 0, 0, 1));
+//					if(MyGLSurfaceView.dx > 0.0f && MyGLSurfaceView.dy > 0.0f) 
+//						m.transList.add(0, new Transformation(15.0f,MyGLSurfaceView.dx, MyGLSurfaceView.dy, 0));
+					m.transList.set(0, new Transformation(m.rotX+=MyGLSurfaceView.dx, 1, 0, 0));
+					m.transList.set(1, new Transformation(m.rotY+=MyGLSurfaceView.dy, 0, 1, 0));
+					
 
 					//m.addTransformToFront((new Transformation(m.angle, 0, 0, 1)));
 				}
@@ -135,7 +140,9 @@ public class ShootEmUpScene extends Scene {
 //					
 //					m.addTransformToFront((new Transformation(360.0f, MyGLSurfaceView.dx, MyGLSurfaceView.dy, 0, 0, 360)));
 //					m.addTransformToFront((new Transformation(0.0f, 0.0f, -4.0f)));
-					m.transList.set(1, new Transformation(360.0f, MyGLSurfaceView.dx, MyGLSurfaceView.dy, 0, 0, 360));
+					//m.transList.set(1, new Transformation(360.0f, MyGLSurfaceView.dx, MyGLSurfaceView.dy, 0, 0, 360));
+					//m.transList.add(1, new Transformation(1.0f, MyGLSurfaceView.dx, MyGLSurfaceView.dy, 0));
+
 
 
 					//m.addTransformToFront((new Transformation(m.angle, 0, 0, 1)));
