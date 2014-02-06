@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.opengl.Matrix;
 
+import com.kernicky.gl_prototype.models.Base;
 import com.kernicky.gl_prototype.models.BlackIco;
 import com.kernicky.gl_prototype.models.F;
 import com.kernicky.gl_prototype.models.GoldenShip;
@@ -64,30 +65,31 @@ public class ShootEmUpScene extends Scene {
 		Lamp l3 = new Lamp(0.0f, 0.0f, 0.0f);
 		Lamp l4 = new Lamp(0.0f, 0.0f, 0.0f);
 
-		BlackIco b = new BlackIco();
+		//BlackIco b = new BlackIco();
+		Base b = new Base();
 		b.addTransform(new Transformation(0.0f, 0.0f, -4.0f));
-		b.addTransform(new Transformation(360.0f, 0, 1, 0, 0, 360));
+		b.addTransform(new Transformation(360.0f, 1, 0, 0, 0, 360));
 
-		b.addTransform(new Transformation(74.0f, 1, 1, 1));
-		b.addTransform(new Transformation(7.0f));
+		//b.addTransform(new Transformation(90.0f, 0, 0, 1));
+		b.addTransform(new Transformation(8.0f));
 
 		l1.addTransform(new Transformation(360.0f, 0, 0, 1, 0, 120));
-		l1.addTransform(new Transformation(1.0f, 1.0f, 1.5f));
+		l1.addTransform(new Transformation(.5f, .5f, 1.0f));
 		l1.addTransform(new Transformation(0.025f));
 		lightList.add(l1);
 
 		l2.addTransform(new Transformation(360.0f, 0, 0, 1, 0, 120));
-		l2.addTransform(new Transformation(1.0f, -1.0f, 1.5f));
+		l2.addTransform(new Transformation(.5f, -.5f, 1.0f));
 		l2.addTransform(new Transformation(0.025f));
 		lightList.add(l2);
 
 		l3.addTransform(new Transformation(360.0f, 0, 0, 1, 0, 120));
-		l3.addTransform(new Transformation(-1.0f, 1.0f, 1.5f));
+		l3.addTransform(new Transformation(-.5f, .5f, 1.0f));
 		l3.addTransform(new Transformation(0.025f));
 		lightList.add(l3);
 
 		l4.addTransform(new Transformation(360.0f, 0, 0, 1, 0, 120));
-		l4.addTransform(new Transformation(-1.0f, -1.0f, 1.5f));
+		l4.addTransform(new Transformation(-.5f, -.5f, 1.0f));
 		l4.addTransform(new Transformation(0.025f));
 		lightList.add(l4);
 
@@ -120,8 +122,20 @@ public class ShootEmUpScene extends Scene {
 			for (Model m : modelList) {
 				if(m.getClass().equals(GoldenShip.class)) {
 					m.angle = MyGLSurfaceView.angle;
-					m.transList.remove(0); 
-					m.addTransformToFront((new Transformation(m.angle, 0, 0, 1)));
+					//m.transList.remove(0); 
+					//m.addTransformToFront((new Transformation(m.angle, 0, 0, 1)));
+					m.transList.set(0,new Transformation(m.angle, 0, 0, 1));
+
+
+					//m.addTransformToFront((new Transformation(m.angle, 0, 0, 1)));
+				}
+				if(m.getClass().equals(Base.class)) {
+//					m.transList.remove(0); 
+//					m.transList.remove(0); 
+//					
+//					m.addTransformToFront((new Transformation(360.0f, MyGLSurfaceView.dx, MyGLSurfaceView.dy, 0, 0, 360)));
+//					m.addTransformToFront((new Transformation(0.0f, 0.0f, -4.0f)));
+					m.transList.set(1, new Transformation(360.0f, MyGLSurfaceView.dx, MyGLSurfaceView.dy, 0, 0, 360));
 
 
 					//m.addTransformToFront((new Transformation(m.angle, 0, 0, 1)));

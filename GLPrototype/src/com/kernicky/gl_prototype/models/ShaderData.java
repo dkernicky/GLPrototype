@@ -1,7 +1,7 @@
 package com.kernicky.gl_prototype.models;
 
 public class ShaderData {
-	private final String vertexShaderCode =
+	public static final String multiColorVertexShaderCode =
 			"uniform mat4 u_MVPMatrix;" +
 			"uniform mat4 u_MVMatrix;" +
 			"attribute vec4 a_Position;" +
@@ -25,9 +25,9 @@ public class ShaderData {
 			"  v_Shininess = a_Shininess;" +
 			"  gl_Position = u_MVPMatrix * a_Position;" +
 			"}";
-	private final String fragmentShaderCode = 
+	public static final String multiColorFragmentShaderCode = 
 			"precision mediump float;" + 
-			"uniform vec3 u_LightPos[3];" +
+			"uniform vec3 u_LightPos[4];" +
 			"varying vec3 v_Position;" +
 			"varying vec3 v_Normal;" +
 			"varying vec3 v_Ambient;" +
@@ -38,7 +38,7 @@ public class ShaderData {
 			"  vec3 amb = vec3(0.0, 0.0, 0.0);" +
 			"  vec3 diff = vec3(0.0, 0.0, 0.0);" +
 			"  vec3 spec = vec3(0.0, 0.0, 0.0);" +
-			"  for(int n = 0; n < 3; n ++) {" +
+			"  for(int n = 0; n < 4; n ++) {" +
 			"    vec3 v = normalize(vec3(0.0, 0.0, 0.0) - v_Position);" +
 			"    vec3 lightDir = u_LightPos[n] - v_Position;" +
 			"    float distance = length(lightDir);" +

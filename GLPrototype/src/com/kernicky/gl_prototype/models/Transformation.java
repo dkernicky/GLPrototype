@@ -16,6 +16,7 @@ public class Transformation {
 	private int duration = 1;
 	private float factor = 1.0f;
 	
+	public Transformation() {}
 	public Transformation(float angle, float x, float y, float z) { // Static rotation
 		t1 = type.STATIC;
 		t2 = type.ROTATION;
@@ -105,5 +106,12 @@ public class Transformation {
 //			System.out.print(f + " ");
 //		}
 		return mModel;
+	}
+	
+	public class Scale extends Transformation {
+		
+		public Scale(float x, float y, float z) {
+			
+		}
 	}
 }
