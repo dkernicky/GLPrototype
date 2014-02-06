@@ -95,7 +95,7 @@ public class ShootEmUpScene extends Scene {
 		lightList.add(l4);
 
 		modelList.add(ship);
-		modelList.add(b);
+		//modelList.add(b);
 	}
 
 	public void draw() {
@@ -128,8 +128,10 @@ public class ShootEmUpScene extends Scene {
 					m.transList.set(2,new Transformation(m.angle, 0, 0, 1));
 //					if(MyGLSurfaceView.dx > 0.0f && MyGLSurfaceView.dy > 0.0f) 
 //						m.transList.add(0, new Transformation(15.0f,MyGLSurfaceView.dx, MyGLSurfaceView.dy, 0));
-					m.transList.set(0, new Transformation(m.rotX+=MyGLSurfaceView.dx, 1, 0, 0));
-					m.transList.set(1, new Transformation(m.rotY+=MyGLSurfaceView.dy, 0, 1, 0));
+					float rotX = m.rotX;
+					float rotY = m.rotY;
+					m.transList.set(0, new Transformation(m.rotX = (m.rotX+MyGLSurfaceView.dx)%360.0f, 1, 0, 0));
+					m.transList.set(1, new Transformation(m.rotY = (m.rotY+MyGLSurfaceView.dy)%360.0f, 0, 1, 0));
 					
 
 					//m.addTransformToFront((new Transformation(m.angle, 0, 0, 1)));
