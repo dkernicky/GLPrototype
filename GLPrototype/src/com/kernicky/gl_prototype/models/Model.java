@@ -228,7 +228,7 @@ public abstract class Model {
 		GLES20.glUniformMatrix4fv(mMVMatrixHandle, 1, false, mModelView, 0);
 		MyGLRenderer.checkGlError("glUniformMatrix4fv");
 
-		System.out.println(mLightPos.length);
+		//System.out.println(mLightPos.length);
 		mLightPosHandle = GLES20.glGetUniformLocation(mProgram, "u_LightPos");
 		GLES20.glUniform3fv(mLightPosHandle, mLightPos.length/3, mLightPos, 0);
 		//GLES20.glUniform3f(mLightPosHandle, mLightPos[0] , mLightPos[1], mLightPos[2]);

@@ -88,6 +88,8 @@ class MyGLSurfaceView extends GLSurfaceView {
     private float mPreviousYRight;
     private float mPreviousXLeft;
     private float mPreviousYLeft;
+    private boolean leftTouch, rightTouch;
+    private float leftX, leftY, rightX, rightY;
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
@@ -95,20 +97,71 @@ class MyGLSurfaceView extends GLSurfaceView {
         // and other input controls. In this case, you are only
         // interested in events where the touch position changed.
 
-        float x = e.getX();
-        float y = e.getY();
+    	int count = e.getPointerCount();
+		//System.out.println(count);
+
+    	leftTouch = false;
+    	rightTouch = false;
+    	for(int n = 0; n < count; n ++) {
+    		if(e.getX(n) < getWidth()/2) {
+    			leftTouch = true;
+    	    	//System.out.println("LEFT TRUE");
+
+    			leftX = e.getX(n);
+    			leftY = e.getY(n);
+    		}
+    		else {
+    			rightTouch = true;
+    	    	//System.out.println("RIGHT TRUE");
+    			rightX = e.getX(n);
+    			rightY = e.getY(n);
+    		}
+    	}
+    	if(!leftTouch) {
+    		this.dxLeft = 0;
+    		this.dyLeft = 0;
+    	}
+
+        //float x = e.getX();
+        //float y = e.getY();
+
 //        float[] result = mapToModelSpace(x, y);
 //        System.out.println(result[0] + "*****" + result[1]);
         switch (e.getAction()) {
         	case MotionEvent.ACTION_UP:
-        		this.dxLeft = 0;
-        		this.dyLeft = 0;
+        		count = e.getPointerCount();
+    			System.out.println(count);
+
+            	leftTouch = false;
+            	rightTouch = false;
+            	for(int n = 1; n < count; n ++) {
+            		if(e.getX(n) < getWidth()/2) {
+            			leftTouch = true;
+
+            			leftX = e.getX(n);
+            			leftY = e.getY(n);
+            		}
+            		else {
+            			rightTouch = true;
+            			rightX = e.getX(n);
+            			rightY = e.getY(n);
+            		}
+            	}
+            	if(!leftTouch) {
+            		this.dxLeft = 0.0f;
+            		this.dyLeft = 0.0f;
+        	    	//System.out.println("UP!!!!!!!!!!!!!");
+            	}
+            	//System.out.println(leftTouch);
+
+
+
         		break;
             case MotionEvent.ACTION_MOVE:
             	
-            	if(x > getWidth()/2) {
-	                double dx = x - mPreviousXRight;
-	                double dy = y - mPreviousYRight;
+            	if(rightTouch) {
+	                double dx = rightX - mPreviousXRight;
+	                double dy = rightY - mPreviousYRight;
 	                //dx = -1.0f;
 	                //dy = 1.0f;
 	                if(dx == 0) {
@@ -136,14 +189,14 @@ class MyGLSurfaceView extends GLSurfaceView {
 		                
 		                this.dxRight = (float) dx;
 		                this.dyRight = (float) dy;
-	                    mPreviousXRight = x;
-	                    mPreviousYRight = y;
+	                    mPreviousXRight = rightX;
+	                    mPreviousYRight = rightY;
 	                }
             	}
-            	if(x < getWidth()/2) {
-            		double dx = x - mPreviousXLeft;
-            		double dy = y - mPreviousYLeft;
- 	                
+            	if(leftTouch) {
+            		double dx = leftX - mPreviousXLeft;
+            		double dy = leftY - mPreviousYLeft;
+ 	                //dy *= -1.0f;
             		if(dx == 0) {
             			dx = .000001f;
             		}
@@ -161,19 +214,21 @@ class MyGLSurfaceView extends GLSurfaceView {
 	                if((dx <= 0 && dy <= 0) || (dx <= 0 && dy >= 0)) {
 	                	angle += 180.0;
 	                }
-	                if(magnitude > 3) {
+	                if(true || magnitude > 10) {
+	                	System.out.println(this.angleLeft == -90.0);
 		                this.angleLeft = (float) ((float) -1.0f*angle);
 		                //mRenderer.mAngle += (dx + dy) * TOUCH_SCALE_FACTOR;  // = 180.0f / 320
 		                
 		                this.dxLeft = (float) dx;
 		                this.dyLeft = (float) dy;
+
 		                
-		                mPreviousXLeft = x;
-		                mPreviousYLeft = y;
+		                mPreviousXLeft = leftX;
+		                mPreviousYLeft = leftY;
 	                }
 	            
             	}
-            	cross();
+            	//cross();
                 requestRender();
         }
 

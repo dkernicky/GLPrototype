@@ -31,7 +31,7 @@ public class ShootEmUpScene extends Scene {
 	private ArrayList<Float> lightPosList = new ArrayList<Float>();
 
 	public ShootEmUpScene() {
-		PhongCube cube = new PhongCube();
+		//PhongCube cube = new PhongCube();
 		GoldenShip ship = new GoldenShip();
 		F f1 = new F();
 		F f2 = new F();
@@ -69,12 +69,11 @@ public class ShootEmUpScene extends Scene {
 
 		//BlackIco b = new BlackIco();
 		Base b = new Base();
-		//b.addTransform(new Transformation(0.0f, 0.0f, -4.0f));
+		//PhongCube b = new PhongCube();
 		b.addTransform(new Transformation(0.0f, 1, 0, 0, 0, 360));
 		b.addTransform(new Transformation(0.0f, 1, 0, 0, 0, 360));
-		//b.addTransform(new Transformation(360.0f, 1, 0, 0, 0, 360));
-		//b.addTransform(new Transformation(90.0f, 0, 0, 1));
 		b.addTransform(new Transformation(1.9f));
+
 
 		//l1.addTransform(new Transformation(360.0f, 0, 0, 1, 0, 120));
 		l1.addTransform(new Transformation(0, 0, 0, 1));
@@ -131,16 +130,25 @@ public class ShootEmUpScene extends Scene {
 				if(m.getClass().equals(GoldenShip.class)) {
 					m.angle = MyGLSurfaceView.angleLeft;
 					m.transList.set(2,new Transformation(m.angle, 0, 0, 1));
+					//System.out.println(m.angle);
+
+//					m.transList.set(0, new Transformation(m.rotX = (m.rotX+MyGLSurfaceView.dyLeft)%360.0f, 1, 0, 0));
+//					m.transList.set(1, new Transformation(m.rotY = (m.rotY+MyGLSurfaceView.dxLeft)%360.0f, 0, 1, 0));
+				}
+				if(m.getClass().equals(BlackIco.class) || m.getClass().equals(Base.class) || m.getClass().equals(PhongCube.class)) {
 					float rotX = m.rotX;
 					float rotY = m.rotY;
-					//m.transList.set(0, new Transformation(m.rotX = (m.rotX+MyGLSurfaceView.dx)%360.0f, 1, 0, 0));
-					//m.transList.set(1, new Transformation(m.rotY = (m.rotY+MyGLSurfaceView.dy)%360.0f, 0, 1, 0));
-					
-
-				}
-				if(m.getClass().equals(BlackIco.class) || m.getClass().equals(Base.class)) {
-					m.transList.set(0, new Transformation(m.rotX = (m.rotX-2*MyGLSurfaceView.dxLeft)%360.0f, 1, 0, 0));
-					m.transList.set(1, new Transformation(m.rotY = (m.rotY-2*MyGLSurfaceView.dyLeft)%360.0f, 0, 1, 0));
+					//System.out.println(MyGLSurfaceView.dyLeft);
+					m.rotX = (m.rotX-2*MyGLSurfaceView.dyLeft)%360.0f;
+					m.rotY = (m.rotY-2*MyGLSurfaceView.dxLeft)%360.0f;
+					while(m.rotX < -180.0f) {
+						m.rotX += 360.0f;
+					}
+					while(m.rotY < 0) {
+						m.rotY += 360.0f;
+					}
+					m.transList.set(0, new Transformation(m.rotX, 1, 0, 0));
+					m.transList.set(1, new Transformation(m.rotY, 0, 1, 0));
 
 				}
 				m.draw(mView, mProj, lightPos);

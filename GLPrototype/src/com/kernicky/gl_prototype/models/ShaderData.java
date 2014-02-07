@@ -52,7 +52,7 @@ public class ShaderData {
 			
 			"    vec3 lc = vec3(1.0, 1.0, 1.0);" +
 			"    vec3 v_Diff = vec3(.5, .5, .5);" +
-			"    diff += intensity*lc*v_Diff/distance;" +
+			"    diff += intensity*lc*v_Diffuse/distance;" +
 			"    vec3 H = normalize(v+lightDir);" +
 			"    float NdotH = dot(v_Normal, H);" +
 			"    intensity = min(NdotH, 1.0);" +
