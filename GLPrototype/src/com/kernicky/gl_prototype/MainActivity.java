@@ -19,6 +19,7 @@ package com.kernicky.gl_prototype;
 import android.app.Activity;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.opengl.Matrix;
 import android.os.Bundle;
 import android.view.MotionEvent;
 
@@ -66,6 +67,9 @@ class MyGLSurfaceView extends GLSurfaceView {
     public static float angleRight = 0.0f;
     public static float dxRight = 0.0f;
     public static float dyRight = 0.0f;
+    public static float[] x_axis = {1.0f, 0.0f, 0.0f, 1.0f};
+    public static float[] y_axis = {0.0f, 1.0f, 0.0f, 1.0f};
+    public static float[] ship_Position = {0.0f, 0.0f, 1.0f, 1.0f};
 
     public MyGLSurfaceView(Context context) {
         super(context);
@@ -80,6 +84,10 @@ class MyGLSurfaceView extends GLSurfaceView {
         // Render the view only when there is a change in the drawing data
         //setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+        
+        Matrix.setIdentityM(transformMatrix, 0);
+        //dxLeft = 1.0f;
+       // rotate();
 
     }
 
@@ -90,13 +98,16 @@ class MyGLSurfaceView extends GLSurfaceView {
     private float mPreviousYLeft;
     private boolean leftTouch, rightTouch;
     private float leftX, leftY, rightX, rightY;
+    private float[] transformMatrix = new float[16];
+ 
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
+
         // MotionEvent reports input details from the touch screen
         // and other input controls. In this case, you are only
         // interested in events where the touch position changed.
-
+    	//printMatrix();
     	int count = e.getPointerCount();
 		//System.out.println(count);
 
@@ -215,7 +226,7 @@ class MyGLSurfaceView extends GLSurfaceView {
 	                	angle += 180.0;
 	                }
 	                if(true || magnitude > 10) {
-	                	System.out.println(this.angleLeft == -90.0);
+	                	//System.out.println(this.angleLeft == -90.0);
 		                this.angleLeft = (float) ((float) -1.0f*angle);
 		                //mRenderer.mAngle += (dx + dy) * TOUCH_SCALE_FACTOR;  // = 180.0f / 320
 		                
@@ -225,6 +236,7 @@ class MyGLSurfaceView extends GLSurfaceView {
 		                
 		                mPreviousXLeft = leftX;
 		                mPreviousYLeft = leftY;
+		                rotate();
 	                }
 	            
             	}
@@ -252,6 +264,46 @@ class MyGLSurfaceView extends GLSurfaceView {
     	this.dxLeft = y;
     	this.dyLeft = (float) (-1.0*x);
     	
+    }
+    public void printMatrix() {
+    	System.out.println("****************");
+    	System.out.println(transformMatrix[0] + " "  + transformMatrix[4] + " " + transformMatrix[8] + " "  + transformMatrix[12]);
+    	System.out.println(transformMatrix[1] + " "  + transformMatrix[5] + " " + transformMatrix[9] + " "  + transformMatrix[13]);
+    	System.out.println(transformMatrix[2] + " "  + transformMatrix[6] + " " + transformMatrix[10] + " "  + transformMatrix[14]);
+    	System.out.println(transformMatrix[3] + " "  + transformMatrix[7] + " " + transformMatrix[11] + " "  + transformMatrix[15]);
+    	System.out.println("****************");
+
+    	
+    }
+    public void rotate() {
+    	Matrix.rotateM(transformMatrix, 0, 4*dxLeft, y_axis[0], y_axis[1], y_axis[2]);
+    	Matrix.rotateM(transformMatrix, 0, 4*dyLeft, x_axis[0], x_axis[1], x_axis[2]);
+    	float[] newXAxis = new float[4];
+    	float[] newYAxis = new float[4];
+    	float[] newShipPosition = new float[4];
+    	float[] newShipAngle = new float[4];
+    	float[] newViewerPos = new float[4];
+    	Matrix.multiplyMV(newXAxis, 0, transformMatrix, 0, x_axis, 0);
+    	Matrix.multiplyMV(newYAxis, 0, transformMatrix, 0, y_axis, 0);
+    	Matrix.multiplyMV(newShipPosition, 0, transformMatrix, 0, ShootEmUpScene.shipPosition, 0);
+    	Matrix.multiplyMV(newShipAngle, 0, transformMatrix, 0, ShootEmUpScene.shipAngle, 0);
+    	Matrix.multiplyMV(newViewerPos, 0, transformMatrix, 0, ShootEmUpScene.mViewerPos, 0);
+    	
+    	double phi = Math.acos(newShipPosition[2]);
+    	double theta = Math.acos(newShipPosition[0]/Math.sin(phi));
+
+
+    	float[] posVec = {newShipPosition[0] - ShootEmUpScene.shipPosition[0], newShipPosition[1] - ShootEmUpScene.shipPosition[1], newShipPosition[2] - ShootEmUpScene.shipPosition[2]};
+    	float magnitude = (float) Math.sqrt(posVec[0]*posVec[0] + posVec[1]*posVec[1] + posVec[2]*posVec[2]);
+    	x_axis = newXAxis;
+    	y_axis = newYAxis;
+    	ShootEmUpScene.mUpV = y_axis;
+    	ShootEmUpScene.shipPosition = newShipPosition;
+    	ShootEmUpScene.shipAngle = newShipAngle;
+    	ShootEmUpScene.mViewerPos = newViewerPos;
+    	//System.out.println("x: " + x_axis[0] + " " + x_axis[1] + " " + x_axis[2]);
+    	Matrix.setIdentityM(transformMatrix, 0);
+
     }
 }
 

@@ -22,9 +22,11 @@ public class ShootEmUpScene extends Scene {
 	private float[] mView = new float[16];
 	private float[] mProj = new float[16];
 
-	private float[] mViewerPos = { 0.0f, 0.0f, 2.0f, 0.0f };
-	private float[] mCenterPos = { 0.0f, 0.0f, 0.0f };
-	private float[] mUpV = { 0.0f, 1.0f, 0.0f };
+	public static float[] mViewerPos = { 0.0f, 0.0f, 2.0f, 1.0f };
+	private float[] mCenterPos = { 0.0f, 0.0f, 0.0f, 1.0f };
+	public static float[] mUpV = { 0.0f, 1.0f, 0.0f, 1.0f };
+	public static float[] shipPosition = { 0.0f, 0.0f, 1.0f, 1.0f };
+	public static float[] shipAngle = { 0.0f, 1.0f, 0.0f, 1.0f };
 
 	private ArrayList<Model> modelList = new ArrayList<Model>();
 	private ArrayList<Lamp> lightList = new ArrayList<Lamp>();
@@ -37,29 +39,14 @@ public class ShootEmUpScene extends Scene {
 		F f2 = new F();
 		O o = new O();
 
-		// ship.addTransform(new Transformation(1.5f, 0.0f, 0.0f, 0, 30));
-		// ship.addTransform(new Transformation(-3.0f, 0.0f, 0.0f, 30, 90));
-		// ship.addTransform(new Transformation(1.5f, 0.0f, 0.0f, 90, 120));
 
-		// ship.addTransform(new Transformation(20.0f, 0, 1, 0, 0, 30));
-		// ship.addTransform(new Transformation(-45.0f, 0, 1, 0, 30, 90));
-		// ship.addTransform(new Transformation(20.0f, 0, 1, 0, 90, 120));
+		ship.addTransform(new Transformation(0.0f, 1, 0, 0));
+		ship.addTransform(new Transformation(0.0f, 1, 0, 0));
+		ship.addTransform(new Transformation(0.0f, 1, 0, 0));
 
-		// ship.addTransform(new Transformation(-40.0f, 0, 0, 1, 15, 30));
-		// ship.addTransform(new Transformation(40.0f, 0, 0, 1, 30, 45));
-		// ship.addTransform(new Transformation(40.0f, 0, 0, 1, 75, 90));
-		// ship.addTransform(new Transformation(-40.0f, 0, 0, 1, 90, 105));
-
-		// ship.addTransform(new Transformation(-180.0f, 0, 0, 1, 0, 30));
-		// ship.addTransform(new Transformation(360.0f, 0, 0, 1, 30, 90));
-		// ship.addTransform(new Transformation(-180.0f, 0, 0, 1, 90, 120));
-
-		ship.addTransform(new Transformation(0.0f, 1, 0, 0, 0, 360));
-		ship.addTransform(new Transformation(0.0f, 1, 0, 0, 0, 360));
-		ship.addTransform(new Transformation(ship.angle, 0, 0, 1));
-		ship.addTransform(new Transformation(0, 0, 1.f));
-		ship.addTransform(new Transformation(90.0f, 1, 0, 0));
-		ship.addTransform(new Transformation(0.25f));
+		ship.addTransform(new Transformation(shipPosition[0], shipPosition[1], shipPosition[2]));
+		ship.addTransform(new Transformation(90.0f, MyGLSurfaceView.x_axis[0], MyGLSurfaceView.x_axis[1], MyGLSurfaceView.x_axis[2]));
+		ship.addTransform(new Transformation(0.2f));
 
 
 		Lamp l1 = new Lamp(0.0f, 0.0f, 0.0f);
@@ -75,26 +62,26 @@ public class ShootEmUpScene extends Scene {
 		b.addTransform(new Transformation(1.9f));
 
 
-		//l1.addTransform(new Transformation(360.0f, 0, 0, 1, 0, 120));
 		l1.addTransform(new Transformation(0, 0, 0, 1));
+		l1.addTransform(new Transformation(0, 0, 0));
 		l1.addTransform(new Transformation(.0f, .75f, 1.0f));
 		l1.addTransform(new Transformation(0.025f));
 		lightList.add(l1);
 
-		//l2.addTransform(new Transformation(360.0f, 0, 0, 1, 0, 120));
 		l2.addTransform(new Transformation(0, 0, 0, 1));
+		l2.addTransform(new Transformation(0, 0, 0));
 		l2.addTransform(new Transformation(.0f, -.75f, 1.0f));
 		l2.addTransform(new Transformation(0.025f));
 		lightList.add(l2);
 
-		//l3.addTransform(new Transformation(360.0f, 0, 0, 1, 0, 120));
 		l3.addTransform(new Transformation(0, 0, 0, 1));
+		l3.addTransform(new Transformation(0, 0, 0));
 		l3.addTransform(new Transformation(-.75f, -0.f, 1.0f));
 		l3.addTransform(new Transformation(0.025f));
 		lightList.add(l3);
 
-		//l4.addTransform(new Transformation(360.0f, 0, 0, 1, 0, 120));
 		l4.addTransform(new Transformation(0, 0, 0, 1));
+		l4.addTransform(new Transformation(0, 0, 0));
 		l4.addTransform(new Transformation(.75f, -0.0f, 1.0f));
 		l4.addTransform(new Transformation(0.025f));
 		lightList.add(l4);
@@ -107,14 +94,20 @@ public class ShootEmUpScene extends Scene {
 		double currentTime = System.currentTimeMillis();
 		if (true || currentTime - lastUpdate >= 1000.0f / frameRate) {
 
+			
 			Matrix.setLookAtM(mView, 0, mViewerPos[0], mViewerPos[1],
 					mViewerPos[2], mCenterPos[0], mCenterPos[1], mCenterPos[2],
 					mUpV[0], mUpV[1], mUpV[2]);
-
+//			System.out.println("view: " + mViewerPos[0] + " " + mViewerPos[1] + " " + mViewerPos[2]);
+//			System.out.println("ship: " + shipPosition[0] + " " + shipPosition[1] + " " +shipPosition[2]);
+//			System.out.println("up: " + mUpV[0] + " " + mUpV[1] + " " +mUpV[2]);
+			
 			lightPosList.clear();
 
 			for (int n = 0; n < lightList.size(); n++) {
 				lightList.get(n).transList.set(0, new Transformation(MyGLSurfaceView.angleRight, 0, 0, 1));
+				//lightList.get(n).transList.set(1, new Transformation(MyGLSurfaceView.angleRight, shipPosition[0], shipPosition[1], shipPosition[2]));
+
 				lightList.get(n).draw(mView, mProj);
 
 				for (int m = 0; m < lightList.get(n).getMELightPos().length - 1; m++) {
@@ -129,26 +122,34 @@ public class ShootEmUpScene extends Scene {
 			for (Model m : modelList) {
 				if(m.getClass().equals(GoldenShip.class)) {
 					m.angle = MyGLSurfaceView.angleLeft;
-					m.transList.set(2,new Transformation(m.angle, 0, 0, 1));
-					//System.out.println(m.angle);
+					//m.transList.set(1,new Transformation(90, shipAngle[0], shipAngle[1], shipAngle[2]));
+					//m.transList.set(0, new Transformation(shipPosition[0], shipPosition[1], shipPosition[2]));
+					m.transList.set(0, new Transformation(m.rotY+=4*MyGLSurfaceView.dxLeft, MyGLSurfaceView.y_axis[0], MyGLSurfaceView.y_axis[1], MyGLSurfaceView.y_axis[2]));
+					m.transList.set(1, new Transformation(m.rotX+=4*MyGLSurfaceView.dyLeft, MyGLSurfaceView.x_axis[0], MyGLSurfaceView.x_axis[1], MyGLSurfaceView.x_axis[2]));
+
+
+
+					//m.transList.set(3, new Transformation(90.0f, MyGLSurfaceView.x_axis[0], MyGLSurfaceView.x_axis[1], MyGLSurfaceView.x_axis[2]));
+
 
 //					m.transList.set(0, new Transformation(m.rotX = (m.rotX+MyGLSurfaceView.dyLeft)%360.0f, 1, 0, 0));
 //					m.transList.set(1, new Transformation(m.rotY = (m.rotY+MyGLSurfaceView.dxLeft)%360.0f, 0, 1, 0));
 				}
 				if(m.getClass().equals(BlackIco.class) || m.getClass().equals(Base.class) || m.getClass().equals(PhongCube.class)) {
-					float rotX = m.rotX;
-					float rotY = m.rotY;
-					//System.out.println(MyGLSurfaceView.dyLeft);
-					m.rotX = (m.rotX-2*MyGLSurfaceView.dyLeft)%360.0f;
-					m.rotY = (m.rotY-2*MyGLSurfaceView.dxLeft)%360.0f;
-					while(m.rotX < -180.0f) {
-						m.rotX += 360.0f;
-					}
-					while(m.rotY < 0) {
-						m.rotY += 360.0f;
-					}
-					m.transList.set(0, new Transformation(m.rotX, 1, 0, 0));
-					m.transList.set(1, new Transformation(m.rotY, 0, 1, 0));
+//					float rotX = m.rotX;
+//					float rotY = m.rotY;
+//					//System.out.println(MyGLSurfaceView.dyLeft);
+//					
+//					m.rotX = (m.rotX-2*MyGLSurfaceView.dyLeft)%360.0f;
+//					m.rotY = (m.rotY-2*MyGLSurfaceView.dxLeft)%360.0f;
+//					while(m.rotX < -180.0f) {
+//						m.rotX += 360.0f;
+//					}
+//					while(m.rotY < 0) {
+//						m.rotY += 360.0f;
+//					}
+//					m.transList.set(0, new Transformation(m.rotX, 1, 0, 0));
+//					m.transList.set(1, new Transformation(m.rotY, 0, 1, 0));
 
 				}
 				m.draw(mView, mProj, lightPos);
