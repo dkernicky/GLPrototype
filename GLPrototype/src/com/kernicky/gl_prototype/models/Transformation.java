@@ -4,7 +4,7 @@ import android.opengl.Matrix;
 
 public class Transformation {
 	
-	public enum type  {STATIC, DYNAMIC, TRANSLATION, ROTATION, SCALE};
+	public enum type  {STATIC, DYNAMIC, TRANSLATION, ROTATION, SCALE, MATRIX};
 	private type t1 = type.STATIC;
 	private type t2 = type.ROTATION;
 	private float angle = 0.0f;
@@ -15,6 +15,7 @@ public class Transformation {
 	private int end = 1;
 	private int duration = 1;
 	private float factor = 1.0f;
+	private float[] m = new float[16];
 	
 	public Transformation() {}
 	public Transformation(float angle, float x, float y, float z) { // Static rotation
@@ -61,6 +62,10 @@ public class Transformation {
 		t2 = type.SCALE;
 		factor = value;
 	}
+	public Transformation(float[] m) {
+		this.m = m;
+		t1 = type.MATRIX;
+	}
 	
 	public int getEndTick() {
 		return this.end;
@@ -78,7 +83,7 @@ public class Transformation {
 				Matrix.scaleM(mModel, 0, factor, factor, factor);
 			}
 		}
-		else {
+		else if(t1 == type.DYNAMIC){
 			if(start <= currentTick && end >= currentTick) {
 
 				if(t2 == type.ROTATION) {
@@ -101,6 +106,10 @@ public class Transformation {
 
 				}
 			}
+		}
+		else if(t1 == type.MATRIX) {
+			float[] newModel = new float[16];
+			Matrix.multiplyMM(newModel, 0, mModel, 0, m, 0);
 		}
 //		for(float f: mModel) {
 //			System.out.print(f + " ");

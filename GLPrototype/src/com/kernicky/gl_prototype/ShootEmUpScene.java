@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.opengl.Matrix;
 
+import com.kernicky.gl_prototype.math.Quaternion;
 import com.kernicky.gl_prototype.models.Base;
 import com.kernicky.gl_prototype.models.BlackIco;
 import com.kernicky.gl_prototype.models.F;
@@ -26,7 +27,11 @@ public class ShootEmUpScene extends Scene {
 	private float[] mCenterPos = { 0.0f, 0.0f, 0.0f, 1.0f };
 	public static float[] mUpV = { 0.0f, 1.0f, 0.0f, 1.0f };
 	public static float[] shipPosition = { 0.0f, 0.0f, 1.0f, 1.0f };
-	public static float[] shipAngle = { 0.0f, 1.0f, 0.0f, 1.0f };
+	public static float[] shipAngle = { 0.0f, 0.0f, 0.0f, 1.0f };
+	public static Quaternion viewQ = new Quaternion(0.0f, 0.0f, 2.0f, 0.0f);
+	public static Quaternion shipQ = new Quaternion(0.0f, 0.0f, 1.0f, 0.0f);
+	public static Quaternion shipDirQ = new Quaternion(0.0f, 1.0f, 0.0f, 0.0f);
+
 
 	private ArrayList<Model> modelList = new ArrayList<Model>();
 	private ArrayList<Lamp> lightList = new ArrayList<Lamp>();
@@ -43,8 +48,8 @@ public class ShootEmUpScene extends Scene {
 		ship.addTransform(new Transformation(0.0f, 1, 0, 0));
 		ship.addTransform(new Transformation(0.0f, 1, 0, 0));
 		ship.addTransform(new Transformation(0.0f, 1, 0, 0));
-
 		ship.addTransform(new Transformation(shipPosition[0], shipPosition[1], shipPosition[2]));
+		
 		ship.addTransform(new Transformation(90.0f, MyGLSurfaceView.x_axis[0], MyGLSurfaceView.x_axis[1], MyGLSurfaceView.x_axis[2]));
 		ship.addTransform(new Transformation(0.2f));
 
@@ -124,9 +129,11 @@ public class ShootEmUpScene extends Scene {
 					m.angle = MyGLSurfaceView.angleLeft;
 					//m.transList.set(1,new Transformation(90, shipAngle[0], shipAngle[1], shipAngle[2]));
 					//m.transList.set(0, new Transformation(shipPosition[0], shipPosition[1], shipPosition[2]));
-					m.transList.set(0, new Transformation(m.rotY+=4*MyGLSurfaceView.dxLeft, MyGLSurfaceView.y_axis[0], MyGLSurfaceView.y_axis[1], MyGLSurfaceView.y_axis[2]));
-					m.transList.set(1, new Transformation(m.rotX+=4*MyGLSurfaceView.dyLeft, MyGLSurfaceView.x_axis[0], MyGLSurfaceView.x_axis[1], MyGLSurfaceView.x_axis[2]));
-
+					//m.transList.set(0, new Transformation(m.rotY+=4*MyGLSurfaceView.dxLeft, MyGLSurfaceView.y_axis[0], MyGLSurfaceView.y_axis[1], MyGLSurfaceView.y_axis[2]));
+					//m.transList.set(1, new Transformation(m.rotX+=4*MyGLSurfaceView.dyLeft, MyGLSurfaceView.x_axis[0], MyGLSurfaceView.x_axis[1], MyGLSurfaceView.x_axis[2]));
+					m.transList.set(0, new Transformation(shipAngle[0], 1, 0, 0));
+					m.transList.set(1, new Transformation(shipAngle[1], 0, 1, 0));
+					m.transList.set(2, new Transformation(shipAngle[2], 0, 0, 1));
 
 
 					//m.transList.set(3, new Transformation(90.0f, MyGLSurfaceView.x_axis[0], MyGLSurfaceView.x_axis[1], MyGLSurfaceView.x_axis[2]));
