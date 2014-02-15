@@ -24,6 +24,8 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 
 import com.kernicky.gl_prototype.math.Quaternion;
+import com.kernicky.gl_prototype.math.MatrixOp;
+import com.kernicky.gl_prototype.math.Vector;
 
 public class MainActivity extends Activity {
 
@@ -71,6 +73,7 @@ class MyGLSurfaceView extends GLSurfaceView {
     public static float dyRight = 0.0f;
     public static float[] x_axis = {1.0f, 0.0f, 0.0f, 0.0f};
     public static float[] y_axis = {0.0f, 1.0f, 0.0f, 0.0f};
+    float[] currentTransform = MatrixOp.identity();
     public static float[] ship_Position = {0.0f, 0.0f, 1.0f, 1.0f};
 
     public MyGLSurfaceView(Context context) {
@@ -277,52 +280,128 @@ class MyGLSurfaceView extends GLSurfaceView {
 
     	
     }
-    public void rotate() {    	
-//    	System.out.println("*****************************");
+//    public void rotate4() {
+//    	float[] inputVec = {-1*dxLeft, dyLeft, 0, 0};
+//		inputVec = Vector.normalize(inputVec);
+//		inputVec = MatrixOp.multiplyMV(currentTransform, inputVec);
+//		
+//		float[] rotAxis = Vector.cross(inputVec, ShootEmUpScene.shipQ.toFloat());
+//		MatrixOp.printV(rotAxis);
+//
+//		Quaternion q = Quaternion.rotate(.08f,ShootEmUpScene.shipQ.toFloat(), rotAxis);
+//		float[] transform = Quaternion.rotateTo(ShootEmUpScene.shipQ, q);
+//		
+//		ShootEmUpScene.shipQ = new Quaternion(MatrixOp.multiplyMV(transform, ShootEmUpScene.shipQ.toFloat()));
+//		ShootEmUpScene.viewQ = new Quaternion(MatrixOp.multiplyMV(transform, ShootEmUpScene.viewQ.toFloat()));
+//		x_axis = MatrixOp.multiplyMV(transform, x_axis);
+//		y_axis = MatrixOp.multiplyMV(transform, y_axis);
+//		
+//		x_axis = Vector.normalize(x_axis);
+//		y_axis = Vector.normalize(y_axis);		
+//		ShootEmUpScene.shipQ.normalize();
+//		
+//		MatrixOp.printV(x_axis);
+//		MatrixOp.printV(y_axis);
+//
+//		//ShootEmUpScene.shipQ.print();
+//		MatrixOp.printV(y_axis);
+//		currentTransform = MatrixOp.multiplyMM(currentTransform, transform);
+//		ShootEmUpScene.shipAngle = currentTransform;
+//		System.out.println("**");
+//    }
+    public void rotate() {  
+    	System.out.println("*****************************");
 
-    	//Matrix.rotateM(transformMatrix, 0, 4*dxLeft, y_axis[0], y_axis[1], y_axis[2]);
-    	//Matrix.rotateM(transformMatrix, 0, 4*dyLeft, x_axis[0], x_axis[1], x_axis[2]);
-		float[] shipPrevQ = new float[]{ShootEmUpScene.shipQ.x, ShootEmUpScene.shipQ.y, ShootEmUpScene.shipQ.z, ShootEmUpScene.shipQ.w};
-//		System.out.println("From: " + shipPrevQ[0] + " " + shipPrevQ[1] + " " + shipPrevQ[2] + " " + shipPrevQ[3]);
-    	Quaternion x = new Quaternion(x_axis[0], x_axis[1], x_axis[2], 0);
-    	Quaternion y = new Quaternion(y_axis[0], y_axis[1], y_axis[2], 0);
-    	
+    	float[] transform = new float[16];
+		Quaternion q = Quaternion.rotate(.08f*dyLeft, ShootEmUpScene.shipQ.toFloat(), x_axis);
+		Quaternion r = Quaternion.rotate(.08f*dxLeft, ShootEmUpScene.shipQ.toFloat(), y_axis);
+		float[] a = Quaternion.rotateTo(ShootEmUpScene.shipQ, q);
+		float[] b = Quaternion.rotateTo(ShootEmUpScene.shipQ, r);
+		
+		transform = MatrixOp.multiplyMM(a, b);
+		
+		ShootEmUpScene.shipQ = new Quaternion(MatrixOp.multiplyMV(transform, ShootEmUpScene.shipQ.toFloat()));
+		ShootEmUpScene.viewQ = new Quaternion(MatrixOp.multiplyMV(transform, ShootEmUpScene.viewQ.toFloat()));
+		x_axis = MatrixOp.multiplyMV(transform, x_axis);
+		y_axis = MatrixOp.multiplyMV(transform, y_axis);
+		
+		x_axis = Vector.normalize(x_axis);
+		y_axis = Vector.normalize(y_axis);		
+		ShootEmUpScene.shipQ.normalize();
+		//ShootEmUpScene.viewQ.normalize();
+		MatrixOp.printV(x_axis);
+		MatrixOp.printV(y_axis);
+		//ShootEmUpScene.shipAngle = MatrixOp.multiplyMM(ShootEmUpScene.shipAngle, transform);
+		ShootEmUpScene.shipAngle = transform;
+		//ShootEmUpScene.viewQ.print();
+    	System.out.println("*****************************");
+
+    }
+    
+    public void rotate3() {    	
+    	System.out.println("*****************************");
+
+//    	ShootEmUpScene.shipQ = new Quaternion(0, 0, 1, 0);
+//    	ShootEmUpScene.viewQ = new Quaternion(0, 0, 2, 0);
 //    	x_axis = new float[]{1, 0, 0, 0};
 //    	y_axis = new float[]{0, 1, 0, 0};
-//    	dyLeft = (float) (Math.PI/2);
-//    	dxLeft = 0;
-    	ShootEmUpScene.viewQ.rotate(.01f*dyLeft,  x_axis);
-    	ShootEmUpScene.viewQ.rotate(.01f*dxLeft,  y_axis);
-    	ShootEmUpScene.shipQ.rotate(.01f*dyLeft,  x_axis);
-       	ShootEmUpScene.shipQ.rotate(.01f*dxLeft,  y_axis);   	
-		float[] shipNewQ = new float[]{ShootEmUpScene.shipQ.x, ShootEmUpScene.shipQ.y, ShootEmUpScene.shipQ.z, ShootEmUpScene.shipQ.w};
-//		System.out.println("To: " + shipNewQ[0] + " " + shipNewQ[1] + " " + shipNewQ[2] + " " + shipNewQ[3]);
+//    	dyLeft = (float) (-1*Math.PI/2);
+//    	dxLeft = (float) (-1*Math.PI/2);;
 
-       	float[] result = ShootEmUpScene.viewQ.rotateTo(shipPrevQ, shipNewQ);
-//    	System.out.println("****************");
-//    	System.out.println(result[0] + " "  + result[4] + " " + result[8] + " "  + result[12]);
-//    	System.out.println(result[1] + " "  + result[5] + " " + result[9] + " "  + result[13]);
-//    	System.out.println(result[2] + " "  + result[6] + " " + result[10] + " "  + result[14]);
-//    	System.out.println(result[3] + " "  + result[7] + " " + result[11] + " "  + result[15]);
-//    	System.out.println("****************");
+		//float[] shipPrevQ = new float[]{ShootEmUpScene.shipQ.x, ShootEmUpScene.shipQ.y, ShootEmUpScene.shipQ.z, ShootEmUpScene.shipQ.w};
+		//System.out.println("From: " + shipPrevQ[0] + " " + shipPrevQ[1] + " " + shipPrevQ[2] + " " + shipPrevQ[3]);
+    	
+    	//Quaternion x = new Quaternion(x_axis[0], x_axis[1], x_axis[2], 0);
+    	//Quaternion y = new Quaternion(y_axis[0], y_axis[1], y_axis[2], 0);
+    	
 
+    	//ShootEmUpScene.viewQ.rotate(dyLeft,  x_axis);
+    	//ShootEmUpScene.viewQ.rotate(dxLeft,  y_axis);
+
+    	Quaternion q = Quaternion.rotate(.2f*dyLeft, ShootEmUpScene.shipQ.toFloat(), x_axis);
+    	//q.print();
+    	Quaternion r = Quaternion.rotate(.2f*dxLeft, ShootEmUpScene.shipQ.toFloat(), y_axis);
+    	//r.print();
+    	q = q.add(r);
+    	q.normalize();
+    	q.print();
+    	//ShootEmUpScene.shipQ.normalize();
+    	
+    	//y_axis = q.toFloat();
+    	//q.rotate(dxLeft,  y_axis);
+    	//Quaternion s = q.multiply(r);
+    	//q.print();
+       	//ShootEmUpScene.shipQ.rotate(dxLeft,  y_axis);   
+    	
+		//float[] shipNewQ = ShootEmUpScene.shipQ.toFloat();
+		//System.out.println("From: " + shipNewQ[0] + " " + shipNewQ[1] + " " + shipNewQ[2] + " " + shipNewQ[3]);
+		//shipNewQ = q.toFloat();
+		//System.out.println("To: " + shipNewQ[0] + " " + shipNewQ[1] + " " + shipNewQ[2] + " " + shipNewQ[3]);
+
+       	//float[] result = ShootEmUpScene.viewQ.rotateTo(ShootEmUpScene.shipQ.toFloat(), q.toFloat());
+       	float[] result = q.toMatrixCM();
 		//printMatrix(result);
-//    	System.out.println("**");
-//    	ShootEmUpScene.viewQ.print();
-//    	System.out.println("***");
+
        	
        	Matrix.multiplyMV(x_axis, 0, result, 0, x_axis, 0);
        	Matrix.multiplyMV(y_axis, 0, result, 0, y_axis, 0);
        	Matrix.multiplyMV(ShootEmUpScene.shipPosition, 0, result, 0, ShootEmUpScene.shipPosition, 0);
+       	Matrix.multiplyMV(ShootEmUpScene.mViewerPos, 0, result, 0, ShootEmUpScene.mViewerPos, 0);
+       	ShootEmUpScene.shipQ = new Quaternion(ShootEmUpScene.shipPosition[0], ShootEmUpScene.shipPosition[1], ShootEmUpScene.shipPosition[2], 0);
+       	ShootEmUpScene.viewQ = new Quaternion(ShootEmUpScene.mViewerPos[0], ShootEmUpScene.mViewerPos[1], ShootEmUpScene.mViewerPos[2], 0);
+    	//System.out.println(ShootEmUpScene.shipPosition[0] + " " + ShootEmUpScene.shipPosition[1] + " " + ShootEmUpScene.shipPosition[2]);
 
-//       	System.out.println("x: " + x_axis[0] + " " + x_axis[1] + " " + x_axis[2] + " " + x_axis[3]);
-//       	System.out.println("y: " + y_axis[0] + " " + y_axis[1] + " " + y_axis[2] + " " + y_axis[3]);
+       	//Matrix.multiplyMV(ShootEmUpScene.shipAngle, 0, result, 0, ShootEmUpScene.shipAngle, 0);
+       	//ShootEmUpScene.shipAngle = result;
+
+       	//System.out.println("x: " + x_axis[0] + " " + x_axis[1] + " " + x_axis[2] + " " + x_axis[3]);
+       	//System.out.println("y: " + y_axis[0] + " " + y_axis[1] + " " + y_axis[2] + " " + y_axis[3]);
        	
        	ShootEmUpScene.mUpV = y_axis;
-    	ShootEmUpScene.shipPosition = new float[]{ShootEmUpScene.shipQ.x, ShootEmUpScene.shipQ.y, ShootEmUpScene.shipQ.z, ShootEmUpScene.shipQ.w};
+       	//ShootEmUpScene.mViewerPos = ShootEmUpScene.viewQ.toFloat();
+    	//ShootEmUpScene.shipPosition = new float[]{ShootEmUpScene.shipQ.x, ShootEmUpScene.shipQ.y, ShootEmUpScene.shipQ.z, ShootEmUpScene.shipQ.w};
     	//ShootEmUpScene.shipAngle = newShipAngle;
-    	ShootEmUpScene.mViewerPos = new float[]{ShootEmUpScene.viewQ.x, ShootEmUpScene.viewQ.y, ShootEmUpScene.viewQ.z, ShootEmUpScene.viewQ.w};
-//    	System.out.println("*****************************");
+    	System.out.println("*****************************");
 
 
     }

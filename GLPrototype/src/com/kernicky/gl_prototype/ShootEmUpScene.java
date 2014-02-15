@@ -23,12 +23,15 @@ public class ShootEmUpScene extends Scene {
 	private float[] mView = new float[16];
 	private float[] mProj = new float[16];
 
-	public static float[] mViewerPos = { 0.0f, 0.0f, 2.0f, 1.0f };
+	public static float[] mViewerPos = { 0.0f, 0.0f, 3.0f, 1.0f };
 	private float[] mCenterPos = { 0.0f, 0.0f, 0.0f, 1.0f };
 	public static float[] mUpV = { 0.0f, 1.0f, 0.0f, 1.0f };
-	public static float[] shipPosition = { 0.0f, 0.0f, 1.0f, 1.0f };
-	public static float[] shipAngle = { 0.0f, 0.0f, 0.0f, 1.0f };
-	public static Quaternion viewQ = new Quaternion(0.0f, 0.0f, 2.0f, 0.0f);
+	public static float[] shipPosition = { 0.0f, 0.0f, 1.0f, 0.0f };
+	public static float[] shipAngle = {1, 0, 0, 0,
+									   0, 1, 0, 0,
+									   0, 0, 1, 0,
+									   0, 0, 0, 1};
+	public static Quaternion viewQ = new Quaternion(0.0f, 0.0f, 3.0f, 0.0f);
 	public static Quaternion shipQ = new Quaternion(0.0f, 0.0f, 1.0f, 0.0f);
 	public static Quaternion shipDirQ = new Quaternion(0.0f, 1.0f, 0.0f, 0.0f);
 
@@ -45,11 +48,13 @@ public class ShootEmUpScene extends Scene {
 		O o = new O();
 
 
-		ship.addTransform(new Transformation(0.0f, 1, 0, 0));
-		ship.addTransform(new Transformation(0.0f, 1, 0, 0));
-		ship.addTransform(new Transformation(0.0f, 1, 0, 0));
+//		ship.addTransform(new Transformation(0.0f, 1, 0, 0));
+//		ship.addTransform(new Transformation(0.0f, 1, 0, 0));
+//		ship.addTransform(new Transformation(0.0f, 1, 0, 0));
 		ship.addTransform(new Transformation(shipPosition[0], shipPosition[1], shipPosition[2]));
-		
+		ship.addTransform(new Transformation(ship.angle));
+
+
 		ship.addTransform(new Transformation(90.0f, MyGLSurfaceView.x_axis[0], MyGLSurfaceView.x_axis[1], MyGLSurfaceView.x_axis[2]));
 		ship.addTransform(new Transformation(0.2f));
 
@@ -58,7 +63,10 @@ public class ShootEmUpScene extends Scene {
 		Lamp l2 = new Lamp(0.0f, 0.0f, 0.0f);
 		Lamp l3 = new Lamp(0.0f, 0.0f, 0.0f);
 		Lamp l4 = new Lamp(0.0f, 0.0f, 0.0f);
-
+		Lamp l5 = new Lamp(0.0f, 0.0f, 0.0f);
+		Lamp l6 = new Lamp(0.0f, 0.0f, 0.0f);
+		Lamp l7 = new Lamp(0.0f, 0.0f, 0.0f);
+		Lamp l8 = new Lamp(0.0f, 0.0f, 0.0f);
 		//BlackIco b = new BlackIco();
 		Base b = new Base();
 		//PhongCube b = new PhongCube();
@@ -69,27 +77,51 @@ public class ShootEmUpScene extends Scene {
 
 		l1.addTransform(new Transformation(0, 0, 0, 1));
 		l1.addTransform(new Transformation(0, 0, 0));
-		l1.addTransform(new Transformation(.0f, .75f, 1.0f));
+		l1.addTransform(new Transformation(1f, 1f, 1f));
 		l1.addTransform(new Transformation(0.025f));
 		lightList.add(l1);
 
 		l2.addTransform(new Transformation(0, 0, 0, 1));
 		l2.addTransform(new Transformation(0, 0, 0));
-		l2.addTransform(new Transformation(.0f, -.75f, 1.0f));
+		l2.addTransform(new Transformation(-1f, 1f, 1f));
 		l2.addTransform(new Transformation(0.025f));
 		lightList.add(l2);
 
 		l3.addTransform(new Transformation(0, 0, 0, 1));
 		l3.addTransform(new Transformation(0, 0, 0));
-		l3.addTransform(new Transformation(-.75f, -0.f, 1.0f));
+		l3.addTransform(new Transformation(-1f, -1f, 1.0f));
 		l3.addTransform(new Transformation(0.025f));
 		lightList.add(l3);
 
 		l4.addTransform(new Transformation(0, 0, 0, 1));
 		l4.addTransform(new Transformation(0, 0, 0));
-		l4.addTransform(new Transformation(.75f, -0.0f, 1.0f));
+		l4.addTransform(new Transformation(1, -1f, 1.0f));
 		l4.addTransform(new Transformation(0.025f));
 		lightList.add(l4);
+		
+		l5.addTransform(new Transformation(0, 0, 0, 1));
+		l5.addTransform(new Transformation(0, 0, 0));
+		l5.addTransform(new Transformation(1f, 1f, -1.0f));
+		l5.addTransform(new Transformation(0.025f));
+		lightList.add(l5);
+
+		l6.addTransform(new Transformation(0, 0, 0, 1));
+		l6.addTransform(new Transformation(0, 0, 0));
+		l6.addTransform(new Transformation(-1f, 1f, -1.0f));
+		l6.addTransform(new Transformation(0.025f));
+		lightList.add(l6);
+
+		l7.addTransform(new Transformation(0, 0, 0, 1));
+		l7.addTransform(new Transformation(0, 0, 0));
+		l7.addTransform(new Transformation(-1f, -1.f, -1.0f));
+		l7.addTransform(new Transformation(0.025f));
+		lightList.add(l7);
+
+		l8.addTransform(new Transformation(0, 0, 0, 1));
+		l8.addTransform(new Transformation(0, 0, 0));
+		l8.addTransform(new Transformation(1f, -1f, -1.0f));
+		l8.addTransform(new Transformation(0.025f));
+		lightList.add(l8);
 
 		modelList.add(ship);
 		modelList.add(b);
@@ -99,10 +131,11 @@ public class ShootEmUpScene extends Scene {
 		double currentTime = System.currentTimeMillis();
 		if (true || currentTime - lastUpdate >= 1000.0f / frameRate) {
 
-			
-			Matrix.setLookAtM(mView, 0, mViewerPos[0], mViewerPos[1],
-					mViewerPos[2], mCenterPos[0], mCenterPos[1], mCenterPos[2],
-					mUpV[0], mUpV[1], mUpV[2]);
+			//viewQ = new Quaternion(0, 0, 2, 0);
+			//MyGLSurfaceView.y_axis = new float[]{0, 1, 0, 0};
+			Matrix.setLookAtM(mView, 0, viewQ.x, viewQ.y,
+					viewQ.z, mCenterPos[0], mCenterPos[1], mCenterPos[2],
+					MyGLSurfaceView.y_axis[0], MyGLSurfaceView.y_axis[1], MyGLSurfaceView.y_axis[2]);
 //			System.out.println("view: " + mViewerPos[0] + " " + mViewerPos[1] + " " + mViewerPos[2]);
 //			System.out.println("ship: " + shipPosition[0] + " " + shipPosition[1] + " " +shipPosition[2]);
 //			System.out.println("up: " + mUpV[0] + " " + mUpV[1] + " " +mUpV[2]);
@@ -128,12 +161,14 @@ public class ShootEmUpScene extends Scene {
 				if(m.getClass().equals(GoldenShip.class)) {
 					m.angle = MyGLSurfaceView.angleLeft;
 					//m.transList.set(1,new Transformation(90, shipAngle[0], shipAngle[1], shipAngle[2]));
-					//m.transList.set(0, new Transformation(shipPosition[0], shipPosition[1], shipPosition[2]));
+					m.transList.set(0, new Transformation(shipQ.x, shipQ.y, shipQ.z));
+					m.transList.set(1, new Transformation(shipAngle));
+
 					//m.transList.set(0, new Transformation(m.rotY+=4*MyGLSurfaceView.dxLeft, MyGLSurfaceView.y_axis[0], MyGLSurfaceView.y_axis[1], MyGLSurfaceView.y_axis[2]));
 					//m.transList.set(1, new Transformation(m.rotX+=4*MyGLSurfaceView.dyLeft, MyGLSurfaceView.x_axis[0], MyGLSurfaceView.x_axis[1], MyGLSurfaceView.x_axis[2]));
-					m.transList.set(0, new Transformation(shipAngle[0], 1, 0, 0));
-					m.transList.set(1, new Transformation(shipAngle[1], 0, 1, 0));
-					m.transList.set(2, new Transformation(shipAngle[2], 0, 0, 1));
+					//m.transList.set(0, new Transformation(shipAngle[0], 1, 0, 0));
+					//m.transList.set(1, new Transformation(shipAngle[1], 0, 1, 0));
+					//m.transList.set(2, new Transformation(shipAngle[2], 0, 0, 1));
 
 
 					//m.transList.set(3, new Transformation(90.0f, MyGLSurfaceView.x_axis[0], MyGLSurfaceView.x_axis[1], MyGLSurfaceView.x_axis[2]));

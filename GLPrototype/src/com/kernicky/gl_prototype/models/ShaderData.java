@@ -38,7 +38,7 @@ public class ShaderData {
 			"  vec3 amb = vec3(0.0, 0.0, 0.0);" +
 			"  vec3 diff = vec3(0.0, 0.0, 0.0);" +
 			"  vec3 spec = vec3(0.0, 0.0, 0.0);" +
-			"  for(int n = 0; n < 4; n ++) {" +
+			"  for(int n = 0; n < 8; n ++) {" +
 			"    vec3 v = normalize(vec3(0.0, 0.0, 0.0) - v_Position);" +
 			"    vec3 lightDir = u_LightPos[n] - v_Position;" +
 			"    float distance = length(lightDir);" +

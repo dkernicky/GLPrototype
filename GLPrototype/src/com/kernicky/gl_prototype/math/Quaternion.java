@@ -12,7 +12,19 @@ public class Quaternion {
 		this.z = z;
 		this.w = w;
 	}
-	
+	public Quaternion(float[] v) {
+		this.x = v[0];
+		this.y = v[1];
+		this.z = v[2];
+		this.w = v[3];
+	}
+	public void normalize() {
+		double mag = Math.sqrt(x*x+y*y+z*z+w*w);
+		x /= mag;
+		y /= mag;
+		z /= mag;
+		w /= mag;
+	}
 	public Quaternion multiply(Quaternion r) {
 		float x = this.y*r.z - this.z*r.y + r.w*this.x + this.w*r.x;
 		float y = this.z*r.x - this.x*r.z + r.w*this.y + this.w*r.y;
@@ -83,15 +95,18 @@ public class Quaternion {
 		float c1 = (float) Math.sin(theta/2.0);
 		float c2 = (float) Math.cos(theta/2.0);
 		Quaternion q_quat = new Quaternion(c1*u[0], c1*u[1], c1*u[2], c2);
+		Quaternion q_quat_in = q_quat.inverse();
 		Quaternion p_quat = new Quaternion(p[0], p[1], p[2], p[3]);
-		return q_quat.multiply(p_quat).multiply(q_quat.inverse());
+		return q_quat.multiply(p_quat).multiply(q_quat_in);
 	}
 	public void rotate(float theta, float[] u) {
 		float c1 = (float) Math.sin(theta/2.0);
 		float c2 = (float) Math.cos(theta/2.0);
 		Quaternion q_quat = new Quaternion(c1*u[0], c1*u[1], c1*u[2], c2);
-		
-		Quaternion r = q_quat.multiply(this).multiply(q_quat.inverse());
+		Quaternion q_quat_in = q_quat.inverse();
+		//Quaternion r = q_quat.multiply(this).multiply(q_quat.inverse());
+		Quaternion r = q_quat.multiply(this).multiply(q_quat_in);
+
 		this.x = r.x;
 		this.y = r.y;
 		this.z = r.z;
@@ -116,6 +131,22 @@ public class Quaternion {
 							h*v[0]*v[2]+v[1], h*v[1]*v[2]-v[0], e + h*v[2]*v[2], 0,
 							0, 0, 0, 1};
 	}
+	public static float[] rotateTo(Quaternion q, Quaternion r) {
+		float[] s = q.toFloat();
+		float[] t = r.toFloat();
+		float[] v = Vector.cross(s, t);
+		float e = Vector.dot(s, t);
+		float h = 1/(1+e);
+		return new float[]{ e+h*v[0]*v[0], h*v[0]*v[1] + v[2], h*v[0]*v[2]-v[1], 0,
+							h*v[0]*v[1]-v[2], e + h*v[1]*v[1], h*v[1]*v[2]+v[0], 0,
+							h*v[0]*v[2]+v[1], h*v[1]*v[2]-v[0], e + h*v[2]*v[2], 0,
+							0, 0, 0, 1};
+	}
+	
+	public float[] toFloat() {
+		return new float[]{x, y, z, w};
+	}
+	
 	
 	
 	public void print() {

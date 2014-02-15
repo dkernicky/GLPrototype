@@ -110,6 +110,7 @@ public class Transformation {
 		else if(t1 == type.MATRIX) {
 			float[] newModel = new float[16];
 			Matrix.multiplyMM(newModel, 0, mModel, 0, m, 0);
+			mModel = newModel;
 		}
 //		for(float f: mModel) {
 //			System.out.print(f + " ");

@@ -2,8 +2,7 @@ package com.kernicky.gl_prototype.math;
 
 public class Vector {
 	public static float[] cross(float[] a, float[] b) {
-		float[] f = new float[]{a[1]*b[2]-b[1]*a[2], -1.0f*(a[0]*b[2]-b[0]*a[2]), a[0]*b[1]-b[0]*a[1]};
-		return f;
+		return new float[]{a[1]*b[2]-b[1]*a[2], -1.0f*(a[0]*b[2]-b[0]*a[2]), a[0]*b[1]-b[0]*a[1]};
 	}
 	public static float dot(float[] a, float[] b) {
 		return a[0]*b[0] + a[1]*b[1] + a[2]*b[2];
