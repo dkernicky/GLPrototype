@@ -67,9 +67,11 @@ public class ShootEmUpScene extends Scene {
 		Lamp l6 = new Lamp(0.0f, 0.0f, 0.0f);
 		Lamp l7 = new Lamp(0.0f, 0.0f, 0.0f);
 		Lamp l8 = new Lamp(0.0f, 0.0f, 0.0f);
+		
 		//BlackIco b = new BlackIco();
 		Base b = new Base();
 		//PhongCube b = new PhongCube();
+		
 		b.addTransform(new Transformation(0.0f, 1, 0, 0, 0, 360));
 		b.addTransform(new Transformation(0.0f, 1, 0, 0, 0, 360));
 		b.addTransform(new Transformation(1.9f));
@@ -163,19 +165,6 @@ public class ShootEmUpScene extends Scene {
 					//m.transList.set(1,new Transformation(90, shipAngle[0], shipAngle[1], shipAngle[2]));
 					m.transList.set(0, new Transformation(shipQ.x, shipQ.y, shipQ.z));
 					m.transList.set(1, new Transformation(shipAngle));
-
-					//m.transList.set(0, new Transformation(m.rotY+=4*MyGLSurfaceView.dxLeft, MyGLSurfaceView.y_axis[0], MyGLSurfaceView.y_axis[1], MyGLSurfaceView.y_axis[2]));
-					//m.transList.set(1, new Transformation(m.rotX+=4*MyGLSurfaceView.dyLeft, MyGLSurfaceView.x_axis[0], MyGLSurfaceView.x_axis[1], MyGLSurfaceView.x_axis[2]));
-					//m.transList.set(0, new Transformation(shipAngle[0], 1, 0, 0));
-					//m.transList.set(1, new Transformation(shipAngle[1], 0, 1, 0));
-					//m.transList.set(2, new Transformation(shipAngle[2], 0, 0, 1));
-
-
-					//m.transList.set(3, new Transformation(90.0f, MyGLSurfaceView.x_axis[0], MyGLSurfaceView.x_axis[1], MyGLSurfaceView.x_axis[2]));
-
-
-//					m.transList.set(0, new Transformation(m.rotX = (m.rotX+MyGLSurfaceView.dyLeft)%360.0f, 1, 0, 0));
-//					m.transList.set(1, new Transformation(m.rotY = (m.rotY+MyGLSurfaceView.dxLeft)%360.0f, 0, 1, 0));
 				}
 				if(m.getClass().equals(BlackIco.class) || m.getClass().equals(Base.class) || m.getClass().equals(PhongCube.class)) {
 //					float rotX = m.rotX;

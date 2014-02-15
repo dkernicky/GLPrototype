@@ -311,10 +311,12 @@ class MyGLSurfaceView extends GLSurfaceView {
 //    }
     public void rotate() {  
     	System.out.println("*****************************");
-
+    	float[] inputVector = Vector.normalize(new float[]{1*dxLeft, -1*dyLeft, 0, 0});
+    	
+    	
     	float[] transform = new float[16];
-		Quaternion q = Quaternion.rotate(.08f*dyLeft, ShootEmUpScene.shipQ.toFloat(), x_axis);
-		Quaternion r = Quaternion.rotate(.08f*dxLeft, ShootEmUpScene.shipQ.toFloat(), y_axis);
+		Quaternion q = Quaternion.rotate(.1f*dyLeft, ShootEmUpScene.shipQ.toFloat(), x_axis);
+		Quaternion r = Quaternion.rotate(.1f*dxLeft, ShootEmUpScene.shipQ.toFloat(), y_axis);
 		float[] a = Quaternion.rotateTo(ShootEmUpScene.shipQ, q);
 		float[] b = Quaternion.rotateTo(ShootEmUpScene.shipQ, r);
 		
@@ -328,12 +330,15 @@ class MyGLSurfaceView extends GLSurfaceView {
 		x_axis = Vector.normalize(x_axis);
 		y_axis = Vector.normalize(y_axis);		
 		ShootEmUpScene.shipQ.normalize();
-		//ShootEmUpScene.viewQ.normalize();
 		MatrixOp.printV(x_axis);
 		MatrixOp.printV(y_axis);
-		//ShootEmUpScene.shipAngle = MatrixOp.multiplyMM(ShootEmUpScene.shipAngle, transform);
-		ShootEmUpScene.shipAngle = transform;
-		//ShootEmUpScene.viewQ.print();
+		
+		float[] shipDir = {0, 1, 0, 0};
+		float[] firstT = Quaternion.rotateTo(shipDir, inputVector);
+		//shipDir = MatrixOp.multiplyMV(firstT, shipDir);
+		float[] otherT = Quaternion.rotateTo(shipDir, y_axis);
+		//ShootEmUpScene.shipAngle = firstT;
+		ShootEmUpScene.shipAngle = MatrixOp.multiplyMM(otherT, firstT);
     	System.out.println("*****************************");
 
     }
