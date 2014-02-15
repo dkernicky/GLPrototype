@@ -31,7 +31,11 @@ public class ShootEmUpScene extends Scene {
 									   0, 1, 0, 0,
 									   0, 0, 1, 0,
 									   0, 0, 0, 1};
-	public static Quaternion viewQ = new Quaternion(0.0f, 0.0f, 3.0f, 0.0f);
+	public static float[] staticAngle = {1, 0, 0, 0,
+		   0, 1, 0, 0,
+		   0, 0, 1, 0,
+		   0, 0, 0, 1};
+	public static Quaternion viewQ = new Quaternion(0.0f, 0.0f, 2.0f, 0.0f);
 	public static Quaternion shipQ = new Quaternion(0.0f, 0.0f, 1.0f, 0.0f);
 	public static Quaternion shipDirQ = new Quaternion(0.0f, 1.0f, 0.0f, 0.0f);
 
@@ -51,7 +55,9 @@ public class ShootEmUpScene extends Scene {
 //		ship.addTransform(new Transformation(0.0f, 1, 0, 0));
 //		ship.addTransform(new Transformation(0.0f, 1, 0, 0));
 //		ship.addTransform(new Transformation(0.0f, 1, 0, 0));
+		
 		ship.addTransform(new Transformation(shipPosition[0], shipPosition[1], shipPosition[2]));
+		ship.addTransform(new Transformation(ship.angle));
 		ship.addTransform(new Transformation(ship.angle));
 
 
@@ -162,7 +168,7 @@ public class ShootEmUpScene extends Scene {
 			for (Model m : modelList) {
 				if(m.getClass().equals(GoldenShip.class)) {
 					m.angle = MyGLSurfaceView.angleLeft;
-					//m.transList.set(1,new Transformation(90, shipAngle[0], shipAngle[1], shipAngle[2]));
+					m.transList.set(2, new Transformation(staticAngle));
 					m.transList.set(0, new Transformation(shipQ.x, shipQ.y, shipQ.z));
 					m.transList.set(1, new Transformation(shipAngle));
 				}
