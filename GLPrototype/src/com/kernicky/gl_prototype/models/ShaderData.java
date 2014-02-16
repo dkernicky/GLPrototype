@@ -27,7 +27,7 @@ public class ShaderData {
 			"}";
 	public static final String multiColorFragmentShaderCode = 
 			"precision mediump float;" + 
-			"uniform vec3 u_LightPos[4];" +
+			"uniform vec3 u_LightPos[8];" +
 			"varying vec3 v_Position;" +
 			"varying vec3 v_Normal;" +
 			"varying vec3 v_Ambient;" +
