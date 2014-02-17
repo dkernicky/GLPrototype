@@ -7,14 +7,12 @@ import android.opengl.Matrix;
 import com.kernicky.gl_prototype.math.MatrixOp;
 import com.kernicky.gl_prototype.math.Quaternion;
 import com.kernicky.gl_prototype.math.Vector;
-import com.kernicky.gl_prototype.models.Base;
 import com.kernicky.gl_prototype.models.BlackIco;
 import com.kernicky.gl_prototype.models.F;
 import com.kernicky.gl_prototype.models.GoldenShip;
 import com.kernicky.gl_prototype.models.Lamp;
 import com.kernicky.gl_prototype.models.Model;
 import com.kernicky.gl_prototype.models.O;
-import com.kernicky.gl_prototype.models.PhongCube;
 import com.kernicky.gl_prototype.models.Transformation;
 
 public class ShootEmUpScene extends Scene {
@@ -79,6 +77,7 @@ public class ShootEmUpScene extends Scene {
 		
 		BlackIco b = new BlackIco();
 		//Base b = new Base();
+		//Frame b = new Frame();
 		//PhongCube b = new PhongCube();
 		//b.addTransform(new Transformation(0, 0, -5, 0));
 

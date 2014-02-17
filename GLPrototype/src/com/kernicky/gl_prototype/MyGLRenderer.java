@@ -76,7 +76,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
 		// this projection matrix is applied to object coordinates
 		// in the onDrawFrame() method
-		Matrix.frustumM(mProjMatrix, 0, -ratio, ratio, -1, 1, 1, 15);
+		Matrix.frustumM(mProjMatrix, 0, -ratio, ratio, -1, 1, 1, 25);
 		s.setMProj(mProjMatrix);
 
 	}

@@ -42,9 +42,9 @@ public class ShaderData {
 			"  for(int n = 0; n < 9; n ++) {" +
 			"    vec3 v = normalize(vec3(0.0, 0.0, 0.0) - v_Position);" +
 			"    vec3 lightDir = u_LightPos[n] - v_Position;" +
-			"    float distance = length(lightDir);" +
+			"    float distance = length(lightDir)*.5;" +
 			"    lightDir = lightDir/distance;" +
-			//"    distance = (distance*distance)/.5;" +
+			"    distance = (distance*distance)/.5;" +
 			
 			"    normalize(v_Normal);" +
 			"    float NdotL = dot(v_Normal, lightDir);" +
@@ -64,7 +64,57 @@ public class ShaderData {
 
 			"  }" +
 			"  vec3 v_Amb = vec3(0, 0, 0);" +
-			"  amb += v_Amb*lc;" +
+			
+			"  if(diff.x >.75) { " +
+			"    diff.x = 1.0; " +
+			"  }" +
+			"  else if(diff.x >.5) { " +
+			"    diff.x = 0.75; " +
+			"  }" +
+			"  else if(diff.x >.25) { " +
+			"    diff.x = 0.5; " +
+			"  }" +
+			"  else if(diff.x > 0.0) { " +
+			"    diff.x = 0.25; " +
+			"  }" +
+			"  else {" +
+			"    diff.x = 0.0;" +
+			"  }" +
+			
+			"  if(diff.y >.75) { " +
+			"    diff.y = 1.0; " +
+			"  }" +
+			"  else if(diff.y >.5) { " +
+			"    diff.y = 0.75; " +
+			"  }" +
+			"  else if(diff.y >.25) { " +
+			"    diff.y = 0.5; " +
+			"  }" +
+			"  else if(diff.y > 0.0) { " +
+			"    diff.y = 0.25; " +
+			"  }" +
+			"  else {" +
+			"    diff.y = 0.0;" +
+			"  }" +
+			
+			"  if(diff.z >.75) { " +
+			"    diff.z = 1.0; " +
+			"  }" +
+			"  else if(diff.z >.5) { " +
+			"    diff.z = 0.75; " +
+			"  }" +
+			"  else if(diff.z >.25) { " +
+			"    diff.z = 0.5; " +
+			"  }" +
+			"  else if(diff.z > 0.0) { " +
+			"    diff.z = 0.25; " +
+			"  }" +
+			"  else {" +
+			"    diff.z = 0.0;" +
+			"  }" +
+			
+			"  amb += v_Ambient*lc;" +
+			"  spec = vec3(0.0, 0.0, 0.0);" +
 			"  gl_FragColor = vec4(amb+diff+spec, 0.0);" + 
 			"}";
 	
