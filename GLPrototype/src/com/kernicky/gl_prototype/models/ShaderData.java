@@ -27,7 +27,7 @@ public class ShaderData {
 			"}";
 	public static final String multiColorFragmentShaderCode = 
 			"precision mediump float;" + 
-			"uniform vec3 u_LightPos[8];" +
+			"uniform vec3 u_LightPos[16];" +
 			"varying vec3 v_Position;" +
 			"varying vec3 v_Normal;" +
 			"varying vec3 v_Ambient;" +
@@ -39,12 +39,12 @@ public class ShaderData {
 			"  vec3 diff = vec3(0.0, 0.0, 0.0);" +
 			"  vec3 spec = vec3(0.0, 0.0, 0.0);" +
 			"  vec3 lc = vec3(1.0, 1.0, 1.0);" +
-			"  for(int n = 0; n < 8; n ++) {" +
+			"  for(int n = 0; n < 9; n ++) {" +
 			"    vec3 v = normalize(vec3(0.0, 0.0, 0.0) - v_Position);" +
 			"    vec3 lightDir = u_LightPos[n] - v_Position;" +
 			"    float distance = length(lightDir);" +
 			"    lightDir = lightDir/distance;" +
-			//"    distance = (distance*distance)/.01;" +
+			//"    distance = (distance*distance)/.5;" +
 			
 			"    normalize(v_Normal);" +
 			"    float NdotL = dot(v_Normal, lightDir);" +
@@ -63,7 +63,7 @@ public class ShaderData {
 			"    spec += intensity*lc*v_Spec/distance;" +
 
 			"  }" +
-			"  vec3 v_Amb = vec3(.1, .1, .1);" +
+			"  vec3 v_Amb = vec3(0, 0, 0);" +
 			"  amb += v_Amb*lc;" +
 			"  gl_FragColor = vec4(amb+diff+spec, 0.0);" + 
 			"}";

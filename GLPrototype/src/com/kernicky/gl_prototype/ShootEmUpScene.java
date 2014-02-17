@@ -42,7 +42,9 @@ public class ShootEmUpScene extends Scene {
 	public static Quaternion shipDirQ = new Quaternion(0.0f, 1.0f, 0.0f, 0.0f);
 	public static final float viewDist = 10.0f;
 	public static final float shipDist = 7.0f;
-
+	
+	public static Quaternion optionQ = new Quaternion(0, 0f, 8f, 0);
+	public static float[] optionAngle = MatrixOp.identity();
 
 	private ArrayList<Model> modelList = new ArrayList<Model>();
 	private ArrayList<Lamp> lightList = new ArrayList<Lamp>();
@@ -73,6 +75,7 @@ public class ShootEmUpScene extends Scene {
 		Lamp l6 = new Lamp(0.0f, 0.0f, 0.0f);
 		Lamp l7 = new Lamp(0.0f, 0.0f, 0.0f);
 		Lamp l8 = new Lamp(0.0f, 0.0f, 0.0f);
+		Lamp lo = new Lamp(0.0f, 0.0f, 0.0f);
 		
 		BlackIco b = new BlackIco();
 		//Base b = new Base();
@@ -84,8 +87,18 @@ public class ShootEmUpScene extends Scene {
 		//b.addTransform(new Transformation(0, 0, 4, 0));
 
 		//b.addTransform(new Transformation(1.9f));
+		//b.addTransform(new Transformation(.5f));
+
 		b.addTransform(new Transformation(14f));
 
+		lo.addTransform(new Transformation(MatrixOp.identity()));
+		lo.addTransform(new Transformation(MatrixOp.identity()));
+		lo.addTransform(new Transformation(MatrixOp.identity()));
+		lo.addTransform(new Transformation(MatrixOp.identity()));
+		lo.addTransform(new Transformation(0, .25f, 0));	
+		lo.addTransform(new Transformation(0.05f));
+
+		lightList.add(lo);
 		
 		l1.addTransform(new Transformation(0, 0, 0, 1));
 		l1.addTransform(new Transformation(0, 0, 0));
@@ -152,20 +165,29 @@ public class ShootEmUpScene extends Scene {
 		float[] transform = MatrixOp.multiplyMM(a, b);
 		
 		ShootEmUpScene.shipQ = new Quaternion(MatrixOp.multiplyMV(transform, ShootEmUpScene.shipQ.toFloat()));
+		ShootEmUpScene.optionQ = new Quaternion(MatrixOp.multiplyMV(transform, ShootEmUpScene.optionQ.toFloat()));
 		ShootEmUpScene.viewQ = new Quaternion(MatrixOp.multiplyMV(transform, ShootEmUpScene.viewQ.toFloat()));
 		MyGLSurfaceView.x_axis = MatrixOp.multiplyMV(transform, MyGLSurfaceView.x_axis);
 		MyGLSurfaceView.y_axis = MatrixOp.multiplyMV(transform, MyGLSurfaceView.y_axis);
-		
 		MyGLSurfaceView.x_axis = Vector.normalize(MyGLSurfaceView.x_axis);
 		MyGLSurfaceView.y_axis = Vector.normalize(MyGLSurfaceView.y_axis);		
+		
 		//ShootEmUpScene.shipQ.normalize();
 		
 		float[] shipDir = {0, 1, 0, 0};
+		float[] optionDir = {0, 1, 0, 0};
 		float[] t2 = MatrixOp.identity();
 		if(MyGLSurfaceView.dxLeft != 0 && MyGLSurfaceView.dyLeft != 0) {
 			t2 = Quaternion.rotateTo(shipDir, inputVector);
 			ShootEmUpScene.staticAngle = t2;
 		}
+		float[] input2Vector = Vector.normalize(new float[]{1*MyGLSurfaceView.dxRight, -1*MyGLSurfaceView.dyRight, 0, 0});
+		float[] lightRot = MatrixOp.identity();
+		if(MyGLSurfaceView.dxRight != 0 && MyGLSurfaceView.dyRight != 0) {
+			lightRot = Quaternion.rotateTo(optionDir, input2Vector);
+			ShootEmUpScene.optionAngle = lightRot;
+		}
+		
 
 		MyGLSurfaceView.currentTransform = MatrixOp.multiplyMM(transform, MyGLSurfaceView.currentTransform);
 //		ShootEmUpScene.viewQ = new Quaternion(ShootEmUpScene.shipQ.toFloat());
@@ -194,8 +216,25 @@ public class ShootEmUpScene extends Scene {
 				MyGLSurfaceView.y_axis[0], MyGLSurfaceView.y_axis[1], MyGLSurfaceView.y_axis[2]);
 
 		lightPosList.clear();
-		for (int n = 0; n < lightList.size(); n++) {
-			lightList.get(n).transList.set(0, new Transformation(MyGLSurfaceView.angleRight, 0, 0, 1));
+		
+		MatrixOp.printM(optionAngle);
+		
+//		lightList.get(0).transList.set(3, new Transformation(optionQ.x, optionQ.y, optionQ.z));
+//		lightList.get(0).transList.set(2, new Transformation(shipAngle));
+//		lightList.get(0).transList.set(1, new Transformation(optionAngle));
+//		lightList.get(0).transList.set(0, new Transformation(staticAngle));
+		
+		lightList.get(0).transList.set(3, new Transformation(optionAngle));
+		lightList.get(0).transList.set(2, new Transformation(shipAngle));
+		lightList.get(0).transList.set(1, new Transformation(optionQ.x, optionQ.y, optionQ.z));
+		lightList.get(0).draw(mView, mProj);
+		for (int m = 0; m < lightList.get(0).getMELightPos().length - 1; m++) {
+			lightPosList.add(lightList.get(0).getMELightPos()[m]);
+		}
+
+		for (int n = 1; n < lightList.size(); n++) {
+			//lightList.get(n).transList.set(0, new Transformation(MyGLSurfaceView.angleRight, 0, 0, 1));
+			
 			//lightList.get(n).transList.set(1, new Transformation(MyGLSurfaceView.angleRight, shipPosition[0], shipPosition[1], shipPosition[2]));
 			lightList.get(n).draw(mView, mProj);
 
@@ -203,6 +242,8 @@ public class ShootEmUpScene extends Scene {
 				lightPosList.add(lightList.get(n).getMELightPos()[m]);
 			}
 		}
+
+		
 		float[] lightPos = new float[lightPosList.size()];
 		for (int n = 0; n < lightPos.length; n++) {
 			lightPos[n] = lightPosList.get(n);
