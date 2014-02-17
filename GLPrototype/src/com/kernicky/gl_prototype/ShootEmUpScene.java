@@ -4,7 +4,9 @@ import java.util.ArrayList;
 
 import android.opengl.Matrix;
 
+import com.kernicky.gl_prototype.math.MatrixOp;
 import com.kernicky.gl_prototype.math.Quaternion;
+import com.kernicky.gl_prototype.math.Vector;
 import com.kernicky.gl_prototype.models.Base;
 import com.kernicky.gl_prototype.models.BlackIco;
 import com.kernicky.gl_prototype.models.F;
@@ -139,15 +141,59 @@ public class ShootEmUpScene extends Scene {
 		modelList.add(ship);
 		modelList.add(b);
 	}
+	
+	public void updateTransforms() {
+		//shipQ.print();
+		//viewQ.print();
+    	float[] inputVector = Vector.normalize(new float[]{1*MyGLSurfaceView.dxLeft, -1*MyGLSurfaceView.dyLeft, 0, 0});
+    	Quaternion prevPosQ = new Quaternion(ShootEmUpScene.shipQ.toFloat());
+    	
+		Quaternion q = Quaternion.rotate(.08f*MyGLSurfaceView.dyLeft, prevPosQ.toFloat(), MyGLSurfaceView.x_axis);
+		Quaternion r = Quaternion.rotate(.08f*MyGLSurfaceView.dxLeft, prevPosQ.toFloat(), MyGLSurfaceView.y_axis);
+		float[] a = Quaternion.rotateTo(prevPosQ, q);
+		float[] b = Quaternion.rotateTo(prevPosQ, r);
+		float[] transform = MatrixOp.multiplyMM(a, b);
+		
+		ShootEmUpScene.shipQ = new Quaternion(MatrixOp.multiplyMV(transform, ShootEmUpScene.shipQ.toFloat()));
+		ShootEmUpScene.viewQ = new Quaternion(MatrixOp.multiplyMV(transform, ShootEmUpScene.viewQ.toFloat()));
+		MyGLSurfaceView.x_axis = MatrixOp.multiplyMV(transform, MyGLSurfaceView.x_axis);
+		MyGLSurfaceView.y_axis = MatrixOp.multiplyMV(transform, MyGLSurfaceView.y_axis);
+		
+		MyGLSurfaceView.x_axis = Vector.normalize(MyGLSurfaceView.x_axis);
+		MyGLSurfaceView.y_axis = Vector.normalize(MyGLSurfaceView.y_axis);		
+		ShootEmUpScene.shipQ.normalize();
+		//ShootEmUpScene.viewQ.normalize();
+		
+		float[] shipDir = {0, 1, 0, 0};
+		float[] t2 = MatrixOp.identity();
+		if(MyGLSurfaceView.dxLeft != 0 && MyGLSurfaceView.dyLeft != 0)
+			t2 = Quaternion.rotateTo(shipDir, inputVector);
+		
+		//MatrixOp.printM(t2);
+
+
+
+		MyGLSurfaceView.currentTransform = MatrixOp.multiplyMM(transform, MyGLSurfaceView.currentTransform);
+		ShootEmUpScene.viewQ = new Quaternion(ShootEmUpScene.shipQ.toFloat());
+		ShootEmUpScene.viewQ.multiply(3);
+		
+		
+		ShootEmUpScene.staticAngle = t2;
+		ShootEmUpScene.shipAngle = MyGLSurfaceView.currentTransform;
+		
+		//MatrixOp.printM(staticAngle);
+		//MatrixOp.printM(MyGLSurfaceView.currentTransform);
+    	//System.out.println("*****************************");
+	}
 
 	public void draw() {
-		System.out.println("SceneThread"  + Thread.currentThread().getId());
+		//System.out.println("SceneThread"  + Thread.currentThread().getId());
 
 		//double currentTime = System.currentTimeMillis();
 		//System.out.println(currentTime-lastTime);
 
 		if (true) {
-
+			updateTransforms();
 			//viewQ = new Quaternion(0, 0, 2, 0);
 			//MyGLSurfaceView.y_axis = new float[]{0, 1, 0, 0};
 //			viewQ.normalize();
@@ -156,19 +202,20 @@ public class ShootEmUpScene extends Scene {
 //			shipQ.multiply(shipDist);
 //			shipQ.print();
 //			viewQ.print();
-			//viewQ = new Quaternion(shipQ.toFloat());
-			//viewQ.multiply(3);
+			viewQ = new Quaternion(shipQ.toFloat());
+			viewQ.multiply(3);
 			
-			Quaternion test = new Quaternion(ShootEmUpScene.viewQ.toFloat());
-			test.multiply(.33333f);
-			float dx = Math.abs(test.x - ShootEmUpScene.shipQ.x);
-			float dy = Math.abs(test.y - ShootEmUpScene.shipQ.y);
-			float dz = Math.abs(test.z - ShootEmUpScene.shipQ.z);
-			float dw = Math.abs(test.w - ShootEmUpScene.shipQ.w);
-			if(dx > .0001 || dy > .0001 || dz > .0001 || dw > .0001) {
-				test.print();
-				ShootEmUpScene.shipQ.print();
-			}
+//			Quaternion test = new Quaternion(ShootEmUpScene.viewQ.toFloat());
+//			test.multiply(.33333f);
+//			
+//			float dx = Math.abs(test.x - ShootEmUpScene.shipQ.x);
+//			float dy = Math.abs(test.y - ShootEmUpScene.shipQ.y);
+//			float dz = Math.abs(test.z - ShootEmUpScene.shipQ.z);
+//			float dw = Math.abs(test.w - ShootEmUpScene.shipQ.w);
+//			if(dx > .0001 || dy > .0001 || dz > .0001 || dw > .0001) {
+//				test.print();
+//				ShootEmUpScene.shipQ.print();
+//			}
 			
 			Matrix.setLookAtM(mView, 0, viewQ.x, viewQ.y,
 					viewQ.z, mCenterPos[0], mCenterPos[1], mCenterPos[2],

@@ -73,7 +73,10 @@ class MyGLSurfaceView extends GLSurfaceView {
     public static float dyRight = 0.0f;
     public static float[] x_axis = {1.0f, 0.0f, 0.0f, 0.0f};
     public static float[] y_axis = {0.0f, 1.0f, 0.0f, 0.0f};
-    float[] currentTransform = MatrixOp.identity();
+    static float[] currentTransform = MatrixOp.identity();
+	static float[] transform = MatrixOp.identity();
+	static float[] staticTransform = MatrixOp.identity();
+	
     public static float[] ship_Position = {0.0f, 0.0f, 1.0f, 1.0f};
 
     public MyGLSurfaceView(Context context) {
@@ -135,6 +138,7 @@ class MyGLSurfaceView extends GLSurfaceView {
     	if(!leftTouch) {
     		this.dxLeft = 0;
     		this.dyLeft = 0;
+    		//transform = MatrixOp.identity();
     	}
 
         //float x = e.getX();
@@ -239,10 +243,10 @@ class MyGLSurfaceView extends GLSurfaceView {
 		                
 		                mPreviousXLeft = leftX;
 		                mPreviousYLeft = leftY;
-		                rotate();
+		               // rotate();
 	                }
 	                else{
-	                	rotate();
+	                	//rotate();
 	                }
 	            
             	}
@@ -264,10 +268,26 @@ class MyGLSurfaceView extends GLSurfaceView {
 //    	return result;
 //    }
     
-
-
     public void rotate() {  
-		System.out.println("ActivityThread:" + Thread.currentThread().getId());
+    	float[] inputVector = Vector.normalize(new float[]{1*dxLeft, -1*dyLeft, 0, 0});
+    	Quaternion prevPosQ = new Quaternion(ShootEmUpScene.shipQ.toFloat());
+    	
+    	//float[] transform = new float[16];
+		Quaternion q = Quaternion.rotate(.08f*dyLeft, prevPosQ.toFloat(), x_axis);
+		Quaternion r = Quaternion.rotate(.08f*dxLeft, prevPosQ.toFloat(), y_axis);
+		float[] a = Quaternion.rotateTo(prevPosQ, q);
+		float[] b = Quaternion.rotateTo(prevPosQ, r);
+		transform = MatrixOp.multiplyMM(a, b);
+		float[] shipDir = {0, 1, 0, 0};
+		float[] t2 = Quaternion.rotateTo(shipDir, inputVector);
+		staticTransform = t2;
+
+
+		currentTransform = MatrixOp.multiplyMM(transform, currentTransform);
+    }
+
+    public void rotate2() {  
+		//System.out.println("ActivityThread:" + Thread.currentThread().getId());
 
     	//dxLeft = -1;
     	//dyLeft = 0;
@@ -275,7 +295,6 @@ class MyGLSurfaceView extends GLSurfaceView {
     	float[] inputVector = Vector.normalize(new float[]{1*dxLeft, -1*dyLeft, 0, 0});
     	Quaternion prevPosQ = new Quaternion(ShootEmUpScene.shipQ.toFloat());
     	
-    	float[] transform = new float[16];
 		Quaternion q = Quaternion.rotate(.08f*dyLeft, prevPosQ.toFloat(), x_axis);
 		Quaternion r = Quaternion.rotate(.08f*dxLeft, prevPosQ.toFloat(), y_axis);
 		float[] a = Quaternion.rotateTo(prevPosQ, q);
