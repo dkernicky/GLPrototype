@@ -1,6 +1,30 @@
 package com.kernicky.gl_prototype.models;
 
 public class ShaderData {
+	public static final String singleColorVertexShaderCode =
+			"uniform mat4 u_MVPMatrix;" +
+			"uniform mat4 u_MVMatrix;" +
+			"attribute vec4 a_Position;" +
+			"attribute vec3 a_Normal;" +
+			"varying vec3 v_Position;" +
+			"varying vec3 v_Normal;" +
+			"void main() {" +
+			"  v_Position = vec3(u_MVMatrix * a_Position);" +
+			"  v_Normal = normalize(vec3(u_MVMatrix * vec4(normalize(a_Normal), 0.0)));" +
+			"  gl_Position = u_MVPMatrix * a_Position;" +
+			"}";
+	public static final String singleColorFragmentShaderCode = 
+			"precision mediump float;" + 
+			"uniform vec3 u_LightPos[16];" +
+			"varying vec3 v_Position;" +
+			"varying vec3 v_Normal;" +
+			"uniform vec3 u_Ambient;" +
+			"uniform vec3 u_Diffuse;" +
+			"uniform vec3 u_Specular;" +
+			"uniform float u_Shininess;" +
+			"void main() {  " +
+			"  gl_FragColor = vec4(u_Diffuse, 0.3);" + 
+			"}";
 	public static final String multiColorVertexShaderCode =
 			"uniform mat4 u_MVPMatrix;" +
 			"uniform mat4 u_MVMatrix;" +
@@ -116,7 +140,7 @@ public class ShaderData {
 			
 			"  amb += v_Ambient*lc;" +
 			"  spec = vec3(0.0, 0.0, 0.0);" +
-			"  gl_FragColor = vec4(amb+diff+spec, 0.75);" + 
+			"  gl_FragColor = vec4(amb+diff+spec, 1.0);" + 
 			"}";
 	
 	public static final String lightVertexShaderCode =

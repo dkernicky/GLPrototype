@@ -12,6 +12,7 @@ import com.kernicky.gl_prototype.models.F;
 import com.kernicky.gl_prototype.models.GoldenShip;
 import com.kernicky.gl_prototype.models.Lamp;
 import com.kernicky.gl_prototype.models.Model;
+import com.kernicky.gl_prototype.models.NewIco;
 import com.kernicky.gl_prototype.models.O;
 import com.kernicky.gl_prototype.models.PhongCube;
 import com.kernicky.gl_prototype.models.Transformation;
@@ -49,6 +50,8 @@ public class ShootEmUpScene extends Scene {
 	private ArrayList<Lamp> lightList = new ArrayList<Lamp>();
 	private ArrayList<Float> lightPosList = new ArrayList<Float>();
 	private double lastTime = 0.0f;
+	
+	private NewIco ico = new NewIco();
 
 	public ShootEmUpScene() {
 		//PhongCube cube = new PhongCube();
@@ -86,16 +89,22 @@ public class ShootEmUpScene extends Scene {
 		//Frame b = new Frame();
 		//PhongCube b = new PhongCube();
 		//b.addTransform(new Transformation(0, 0, -5, 0));
-
 		b.addTransform(new Transformation(0.0f, 1, 0, 0, 0, 360));
 		b.addTransform(new Transformation(0.0f, 1, 0, 0, 0, 360));
 		//b.addTransform(new Transformation(0, 0, 4, 0));
 
 		//b.addTransform(new Transformation(1.9f));
 		//b.addTransform(new Transformation(.5f));
-
 		b.addTransform(new Transformation(14f));
-		modelList.add(b);
+		//modelList.add(b);
+		
+		ico.addTransform(new Transformation(0.0f, 1, 0, 0, 0, 360));
+		ico.addTransform(new Transformation(0.0f, 1, 0, 0, 0, 360));
+		//b.addTransform(new Transformation(0, 0, 4, 0));
+
+		//b.addTransform(new Transformation(1.9f));
+		//b.addTransform(new Transformation(.5f));
+		ico.addTransform(new Transformation(14f));	
 
 
 		lo.addTransform(new Transformation(MatrixOp.identity()));
@@ -212,8 +221,9 @@ public class ShootEmUpScene extends Scene {
 	}
 
 	public void draw() {
-
-
+		double currentUpdate = System.currentTimeMillis();
+		System.out.println(currentUpdate-lastUpdate);
+		lastUpdate = currentUpdate;
 		updateTransforms();
 
 		
@@ -265,6 +275,7 @@ public class ShootEmUpScene extends Scene {
 			}
 			m.draw(mView, mProj, lightPos);
 		}
+		ico.draw(mView, mProj, lightPos);
 	
 	}
 
