@@ -35,9 +35,6 @@ public class MainActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Create a GLSurfaceView instance and set it
-        // as the ContentView for this Activity
         mGLView = new MyGLSurfaceView(this);
         setContentView(mGLView);
     }
@@ -45,19 +42,13 @@ public class MainActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        // The following call pauses the rendering thread.
-        // If your OpenGL application is memory intensive,
-        // you should consider de-allocating objects that
-        // consume significant memory here.
         mGLView.onPause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        // The following call resumes a paused rendering thread.
-        // If you de-allocated graphic objects for onPause()
-        // this is a good place to re-allocate them.
+
         mGLView.onResume();
     }
 }
@@ -94,9 +85,6 @@ class MyGLSurfaceView extends GLSurfaceView {
         setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
         
         Matrix.setIdentityM(transformMatrix, 0);
-        //dxLeft = 1.0f;
-       // rotate();
-
     }
 
     private final float TOUCH_SCALE_FACTOR = 180.0f / 320;
@@ -112,10 +100,6 @@ class MyGLSurfaceView extends GLSurfaceView {
     @Override
     public boolean onTouchEvent(MotionEvent e) {
 
-        // MotionEvent reports input details from the touch screen
-        // and other input controls. In this case, you are only
-        // interested in events where the touch position changed.
-    	//printMatrix();
     	int count = e.getPointerCount();
 
     	leftTouch = false;
@@ -123,14 +107,11 @@ class MyGLSurfaceView extends GLSurfaceView {
     	for(int n = 0; n < count; n ++) {
     		if(e.getX(n) < getWidth()/2) {
     			leftTouch = true;
-    	    	//System.out.println("LEFT TRUE");
-
     			leftX = e.getX(n);
     			leftY = e.getY(n);
     		}
     		else {
     			rightTouch = true;
-    	    	//System.out.println("RIGHT TRUE");
     			rightX = e.getX(n);
     			rightY = e.getY(n);
     		}
@@ -138,18 +119,12 @@ class MyGLSurfaceView extends GLSurfaceView {
     	if(!leftTouch) {
     		this.dxLeft = 0;
     		this.dyLeft = 0;
-    		//transform = MatrixOp.identity();
     	}
 
-        //float x = e.getX();
-        //float y = e.getY();
 
-//        float[] result = mapToModelSpace(x, y);
-//        System.out.println(result[0] + "*****" + result[1]);
         switch (e.getAction()) {
         	case MotionEvent.ACTION_UP:
         		count = e.getPointerCount();
-    			//System.out.println(count);
 
             	leftTouch = false;
             	rightTouch = false;
@@ -169,25 +144,19 @@ class MyGLSurfaceView extends GLSurfaceView {
             	if(!leftTouch) {
             		this.dxLeft = 0.0f;
             		this.dyLeft = 0.0f;
-        	    	//System.out.println("UP!!!!!!!!!!!!!");
             	}
-            	//System.out.println(leftTouch);
-
-
 
         		break;
             case MotionEvent.ACTION_MOVE:
             	if(rightTouch) {
 	                double dx = rightX - mPreviousXRight;
 	                double dy = rightY - mPreviousYRight;
-	                //dx = -1.0f;
-	                //dy = 1.0f;
+
 	                if(dx == 0) {
 	                	dx = .000001f;
 	                }
 	                
 	                double magnitude = Math.sqrt(dx*dx + dy*dy);
-	                //System.out.println(magnitude);
 	                
 	                dx /= Math.max(.000001, magnitude);
 	                dy /= Math.max(.000001, magnitude);
@@ -203,7 +172,6 @@ class MyGLSurfaceView extends GLSurfaceView {
 	                
 	                if(magnitude > 2) {
 		                this.angleRight = (float) ((float) -1.0f*angle);
-		                //mRenderer.mAngle += (dx + dy) * TOUCH_SCALE_FACTOR;  // = 180.0f / 320
 		                
 		                this.dxRight = (float) dx;
 		                this.dyRight = (float) dy;
@@ -214,7 +182,6 @@ class MyGLSurfaceView extends GLSurfaceView {
             	if(leftTouch) {
             		double dx = leftX - mPreviousXLeft;
             		double dy = leftY - mPreviousYLeft;
- 	                //dy *= -1.0f;
             		if(dx == 0) {
             			dx = .000001f;
             		}
@@ -233,9 +200,7 @@ class MyGLSurfaceView extends GLSurfaceView {
 	                	angle += 180.0;
 	                }
 	                if(magnitude > 20) {
-	                	//System.out.println(this.angleLeft == -90.0);
 		                this.angleLeft = (float) ((float) -1.0f*angle);
-		                //mRenderer.mAngle += (dx + dy) * TOUCH_SCALE_FACTOR;  // = 180.0f / 320
 		                
 		                this.dxLeft = (float) dx;
 		                this.dyLeft = (float) dy;
@@ -243,109 +208,16 @@ class MyGLSurfaceView extends GLSurfaceView {
 		                
 		                mPreviousXLeft = leftX;
 		                mPreviousYLeft = leftY;
-		               // rotate();
 	                }
-	                else{
-	                	//rotate();
-	                }
-	            
+
             	}
-            	//cross();
+
                 requestRender();
         }
 
 
         return true;
     }
-    
-//    public float[] mapToModelSpace(float x, float y) {
-//    	float[] result = new float[2];
-//    	float width = getWidth();
-//    	float height = getHeight();
-//    	float ratio = width/height;
-//    	result[0] = (x/width)*(2*ratio)-ratio;
-//    	result[1] = (y/height)*(-2) + 1;
-//    	return result;
-//    }
-    
-    public void rotate() {  
-    	float[] inputVector = Vector.normalize(new float[]{1*dxLeft, -1*dyLeft, 0, 0});
-    	Quaternion prevPosQ = new Quaternion(ShootEmUpScene.shipQ.toFloat());
-    	
-    	//float[] transform = new float[16];
-		Quaternion q = Quaternion.rotate(.08f*dyLeft, prevPosQ.toFloat(), x_axis);
-		Quaternion r = Quaternion.rotate(.08f*dxLeft, prevPosQ.toFloat(), y_axis);
-		float[] a = Quaternion.rotateTo(prevPosQ, q);
-		float[] b = Quaternion.rotateTo(prevPosQ, r);
-		transform = MatrixOp.multiplyMM(a, b);
-		float[] shipDir = {0, 1, 0, 0};
-		float[] t2 = Quaternion.rotateTo(shipDir, inputVector);
-		staticTransform = t2;
-
-
-		currentTransform = MatrixOp.multiplyMM(transform, currentTransform);
-    }
-
-    public void rotate2() {  
-		//System.out.println("ActivityThread:" + Thread.currentThread().getId());
-
-    	//dxLeft = -1;
-    	//dyLeft = 0;
-    	//System.out.println("*****************************");
-    	float[] inputVector = Vector.normalize(new float[]{1*dxLeft, -1*dyLeft, 0, 0});
-    	Quaternion prevPosQ = new Quaternion(ShootEmUpScene.shipQ.toFloat());
-    	
-		Quaternion q = Quaternion.rotate(.08f*dyLeft, prevPosQ.toFloat(), x_axis);
-		Quaternion r = Quaternion.rotate(.08f*dxLeft, prevPosQ.toFloat(), y_axis);
-		float[] a = Quaternion.rotateTo(prevPosQ, q);
-		float[] b = Quaternion.rotateTo(prevPosQ, r);
-		transform = MatrixOp.multiplyMM(a, b);
-		
-		ShootEmUpScene.shipQ = new Quaternion(MatrixOp.multiplyMV(transform, ShootEmUpScene.shipQ.toFloat()));
-		ShootEmUpScene.viewQ = new Quaternion(MatrixOp.multiplyMV(transform, ShootEmUpScene.viewQ.toFloat()));
-		x_axis = MatrixOp.multiplyMV(transform, x_axis);
-		y_axis = MatrixOp.multiplyMV(transform, y_axis);
-		
-		x_axis = Vector.normalize(x_axis);
-		y_axis = Vector.normalize(y_axis);		
-		ShootEmUpScene.shipQ.normalize();
-		//ShootEmUpScene.viewQ.normalize();
-		
-		float[] shipDir = {0, 1, 0, 0};
-		float[] t2 = Quaternion.rotateTo(shipDir, inputVector);
-
-
-
-		currentTransform = MatrixOp.multiplyMM(transform, currentTransform);
-		ShootEmUpScene.viewQ = new Quaternion(ShootEmUpScene.shipQ.toFloat());
-		ShootEmUpScene.viewQ.multiply(3);
-		
-//		Quaternion test = new Quaternion(ShootEmUpScene.viewQ.toFloat());
-//		test.multiply(.33333f);
-//		float dx = Math.abs(test.x - ShootEmUpScene.shipQ.x);
-//		float dy = Math.abs(test.y - ShootEmUpScene.shipQ.y);
-//		float dz = Math.abs(test.z - ShootEmUpScene.shipQ.z);
-//		float dw = Math.abs(test.w - ShootEmUpScene.shipQ.w);
-//		if(dx > .0001 || dy > .0001 || dz > .0001 || dw > .0001) {
-//			test.print();
-//			ShootEmUpScene.shipQ.print();
-//		}
-		//ShootEmUpScene.shipQ.print();
-		
-//		Quaternion s = new Quaternion(ShootEmUpScene.shipQ.toFloat());
-//		s.x -= prevPosQ.x;
-//		s.y -= prevPosQ.y;
-//		s.z -= prevPosQ.z;
-//		s.w -= prevPosQ.w;
-//		float mag = (float) s.norm();
-//		if(mag > .08) System.out.println(mag);
-		
-		ShootEmUpScene.staticAngle = t2;
-		ShootEmUpScene.shipAngle = currentTransform;
-    	//System.out.println("*****************************");
-
-    }
-
     
 }
 

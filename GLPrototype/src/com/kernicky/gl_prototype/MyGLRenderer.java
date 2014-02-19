@@ -29,14 +29,9 @@ import android.util.Log;
 public class MyGLRenderer implements GLSurfaceView.Renderer {
 
 	private static final String TAG = "MyGLRenderer";
-	private Triangle mTriangle;
-	private PhongCube mShip;
 	private Scene s;
 
-	private final float[] mMVPMatrix = new float[16];
 	private final float[] mProjMatrix = new float[16];
-	private final float[] mVMatrix = new float[16];
-	private final float[] mRotationMatrix = new float[16];
 
 	// Declare as volatile because we are updating it from another thread
 	public volatile float mAngle;
@@ -60,6 +55,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 		//GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 		GLES20.glEnable( GLES20.GL_DEPTH_TEST );
+		GLES20.glEnable( GLES20.GL_BLEND);
+	    GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
 
 		//s.draw(mShip);
 		s.draw();

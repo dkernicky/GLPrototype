@@ -19,6 +19,7 @@ public class ShaderData {
 			"void main() {" +
 			"  v_Position = vec3(u_MVMatrix * a_Position);" +
 			"  v_Normal = normalize(vec3(u_MVMatrix * vec4(normalize(a_Normal), 0.0)));" +
+			//"  v_Normal = normalize(vec3(u_MVMatrix * a_Position));" +
 			"  v_Ambient = a_Ambient;" +
 			"  v_Diffuse = a_Diffuse;" +
 			"  v_Specular = a_Specular;" +
@@ -42,7 +43,7 @@ public class ShaderData {
 			"  for(int n = 0; n < 9; n ++) {" +
 			"    vec3 v = normalize(vec3(0.0, 0.0, 0.0) - v_Position);" +
 			"    vec3 lightDir = u_LightPos[n] - v_Position;" +
-			"    float distance = length(lightDir)*.5;" +
+			"    float distance = length(lightDir);" +
 			"    lightDir = lightDir/distance;" +
 			"    distance = (distance*distance)/.5;" +
 			
@@ -63,59 +64,59 @@ public class ShaderData {
 			"    spec += intensity*lc*v_Spec/distance;" +
 
 			"  }" +
-			"  vec3 v_Amb = vec3(0, 0, 0);" +
-			
-			"  if(diff.x >.75) { " +
-			"    diff.x = 1.0; " +
-			"  }" +
-			"  else if(diff.x >.5) { " +
-			"    diff.x = 0.75; " +
-			"  }" +
-			"  else if(diff.x >.25) { " +
-			"    diff.x = 0.5; " +
-			"  }" +
-			"  else if(diff.x > 0.0) { " +
-			"    diff.x = 0.25; " +
-			"  }" +
-			"  else {" +
-			"    diff.x = 0.0;" +
-			"  }" +
-			
-			"  if(diff.y >.75) { " +
-			"    diff.y = 1.0; " +
-			"  }" +
-			"  else if(diff.y >.5) { " +
-			"    diff.y = 0.75; " +
-			"  }" +
-			"  else if(diff.y >.25) { " +
-			"    diff.y = 0.5; " +
-			"  }" +
-			"  else if(diff.y > 0.0) { " +
-			"    diff.y = 0.25; " +
-			"  }" +
-			"  else {" +
-			"    diff.y = 0.0;" +
-			"  }" +
-			
-			"  if(diff.z >.75) { " +
-			"    diff.z = 1.0; " +
-			"  }" +
-			"  else if(diff.z >.5) { " +
-			"    diff.z = 0.75; " +
-			"  }" +
-			"  else if(diff.z >.25) { " +
-			"    diff.z = 0.5; " +
-			"  }" +
-			"  else if(diff.z > 0.0) { " +
-			"    diff.z = 0.25; " +
-			"  }" +
-			"  else {" +
-			"    diff.z = 0.0;" +
-			"  }" +
+//			"  vec3 v_Amb = vec3(0, 0, 0);" +
+//			
+//			"  if(diff.x >.75) { " +
+//			"    diff.x = 1.0; " +
+//			"  }" +
+//			"  else if(diff.x >.5) { " +
+//			"    diff.x = 0.75; " +
+//			"  }" +
+//			"  else if(diff.x >.25) { " +
+//			"    diff.x = 0.5; " +
+//			"  }" +
+//			"  else if(diff.x > 0.0) { " +
+//			"    diff.x = 0.25; " +
+//			"  }" +
+//			"  else {" +
+//			"    diff.x = 0.0;" +
+//			"  }" +
+//			
+//			"  if(diff.y >.75) { " +
+//			"    diff.y = 1.0; " +
+//			"  }" +
+//			"  else if(diff.y >.5) { " +
+//			"    diff.y = 0.75; " +
+//			"  }" +
+//			"  else if(diff.y >.25) { " +
+//			"    diff.y = 0.5; " +
+//			"  }" +
+//			"  else if(diff.y > 0.0) { " +
+//			"    diff.y = 0.25; " +
+//			"  }" +
+//			"  else {" +
+//			"    diff.y = 0.0;" +
+//			"  }" +
+//			
+//			"  if(diff.z >.75) { " +
+//			"    diff.z = 1.0; " +
+//			"  }" +
+//			"  else if(diff.z >.5) { " +
+//			"    diff.z = 0.75; " +
+//			"  }" +
+//			"  else if(diff.z >.25) { " +
+//			"    diff.z = 0.5; " +
+//			"  }" +
+//			"  else if(diff.z > 0.0) { " +
+//			"    diff.z = 0.25; " +
+//			"  }" +
+//			"  else {" +
+//			"    diff.z = 0.0;" +
+//			"  }" +
 			
 			"  amb += v_Ambient*lc;" +
 			"  spec = vec3(0.0, 0.0, 0.0);" +
-			"  gl_FragColor = vec4(amb+diff+spec, 0.0);" + 
+			"  gl_FragColor = vec4(amb+diff+spec, 0.75);" + 
 			"}";
 	
 	public static final String lightVertexShaderCode =
@@ -133,7 +134,7 @@ public class ShaderData {
 			"varying vec3 v_Position;" +
 			"void main() {  " +
 			"  vec3 amb = vec3(0.0, 0.0, 0.0);" +
-			"  gl_FragColor = vec4(1.0, 1.0, 1.0, 0.0);" + 
+			"  gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);" + 
 			"}";
 	
 }

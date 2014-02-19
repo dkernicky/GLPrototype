@@ -13,6 +13,7 @@ import com.kernicky.gl_prototype.models.GoldenShip;
 import com.kernicky.gl_prototype.models.Lamp;
 import com.kernicky.gl_prototype.models.Model;
 import com.kernicky.gl_prototype.models.O;
+import com.kernicky.gl_prototype.models.PhongCube;
 import com.kernicky.gl_prototype.models.Transformation;
 
 public class ShootEmUpScene extends Scene {
@@ -64,6 +65,7 @@ public class ShootEmUpScene extends Scene {
 		ship.addTransform(new Transformation(90.0f, MyGLSurfaceView.x_axis[0], MyGLSurfaceView.x_axis[1], MyGLSurfaceView.x_axis[2]));
 		//ship.addTransform(new Transformation(0.2f));
 		ship.addTransform(new Transformation(0.5f));
+		modelList.add(ship);
 
 		Lamp l1 = new Lamp(0.0f, 0.0f, 0.0f);
 		Lamp l2 = new Lamp(0.0f, 0.0f, 0.0f);
@@ -74,6 +76,10 @@ public class ShootEmUpScene extends Scene {
 		Lamp l7 = new Lamp(0.0f, 0.0f, 0.0f);
 		Lamp l8 = new Lamp(0.0f, 0.0f, 0.0f);
 		Lamp lo = new Lamp(0.0f, 0.0f, 0.0f);
+		
+		PhongCube cube = new PhongCube();
+		cube.addTransform(new Transformation(7f));
+		modelList.add(cube);
 		
 		BlackIco b = new BlackIco();
 		//Base b = new Base();
@@ -89,6 +95,8 @@ public class ShootEmUpScene extends Scene {
 		//b.addTransform(new Transformation(.5f));
 
 		b.addTransform(new Transformation(14f));
+		modelList.add(b);
+
 
 		lo.addTransform(new Transformation(MatrixOp.identity()));
 		lo.addTransform(new Transformation(MatrixOp.identity()));
@@ -147,8 +155,7 @@ public class ShootEmUpScene extends Scene {
 		l8.addTransform(new Transformation(0.025f));
 		lightList.add(l8);
 
-		modelList.add(ship);
-		modelList.add(b);
+
 	}
 	
 	public void updateTransforms() {
@@ -216,7 +223,7 @@ public class ShootEmUpScene extends Scene {
 
 		lightPosList.clear();
 		
-		MatrixOp.printM(optionAngle);
+		//MatrixOp.printM(optionAngle);
 		
 //		lightList.get(0).transList.set(3, new Transformation(optionQ.x, optionQ.y, optionQ.z));
 //		lightList.get(0).transList.set(2, new Transformation(shipAngle));
