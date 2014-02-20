@@ -1,19 +1,24 @@
 package com.kernicky.gl_prototype;
 
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 
+import android.net.wifi.WifiManager;
 import android.opengl.Matrix;
+import android.text.format.Formatter;
+import android.util.Log;
 
 import com.kernicky.gl_prototype.math.MatrixOp;
 import com.kernicky.gl_prototype.math.Quaternion;
 import com.kernicky.gl_prototype.math.Vector;
 import com.kernicky.gl_prototype.models.BlackIco;
-import com.kernicky.gl_prototype.models.F;
 import com.kernicky.gl_prototype.models.GoldenShip;
 import com.kernicky.gl_prototype.models.Lamp;
-import com.kernicky.gl_prototype.models.Model;
 import com.kernicky.gl_prototype.models.NewIco;
-import com.kernicky.gl_prototype.models.O;
+import com.kernicky.gl_prototype.models.Model;
 import com.kernicky.gl_prototype.models.PhongCube;
 import com.kernicky.gl_prototype.models.Transformation;
 
@@ -56,9 +61,7 @@ public class ShootEmUpScene extends Scene {
 	public ShootEmUpScene() {
 		//PhongCube cube = new PhongCube();
 		GoldenShip ship = new GoldenShip();
-		F f1 = new F();
-		F f2 = new F();
-		O o = new O();
+
 
 		ship.addTransform(new Transformation(shipQ.x, shipQ.y, shipQ.z));
 		ship.addTransform(new Transformation(ship.angle));
@@ -82,7 +85,7 @@ public class ShootEmUpScene extends Scene {
 		
 		PhongCube cube = new PhongCube();
 		cube.addTransform(new Transformation(7f));
-		modelList.add(cube);
+		//modelList.add(cube);
 		
 		BlackIco b = new BlackIco();
 		//Base b = new Base();
@@ -96,7 +99,7 @@ public class ShootEmUpScene extends Scene {
 		//b.addTransform(new Transformation(1.9f));
 		//b.addTransform(new Transformation(.5f));
 		b.addTransform(new Transformation(14f));
-		//modelList.add(b);
+		modelList.add(b);
 		
 		ico.addTransform(new Transformation(0.0f, 1, 0, 0, 0, 360));
 		ico.addTransform(new Transformation(0.0f, 1, 0, 0, 0, 360));
@@ -219,11 +222,13 @@ public class ShootEmUpScene extends Scene {
 		shipQ.multiply(shipDist);
 		
 	}
-
+	
+	
 	public void draw() {
-		double currentUpdate = System.currentTimeMillis();
-		System.out.println(currentUpdate-lastUpdate);
-		lastUpdate = currentUpdate;
+		
+		//double currentUpdate = System.currentTimeMillis();
+		//System.out.println(currentUpdate-lastUpdate);
+		//lastUpdate = currentUpdate;
 		updateTransforms();
 
 		
@@ -235,15 +240,12 @@ public class ShootEmUpScene extends Scene {
 		
 		//MatrixOp.printM(optionAngle);
 		
-//		lightList.get(0).transList.set(3, new Transformation(optionQ.x, optionQ.y, optionQ.z));
-//		lightList.get(0).transList.set(2, new Transformation(shipAngle));
-//		lightList.get(0).transList.set(1, new Transformation(optionAngle));
-//		lightList.get(0).transList.set(0, new Transformation(staticAngle));
 		
 		lightList.get(0).transList.set(3, new Transformation(optionAngle));
 		lightList.get(0).transList.set(2, new Transformation(shipAngle));
 		lightList.get(0).transList.set(1, new Transformation(optionQ.x, optionQ.y, optionQ.z));
 		lightList.get(0).draw(mView, mProj);
+		
 		for (int m = 0; m < lightList.get(0).getMELightPos().length - 1; m++) {
 			lightPosList.add(lightList.get(0).getMELightPos()[m]);
 		}

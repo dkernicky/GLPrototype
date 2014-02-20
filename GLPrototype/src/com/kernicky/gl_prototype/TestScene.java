@@ -5,11 +5,9 @@ import java.util.ArrayList;
 import android.opengl.Matrix;
 
 import com.kernicky.gl_prototype.models.BlackIco;
-import com.kernicky.gl_prototype.models.F;
 import com.kernicky.gl_prototype.models.GoldenShip;
 import com.kernicky.gl_prototype.models.Lamp;
 import com.kernicky.gl_prototype.models.Model;
-import com.kernicky.gl_prototype.models.O;
 import com.kernicky.gl_prototype.models.PhongCube;
 import com.kernicky.gl_prototype.models.Transformation;
 
@@ -50,9 +48,6 @@ public class TestScene extends Scene {
 	public TestScene() {
 		PhongCube cube = new PhongCube();
 		GoldenShip ship = new GoldenShip();
-		F f1 = new F();
-		F f2 = new F();
-		O o = new O();
 
 //		ship.addTransform(new Transformation(1.5f, 0.0f, 0.0f, 0, 30));
 //		ship.addTransform(new Transformation(-3.0f, 0.0f, 0.0f, 30, 90));
@@ -106,19 +101,6 @@ public class TestScene extends Scene {
 		
 		//modelList.add(cube);
 
-		f1.addTransform(new Transformation(0.35f, -0.3f, 0.3f));
-		f1.addTransform(new Transformation(-360.0f, 0, 1, 0, 0, 240));
-		modelList.add(f1);
-		
-	
-		f2.addTransform(new Transformation(-0.35f, -0.3f, 0.3f));
-		f2.addTransform(new Transformation(360.0f, 0, 1, 0, 0, 240));
-		f2.addTransform(new Transformation(180.0f, 0, 1, 0));	
-		
-		modelList.add(f2);
-
-		o.addTransform(new Transformation(0.0f, -0.2f, 0.3f));
-		modelList.add(o);
 
 
 

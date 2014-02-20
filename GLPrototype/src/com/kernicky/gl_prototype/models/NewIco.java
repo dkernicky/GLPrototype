@@ -3,9 +3,8 @@ package com.kernicky.gl_prototype.models;
 import android.opengl.Matrix;
 
 
-public class NewIco extends NewModel {
-	private float rot = 0.0f;
-
+public class NewIco extends Model {
+	
 	public NewIco() {
 		this.setData(setCoords(), setNormals(), setAmb(), setDiff(), setSpec(), setShine());
 	}
