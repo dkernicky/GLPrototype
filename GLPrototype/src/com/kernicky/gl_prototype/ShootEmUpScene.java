@@ -1,26 +1,20 @@
 package com.kernicky.gl_prototype;
 
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.Enumeration;
 
-import android.net.wifi.WifiManager;
 import android.opengl.Matrix;
-import android.text.format.Formatter;
-import android.util.Log;
 
 import com.kernicky.gl_prototype.math.MatrixOp;
 import com.kernicky.gl_prototype.math.Quaternion;
 import com.kernicky.gl_prototype.math.Vector;
 import com.kernicky.gl_prototype.models.BlackIco;
+import com.kernicky.gl_prototype.models.Compilation;
 import com.kernicky.gl_prototype.models.GoldenShip;
 import com.kernicky.gl_prototype.models.Lamp;
-import com.kernicky.gl_prototype.models.NewIco;
 import com.kernicky.gl_prototype.models.Model;
+import com.kernicky.gl_prototype.models.NewIco;
 import com.kernicky.gl_prototype.models.PhongCube;
-import com.kernicky.gl_prototype.models.Transformation;
+import com.kernicky.gl_prototype.models.*;
 
 public class ShootEmUpScene extends Scene {
 	private double lastUpdate = 0.0f;
@@ -62,12 +56,25 @@ public class ShootEmUpScene extends Scene {
 		//PhongCube cube = new PhongCube();
 		GoldenShip ship = new GoldenShip();
 
+//		GoldenShip ship2 = new GoldenShip();
+//		ship2.addTransform(new Transformation(7, 0, 0));
+//		ship2.addTransform(new Transformation(90.0f, MyGLSurfaceView.x_axis[0], MyGLSurfaceView.x_axis[1], MyGLSurfaceView.x_axis[2]));
+//		ship2.addTransform(new Transformation(0.5f));
+//
+//		modelList.add(ship2);
+		
+		//Compilation c = new Compilation();
+		Nemesis c = new Nemesis();
+		c.addTransform(new Transformation(shipQ.x, shipQ.y, shipQ.z));
+
+		c.addTransform(new Transformation(90.0f, MyGLSurfaceView.x_axis[0], MyGLSurfaceView.x_axis[1], MyGLSurfaceView.x_axis[2]));
+		c.addTransform(new Transformation(0.8f));
+
+		modelList.add(c);
 
 		ship.addTransform(new Transformation(shipQ.x, shipQ.y, shipQ.z));
 		ship.addTransform(new Transformation(ship.angle));
 		ship.addTransform(new Transformation(ship.angle));
-
-
 		ship.addTransform(new Transformation(90.0f, MyGLSurfaceView.x_axis[0], MyGLSurfaceView.x_axis[1], MyGLSurfaceView.x_axis[2]));
 		//ship.addTransform(new Transformation(0.2f));
 		ship.addTransform(new Transformation(0.5f));
@@ -98,7 +105,7 @@ public class ShootEmUpScene extends Scene {
 
 		//b.addTransform(new Transformation(1.9f));
 		//b.addTransform(new Transformation(.5f));
-		b.addTransform(new Transformation(14f));
+		b.addTransform(new Transformation(12f));
 		modelList.add(b);
 		
 		ico.addTransform(new Transformation(0.0f, 1, 0, 0, 0, 360));
@@ -176,8 +183,8 @@ public class ShootEmUpScene extends Scene {
     	Quaternion prevPosQ = new Quaternion(ShootEmUpScene.shipQ.toFloat());
     	prevPosQ.normalize();
     	
-		Quaternion q = Quaternion.rotate(.16f*MyGLSurfaceView.dyLeft, prevPosQ.toFloat(), MyGLSurfaceView.x_axis);
-		Quaternion r = Quaternion.rotate(.16f*MyGLSurfaceView.dxLeft, prevPosQ.toFloat(), MyGLSurfaceView.y_axis);
+		Quaternion q = Quaternion.rotate(.04f*MyGLSurfaceView.dyLeft, prevPosQ.toFloat(), MyGLSurfaceView.x_axis);
+		Quaternion r = Quaternion.rotate(.04f*MyGLSurfaceView.dxLeft, prevPosQ.toFloat(), MyGLSurfaceView.y_axis);
 		float[] a = Quaternion.rotateTo(prevPosQ, q);
 		float[] b = Quaternion.rotateTo(prevPosQ, r);
 		float[] transform = MatrixOp.multiplyMM(a, b);
@@ -246,12 +253,10 @@ public class ShootEmUpScene extends Scene {
 		lightList.get(0).transList.set(1, new Transformation(optionQ.x, optionQ.y, optionQ.z));
 		lightList.get(0).draw(mView, mProj);
 		
-		System.out.println("*****");
 		for (int m = 0; m < lightList.get(0).getMELightPos().length - 1; m++) {
 			lightPosList.add(lightList.get(0).getMELightPos()[m]);
-			System.out.println(lightList.get(0).getMELightPos()[m]);
 		}
-		System.out.println("*****");
+
 
 
 		for (int n = 1; n < lightList.size(); n++) {

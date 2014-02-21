@@ -27,7 +27,7 @@ public class ShaderData {
 			"  vec3 diff = vec3(0.0, 0.0, 0.0);" +
 			"  vec3 spec = vec3(0.0, 0.0, 0.0);" +
 			"  vec3 lc = vec3(1.0, 1.0, 1.0);" +
-			"  for(int n = 0; n < 9; n ++) {" +
+			"  for(int n = 0; n < 3; n ++) {" +
 			"    vec3 v = normalize(vec3(0.0, 0.0, 0.0) - v_Position);" +
 			"    vec3 lightDir = u_LightPos[n] - v_Position;" +
 			"    float distance = length(lightDir);" +
@@ -49,7 +49,7 @@ public class ShaderData {
 			"    spec += intensity*lc*u_Specular/distance;" +
 			"  }" +
 			//"  gl_FragColor = vec4(u_Diffuse, 0.3);" + 
-			"  gl_FragColor = vec4(u_Ambient+diff+spec, 1.0);" + 
+			"  gl_FragColor = vec4(u_Ambient+diff+spec, 0.3);" + 
 			"}";
 	public static final String multiColorVertexShaderCode =
 			"uniform mat4 u_MVPMatrix;" +
@@ -184,7 +184,7 @@ public class ShaderData {
 			"varying vec3 v_Position;" +
 			"void main() {  " +
 			"  vec3 amb = vec3(0.0, 0.0, 0.0);" +
-			"  gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);" + 
+			"  gl_FragColor = vec4(.0, .0, 1.0, 1.0);" + 
 			"}";
 	
 }
