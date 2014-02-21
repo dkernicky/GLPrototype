@@ -1,11 +1,19 @@
 package com.kernicky.gl_prototype.models;
 
-import android.opengl.Matrix;
+import com.kernicky.gl_prototype.math.MatrixOp;
+import com.kernicky.gl_prototype.math.Quaternion;
 
 
 public class Nemesis extends Model {
 	
-	public Nemesis() {
+	public Nemesis(float x, float y, float z) {
+		this.position = new Quaternion(x, y, z, 0);
+		position.normalize();
+		addTransform(new Transformation(position.x, position.y, position.z));
+		addTransform(new Transformation(MatrixOp.identity()));
+		addTransform(new Transformation(MatrixOp.identity()));
+		addTransform(new Transformation(90.0f, 1, 0, 0));
+		addTransform(new Transformation(0.8f));
 		this.setData(setCoords(), setNormals(), setAmb(), setDiff(), setSpec(), setShine());
 	}
 	

@@ -10,7 +10,10 @@ import android.opengl.GLES20;
 import android.opengl.Matrix;
 
 import com.kernicky.gl_prototype.MyGLRenderer;
+import com.kernicky.gl_prototype.ShootEmUpScene;
 import com.kernicky.gl_prototype.math.MatrixOp;
+import com.kernicky.gl_prototype.math.Quaternion;
+import com.kernicky.gl_prototype.math.Vector;
 
 
 public abstract class Model {
@@ -37,14 +40,84 @@ public abstract class Model {
 	public ArrayList<Transformation> transList = new ArrayList<Transformation>();
 	public ArrayList<Model> subList = new ArrayList<Model>();
 	
-	public float angle = 0.0f;
+	//public float angle = 0.0f;
 	protected int currentTick = 0;
 	protected int maxTick = 1;
 	
 //	public float angle = 0.0f;
 //	public float rotX = 0.0f;
 //	public float rotY = 0.0f;
+	
+	public Quaternion position = new Quaternion(7, 0, 0, 0);
+	protected float[] angle = MatrixOp.identity();
+	protected float[] staticAngle = MatrixOp.identity();
 
+	public void applyRot(float speed, float[] axis) {
+		//float[] inputVector = Vector.normalize(new float[]{dx, dy, 0, 0});
+		position.normalize();
+		Quaternion prevPos = new Quaternion(position.toFloat());
+		
+		Quaternion q = Quaternion.rotate(-.02f, prevPos.toFloat(), axis);
+		
+		float[] transform = Quaternion.rotateTo(prevPos, q);
+		position = new Quaternion(MatrixOp.multiplyMV(transform, position.toFloat()));		
+
+		angle = MatrixOp.multiplyMM(transform, angle);
+		
+		//angle = transform;
+
+		
+		position.normalize();;
+		
+		float[] shipDir = {0, 1, 0, 0};
+		float[] inputVector = {position.x-prevPos.x, position.y-prevPos.y, position.z-prevPos.z};
+		inputVector = Vector.normalize(inputVector);
+		//MatrixOp.printV(inputVector);
+		staticAngle = Quaternion.rotateTo(shipDir, inputVector);
+		
+		position.multiply(7);
+		//position.print();
+		
+		transList.set(0, new Transformation(position.x, position.y, position.z));
+		transList.set(1, new Transformation(angle));
+		transList.set(2, new Transformation(staticAngle));
+	}
+	
+	public void seek() {
+		float[] axis = Vector.cross(ShootEmUpScene.shipQ.toFloat(), position.toFloat());
+		axis = Vector.normalize(axis);
+		applyRot(.04f, axis);
+	}
+	
+	public void wander() {
+		float[] f = new float[3];
+		f[0] = (float) Math.random();
+		f[1] = (float) Math.random();
+		f[2] = (float) Math.random();
+		
+		f = Vector.normalize(f);
+		applyRot(.04f, f);
+
+
+	}
+	
+	public void updateKinematics() {
+		//applyRot(.04f, new float[]{0, 1, 0});
+		float[] a = ShootEmUpScene.shipQ.toFloat();
+		a = Vector.normalize(a);
+		float[] b = position.toFloat();
+		b = Vector.normalize(b);
+		
+		float angle = Vector.dot(a, b);
+
+		if(angle > 0) {
+			seek();
+		}
+		else {
+			wander();
+		}
+	}
+	
 	public void setData(float[] coords, float[] normals, float[] amb, float[] diff,
 			float[] spec, float shine) {
 		this.setCoords(coords);

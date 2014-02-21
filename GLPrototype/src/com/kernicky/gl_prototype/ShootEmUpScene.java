@@ -64,17 +64,19 @@ public class ShootEmUpScene extends Scene {
 //		modelList.add(ship2);
 		
 		//Compilation c = new Compilation();
-		Nemesis c = new Nemesis();
-		c.addTransform(new Transformation(shipQ.x, shipQ.y, shipQ.z));
+		//Nemesis c = new Nemesis(0, 0, -7);
+		//c.addTransform(new Transformation(360, 0, 1, 0, 0, 157));
 
-		c.addTransform(new Transformation(90.0f, MyGLSurfaceView.x_axis[0], MyGLSurfaceView.x_axis[1], MyGLSurfaceView.x_axis[2]));
-		c.addTransform(new Transformation(0.8f));
 
-		modelList.add(c);
+		modelList.add(new Nemesis(7, 0, 0));
+		modelList.add(new Nemesis(-7, 0, 0));
+		modelList.add(new Nemesis(0, 7, 0));
+		modelList.add(new Nemesis(0, -7, 0));
+
 
 		ship.addTransform(new Transformation(shipQ.x, shipQ.y, shipQ.z));
-		ship.addTransform(new Transformation(ship.angle));
-		ship.addTransform(new Transformation(ship.angle));
+		ship.addTransform(new Transformation(MatrixOp.identity()));
+		ship.addTransform(new Transformation(MatrixOp.identity()));
 		ship.addTransform(new Transformation(90.0f, MyGLSurfaceView.x_axis[0], MyGLSurfaceView.x_axis[1], MyGLSurfaceView.x_axis[2]));
 		//ship.addTransform(new Transformation(0.2f));
 		ship.addTransform(new Transformation(0.5f));
@@ -233,9 +235,9 @@ public class ShootEmUpScene extends Scene {
 	
 	public void draw() {
 		
-		//double currentUpdate = System.currentTimeMillis();
-		//System.out.println(currentUpdate-lastUpdate);
-		//lastUpdate = currentUpdate;
+//		double currentUpdate = System.currentTimeMillis();
+//		System.out.println(currentUpdate-lastUpdate);
+//		lastUpdate = currentUpdate;
 		updateTransforms();
 
 		
@@ -259,16 +261,16 @@ public class ShootEmUpScene extends Scene {
 
 
 
-		for (int n = 1; n < lightList.size(); n++) {
-			//lightList.get(n).transList.set(0, new Transformation(MyGLSurfaceView.angleRight, 0, 0, 1));
-			
-			//lightList.get(n).transList.set(1, new Transformation(MyGLSurfaceView.angleRight, shipPosition[0], shipPosition[1], shipPosition[2]));
-			lightList.get(n).draw(mView, mProj);
-
-			for (int m = 0; m < lightList.get(n).getMELightPos().length - 1; m++) {
-				lightPosList.add(lightList.get(n).getMELightPos()[m]);
-			}
-		}
+//		for (int n = 1; n < lightList.size(); n++) {
+//			//lightList.get(n).transList.set(0, new Transformation(MyGLSurfaceView.angleRight, 0, 0, 1));
+//			
+//			//lightList.get(n).transList.set(1, new Transformation(MyGLSurfaceView.angleRight, shipPosition[0], shipPosition[1], shipPosition[2]));
+//			lightList.get(n).draw(mView, mProj);
+//
+//			for (int m = 0; m < lightList.get(n).getMELightPos().length - 1; m++) {
+//				lightPosList.add(lightList.get(n).getMELightPos()[m]);
+//			}
+//		}
 
 		
 		float[] lightPos = new float[lightPosList.size()];
@@ -278,10 +280,15 @@ public class ShootEmUpScene extends Scene {
 
 		for (Model m : modelList) {
 			if(m.getClass().equals(GoldenShip.class)) {
-				m.angle = MyGLSurfaceView.angleLeft;
+				//m.angle = MyGLSurfaceView.angleLeft;
 				m.transList.set(0, new Transformation(shipQ.x, shipQ.y, shipQ.z));
 				m.transList.set(1, new Transformation(shipAngle));
 				m.transList.set(2, new Transformation(staticAngle));
+
+			}
+			if(m.getClass().equals(Nemesis.class)) {
+				//m.angle = MyGLSurfaceView.angleLeft;
+				m.updateKinematics();
 
 			}
 			m.draw(mView, mProj, lightPos);
