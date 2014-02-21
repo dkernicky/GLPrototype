@@ -1,12 +1,10 @@
 package com.kernicky.gl_prototype.models;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
+import android.opengl.GLES20;
+import android.opengl.Matrix;
 
 import com.kernicky.gl_prototype.MyGLRenderer;
 
-import android.opengl.GLES20;
-import android.opengl.Matrix;
 
 public class Lamp extends Model {
 	private float rot = 0.0f;
@@ -27,86 +25,53 @@ public class Lamp extends Model {
 		float shine = 96;
 		this.setData(coords, normals, amb, diff, spec, shine, ShaderData.lightVertexShaderCode, ShaderData.lightFragmentShaderCode);
 	}
-
 	
-//	@Override
-//	public void createShaderProgram() {
-//		// prepare shaders and OpenGL program
-//		int vertexShader = MyGLRenderer.loadShader(GLES20.GL_VERTEX_SHADER,
-//				ShaderData.lightVertexShaderCode);
-//		int fragmentShader = MyGLRenderer.loadShader(GLES20.GL_FRAGMENT_SHADER,
-//				ShaderData.lightFragmentShaderCode);
-//
-//		mProgram = GLES20.glCreateProgram(); // create empty OpenGL Program
-//
-//		GLES20.glAttachShader(mProgram, vertexShader); // add vertex shader									
-//		GLES20.glAttachShader(mProgram, fragmentShader); // add fragment shader
-//															
-//		GLES20.glBindAttribLocation(mProgram, 1, "a_Position");
-//		GLES20.glBindAttribLocation(mProgram, 2, "a_Normal");
-////		GLES20.glBindAttribLocation(mProgram, 3, "a_Ambient");
-////		GLES20.glBindAttribLocation(mProgram, 4, "a_Diffuse");
-////		GLES20.glBindAttribLocation(mProgram, 5, "a_Specular");
-////		GLES20.glBindAttribLocation(mProgram, 6, "a_Shininess");
-//		GLES20.glLinkProgram(mProgram); // create OpenGL program executables
-//	}
-//	
-//	@Override
-//	public void initBuffers() {
-//		// initialize vertex byte buffer for shape coordinates
-//		ByteBuffer bbp = ByteBuffer.allocateDirect(
-//		// (# of coordinate values * 4 bytes per float)
-//				getCoords().length * 4);
-//		bbp.order(ByteOrder.nativeOrder());
-//		vertexBuffer = bbp.asFloatBuffer();
-//		vertexBuffer.put(getCoords());
-//		vertexBuffer.position(0);
-//
-//	}
-//	
-//	public void draw(float[] mView, float[] mProj) {
-//			
-//		float[] mModel = new float[16];
-//		float[] mModelView = new float[16];
-//		float[] mModelViewProj = new float[16];
-//		
-//		Matrix.setIdentityM(mModel, 0);
-//		mModel = applyTransforms(mModel);
-//
-//		Matrix.multiplyMM(mModelView, 0, mView, 0, mModel, 0);
-//
-//		Matrix.multiplyMM(mModelViewProj, 0, mProj, 0, mModelView, 0);		
-//		Matrix.multiplyMV(mELightPos, 0, mModelView, 0, mLightPos, 0);
-//
-//		GLES20.glUseProgram(mProgram);
-//
-//		vertexBuffer.position(0);
-//		mPositionHandle = GLES20.glGetAttribLocation(mProgram, "a_Position");
-//		GLES20.glEnableVertexAttribArray(mPositionHandle);
-//		GLES20.glVertexAttribPointer(mPositionHandle, COORDS_PER_VERTEX,
-//				GLES20.GL_FLOAT, false, vertexStride, vertexBuffer);
-//		MyGLRenderer.checkGlError("position");
-//
-//
-//		mMVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "u_MVPMatrix");
-//		// System.out.println("M**************" + mMVPMatrixHandle);
-//		MyGLRenderer.checkGlError("glGetUniformLocation");
-//		GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mModelViewProj, 0);
-//		MyGLRenderer.checkGlError("glUniformMatrix4fv");
-//
-//		mMVMatrixHandle = GLES20.glGetUniformLocation(mProgram, "u_MVMatrix");
-//		// System.out.println("M**************" + mMVPMatrixHandle);
-//		MyGLRenderer.checkGlError("glGetUniformLocation");
-//		GLES20.glUniformMatrix4fv(mMVMatrixHandle, 1, false, mModelView, 0);
-//		MyGLRenderer.checkGlError("glUniformMatrix4fv");
-//
-//
-//		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, getCoords().length / 3);
-//		GLES20.glDisableVertexAttribArray(mPositionHandle);
-//		
-//		currentTick = (currentTick + 1) % maxTick;
-//		//System.out.println(currentTick);
-//	}
+	public void draw(float[] mView, float[] mProj) {
+		float[] mModel = new float[16];
+		float[] mModelView = new float[16];
+		float[] mModelViewProj = new float[16];
+		//float[] mModel = new float[16];
+//		float[] mELightPos = new float[4];
+//		float[] mLightPos = new float[4];
+		
+		Matrix.setIdentityM(mModel, 0);
+		mModel = applyTransforms(mModel);
+
+		Matrix.multiplyMM(mModelView, 0, mView, 0, mModel, 0);
+
+		Matrix.multiplyMM(mModelViewProj, 0, mProj, 0, mModelView, 0);		
+		Matrix.multiplyMV(mELightPos, 0, mModelView, 0, mLightPos, 0);
+
+		GLES20.glUseProgram(mProgram);
+
+		vertexBuffer.position(0);
+		mPositionHandle = GLES20.glGetAttribLocation(mProgram, "a_Position");
+		GLES20.glEnableVertexAttribArray(mPositionHandle);
+		GLES20.glVertexAttribPointer(mPositionHandle, COORDS_PER_VERTEX,
+				GLES20.GL_FLOAT, false, vertexStride, vertexBuffer);
+		MyGLRenderer.checkGlError("position");
+
+
+		mMVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "u_MVPMatrix");
+		// System.out.println("M**************" + mMVPMatrixHandle);
+		MyGLRenderer.checkGlError("glGetUniformLocation");
+		GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mModelViewProj, 0);
+		MyGLRenderer.checkGlError("glUniformMatrix4fv");
+
+		mMVMatrixHandle = GLES20.glGetUniformLocation(mProgram, "u_MVMatrix");
+		// System.out.println("M**************" + mMVPMatrixHandle);
+		MyGLRenderer.checkGlError("glGetUniformLocation");
+		GLES20.glUniformMatrix4fv(mMVMatrixHandle, 1, false, mModelView, 0);
+		MyGLRenderer.checkGlError("glUniformMatrix4fv");
+
+
+		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, getCoords().length / 3);
+		GLES20.glDisableVertexAttribArray(mPositionHandle);
+		
+		currentTick = (currentTick + 1) % maxTick;
+		//System.out.println(currentTick);
+	
+	}
 	
 	public float[] getMELightPos() {
 		return mELightPos;

@@ -246,9 +246,13 @@ public class ShootEmUpScene extends Scene {
 		lightList.get(0).transList.set(1, new Transformation(optionQ.x, optionQ.y, optionQ.z));
 		lightList.get(0).draw(mView, mProj);
 		
+		System.out.println("*****");
 		for (int m = 0; m < lightList.get(0).getMELightPos().length - 1; m++) {
 			lightPosList.add(lightList.get(0).getMELightPos()[m]);
+			System.out.println(lightList.get(0).getMELightPos()[m]);
 		}
+		System.out.println("*****");
+
 
 		for (int n = 1; n < lightList.size(); n++) {
 			//lightList.get(n).transList.set(0, new Transformation(MyGLSurfaceView.angleRight, 0, 0, 1));

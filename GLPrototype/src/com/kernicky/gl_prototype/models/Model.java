@@ -139,52 +139,7 @@ public abstract class Model {
 		return mModel;
 	}
 	
-	public void draw(float[] mView, float[] mProj) {
-		float[] mModel = new float[16];
-		float[] mModelView = new float[16];
-		float[] mModelViewProj = new float[16];
-		//float[] mModel = new float[16];
-		float[] mELightPos = new float[4];
-		float[] mLightPos = new float[4];
-		
-		Matrix.setIdentityM(mModel, 0);
-		mModel = applyTransforms(mModel);
-
-		Matrix.multiplyMM(mModelView, 0, mView, 0, mModel, 0);
-
-		Matrix.multiplyMM(mModelViewProj, 0, mProj, 0, mModelView, 0);		
-		Matrix.multiplyMV(mELightPos, 0, mModelView, 0, mLightPos, 0);
-
-		GLES20.glUseProgram(mProgram);
-
-		vertexBuffer.position(0);
-		mPositionHandle = GLES20.glGetAttribLocation(mProgram, "a_Position");
-		GLES20.glEnableVertexAttribArray(mPositionHandle);
-		GLES20.glVertexAttribPointer(mPositionHandle, COORDS_PER_VERTEX,
-				GLES20.GL_FLOAT, false, vertexStride, vertexBuffer);
-		MyGLRenderer.checkGlError("position");
-
-
-		mMVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "u_MVPMatrix");
-		// System.out.println("M**************" + mMVPMatrixHandle);
-		MyGLRenderer.checkGlError("glGetUniformLocation");
-		GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mModelViewProj, 0);
-		MyGLRenderer.checkGlError("glUniformMatrix4fv");
-
-		mMVMatrixHandle = GLES20.glGetUniformLocation(mProgram, "u_MVMatrix");
-		// System.out.println("M**************" + mMVPMatrixHandle);
-		MyGLRenderer.checkGlError("glGetUniformLocation");
-		GLES20.glUniformMatrix4fv(mMVMatrixHandle, 1, false, mModelView, 0);
-		MyGLRenderer.checkGlError("glUniformMatrix4fv");
-
-
-		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, getCoords().length / 3);
-		GLES20.glDisableVertexAttribArray(mPositionHandle);
-		
-		currentTick = (currentTick + 1) % maxTick;
-		//System.out.println(currentTick);
 	
-	}
 	
 	public void draw(float[] mView, float[] mProj, float[] mLightPos) {
 		

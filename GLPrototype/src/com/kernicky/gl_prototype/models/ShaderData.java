@@ -22,8 +22,34 @@ public class ShaderData {
 			"uniform vec3 u_Diffuse;" +
 			"uniform vec3 u_Specular;" +
 			"uniform float u_Shininess;" +
-			"void main() {  " +
-			"  gl_FragColor = vec4(u_Diffuse, 0.3);" + 
+			"void main() { " +
+			"  vec3 amb = vec3(0.0, 0.0, 0.0);" +
+			"  vec3 diff = vec3(0.0, 0.0, 0.0);" +
+			"  vec3 spec = vec3(0.0, 0.0, 0.0);" +
+			"  vec3 lc = vec3(1.0, 1.0, 1.0);" +
+			"  for(int n = 0; n < 9; n ++) {" +
+			"    vec3 v = normalize(vec3(0.0, 0.0, 0.0) - v_Position);" +
+			"    vec3 lightDir = u_LightPos[n] - v_Position;" +
+			"    float distance = length(lightDir);" +
+			"    lightDir = lightDir/distance;" +
+			"    distance = (distance*distance)/.5;" +
+			
+			"    normalize(v_Normal);" +
+			"    float NdotL = dot(v_Normal, lightDir);" +
+			"    float intensity = min(NdotL, 1.0);" +
+			"    intensity = max(NdotL, 0.0);" +
+			
+			"    vec3 v_Diff = vec3(.5, .5, .5);" +
+			"    diff += intensity*lc*u_Diffuse/distance;" +
+			"    vec3 H = normalize(v+lightDir);" +
+			"    float NdotH = dot(v_Normal, H);" +
+			"    intensity = min(NdotH, 1.0);" +
+			"    intensity = max(NdotH, 0.0);" +
+			"    intensity = pow(intensity, u_Shininess);" +
+			"    spec += intensity*lc*u_Specular/distance;" +
+			"  }" +
+			//"  gl_FragColor = vec4(u_Diffuse, 0.3);" + 
+			"  gl_FragColor = vec4(u_Ambient+diff+spec, 1.0);" + 
 			"}";
 	public static final String multiColorVertexShaderCode =
 			"uniform mat4 u_MVPMatrix;" +
