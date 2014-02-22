@@ -5,10 +5,26 @@ import com.kernicky.gl_prototype.math.Quaternion;
 
 
 public class Nemesis extends Model {
-	
+	public float health = 20;
 	public Nemesis(float x, float y, float z) {
 		this.position = new Quaternion(x, y, z, 0);
 		position.normalize();
+		addTransform(new Transformation(position.x, position.y, position.z));
+		addTransform(new Transformation(MatrixOp.identity()));
+		addTransform(new Transformation(MatrixOp.identity()));
+		addTransform(new Transformation(90.0f, 1, 0, 0));
+		addTransform(new Transformation(0.8f));
+		this.setData(setCoords(), setNormals(), setAmb(), setDiff(), setSpec(), setShine());
+	}
+	public Nemesis() {
+		float[] f = new float[4];
+		f[0] = (float) Math.random();
+		f[1] = (float) Math.random();
+		f[2] = (float) Math.random();
+		f[3] = 0;
+		this.position = new Quaternion(f);
+		position.normalize();
+		position.multiply(7);
 		addTransform(new Transformation(position.x, position.y, position.z));
 		addTransform(new Transformation(MatrixOp.identity()));
 		addTransform(new Transformation(MatrixOp.identity()));

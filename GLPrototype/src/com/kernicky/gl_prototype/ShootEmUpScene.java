@@ -46,10 +46,13 @@ public class ShootEmUpScene extends Scene {
 	public static float[] optionAngle = MatrixOp.identity();
 
 	private ArrayList<Model> modelList = new ArrayList<Model>();
+	private ArrayList<Nemesis> enemyList = new ArrayList<Nemesis>();
+	private ArrayList<Projectile> projectileList = new ArrayList<Projectile>();
+
 	private ArrayList<Lamp> lightList = new ArrayList<Lamp>();
 	private ArrayList<Float> lightPosList = new ArrayList<Float>();
 	private double lastTime = 0.0f;
-	
+	private int updateCount = 0;
 	private NewIco ico = new NewIco();
 
 	public ShootEmUpScene() {
@@ -68,10 +71,13 @@ public class ShootEmUpScene extends Scene {
 		//c.addTransform(new Transformation(360, 0, 1, 0, 0, 157));
 
 
-		modelList.add(new Nemesis(7, 0, 0));
-		modelList.add(new Nemesis(-7, 0, 0));
-		modelList.add(new Nemesis(0, 7, 0));
-		modelList.add(new Nemesis(0, -7, 0));
+		//enemyList.add(new Nemesis(7, 0, 0));
+		//enemyList.add(new Nemesis(-7, 0, 0));
+		//enemyList.add(new Nemesis(0, 7, 0));
+		//enemyList.add(new Nemesis(0, -7, 0));
+		for(int n = 0; n < 5; n ++) {
+			modelList.add(new Nemesis());
+		}
 
 
 		ship.addTransform(new Transformation(shipQ.x, shipQ.y, shipQ.z));
@@ -119,7 +125,6 @@ public class ShootEmUpScene extends Scene {
 		ico.addTransform(new Transformation(14f));	
 
 
-		lo.addTransform(new Transformation(MatrixOp.identity()));
 		lo.addTransform(new Transformation(MatrixOp.identity()));
 		lo.addTransform(new Transformation(MatrixOp.identity()));
 		lo.addTransform(new Transformation(MatrixOp.identity()));
@@ -238,6 +243,14 @@ public class ShootEmUpScene extends Scene {
 //		double currentUpdate = System.currentTimeMillis();
 //		System.out.println(currentUpdate-lastUpdate);
 //		lastUpdate = currentUpdate;
+		if(updateCount > 1 && MyGLSurfaceView.rightTouch == true) {
+			updateCount = 0;
+			modelList.add(new Projectile(shipQ.x, shipQ.y, shipQ.z, MatrixOp.multiplyMM(shipAngle, optionAngle), shipQ.toFloat()));
+
+		}
+		updateCount ++;
+		
+		
 		updateTransforms();
 
 		
@@ -250,9 +263,9 @@ public class ShootEmUpScene extends Scene {
 		//MatrixOp.printM(optionAngle);
 		
 		
-		lightList.get(0).transList.set(3, new Transformation(optionAngle));
-		lightList.get(0).transList.set(2, new Transformation(shipAngle));
-		lightList.get(0).transList.set(1, new Transformation(optionQ.x, optionQ.y, optionQ.z));
+		lightList.get(0).transList.set(2, new Transformation(optionAngle));
+		lightList.get(0).transList.set(1, new Transformation(shipAngle));
+		lightList.get(0).transList.set(0, new Transformation(optionQ.x, optionQ.y, optionQ.z));
 		lightList.get(0).draw(mView, mProj);
 		
 		for (int m = 0; m < lightList.get(0).getMELightPos().length - 1; m++) {
@@ -277,6 +290,47 @@ public class ShootEmUpScene extends Scene {
 		for (int n = 0; n < lightPos.length; n++) {
 			lightPos[n] = lightPosList.get(n);
 		}
+		
+//		for (Nemesis m : enemyList) {
+//			m.updateKinematics();
+//			//System.out.println("e");
+//			m.draw(mView, mProj, lightPos);
+//			//System.out.println("e done");
+//
+//		}
+//		for(Projectile p: projectileList) {
+//			System.out.println(p.time);
+//			if(p.time > 40) {
+//				modelList.remove(p);
+//				break;
+//			}
+//			p.updateKinematics();
+//
+////			for(Nemesis m: enemyList) {
+////				if(Vector.dot(p.position.toFloat(), m.position.toFloat()) >= .999999) {
+////					if(m.health <= 0 ) {
+////						enemyList.remove(m);
+////						p.destroyed = true;
+////						break;
+////					}
+////					m.health -= 1.0;
+////					continue;
+////
+////				}
+////			}
+////			if(p.destroyed) {
+////				projectileList.remove(p);
+////				enemyList.add(new Nemesis());
+////				break;
+////			}
+////			else {
+//				System.out.println("p");
+//
+//				p.draw(mView, mProj, lightPos);
+////			}
+//
+//		}
+
 
 		for (Model m : modelList) {
 			if(m.getClass().equals(GoldenShip.class)) {
@@ -289,6 +343,16 @@ public class ShootEmUpScene extends Scene {
 			if(m.getClass().equals(Nemesis.class)) {
 				//m.angle = MyGLSurfaceView.angleLeft;
 				m.updateKinematics();
+
+			}
+			if(m.getClass().equals(Projectile.class)) {
+				//m.angle = MyGLSurfaceView.angleLeft;
+				m.updateKinematics();
+				System.out.println(m.time);
+				if(m.time > 40) {
+					modelList.remove(m);
+					break;
+				}
 
 			}
 			m.draw(mView, mProj, lightPos);

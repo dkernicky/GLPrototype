@@ -33,6 +33,7 @@ public abstract class Model {
 	private int mLightPosHandle;
 	private float coords[], normals[], spec[], diff[], amb[]; 
 	private float shine;
+	public int time = 0;
 
 	protected final int COORDS_PER_VERTEX = 3;
 	protected final int vertexStride = COORDS_PER_VERTEX * 4;
@@ -57,7 +58,7 @@ public abstract class Model {
 		position.normalize();
 		Quaternion prevPos = new Quaternion(position.toFloat());
 		
-		Quaternion q = Quaternion.rotate(-.02f, prevPos.toFloat(), axis);
+		Quaternion q = Quaternion.rotate(-1*speed, prevPos.toFloat(), axis);
 		
 		float[] transform = Quaternion.rotateTo(prevPos, q);
 		position = new Quaternion(MatrixOp.multiplyMV(transform, position.toFloat()));		
@@ -86,7 +87,7 @@ public abstract class Model {
 	public void seek() {
 		float[] axis = Vector.cross(ShootEmUpScene.shipQ.toFloat(), position.toFloat());
 		axis = Vector.normalize(axis);
-		applyRot(.04f, axis);
+		applyRot(.035f, axis);
 	}
 	
 	public void wander() {
@@ -114,7 +115,8 @@ public abstract class Model {
 			seek();
 		}
 		else {
-			wander();
+			//wander();
+			seek();
 		}
 	}
 	

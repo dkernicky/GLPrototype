@@ -92,7 +92,8 @@ class MyGLSurfaceView extends GLSurfaceView {
     private float mPreviousYRight;
     private float mPreviousXLeft;
     private float mPreviousYLeft;
-    private boolean leftTouch, rightTouch;
+    public boolean leftTouch;
+	public static boolean rightTouch;
     private float leftX, leftY, rightX, rightY;
     private float[] transformMatrix = new float[16];
  
