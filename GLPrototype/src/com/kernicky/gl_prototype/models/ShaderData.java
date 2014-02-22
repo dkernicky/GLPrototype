@@ -32,7 +32,7 @@ public class ShaderData {
 			"    vec3 lightDir = u_LightPos[n] - v_Position;" +
 			"    float distance = length(lightDir);" +
 			"    lightDir = lightDir/distance;" +
-			"    distance = (distance*distance)/.5;" +
+			//"    distance = (distance*distance)/.5;" +
 			
 			"    normalize(v_Normal);" +
 			"    float NdotL = dot(v_Normal, lightDir);" +

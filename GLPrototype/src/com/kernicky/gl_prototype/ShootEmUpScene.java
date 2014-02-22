@@ -75,9 +75,10 @@ public class ShootEmUpScene extends Scene {
 		//enemyList.add(new Nemesis(-7, 0, 0));
 		//enemyList.add(new Nemesis(0, 7, 0));
 		//enemyList.add(new Nemesis(0, -7, 0));
-		for(int n = 0; n < 5; n ++) {
-			modelList.add(new Nemesis());
+		for(int n = 0; n < 15; n ++) {
+			enemyList.add(new Nemesis());
 		}
+		//modelList.add(new Zero(shipQ.x, shipQ.y, shipQ.z));
 
 
 		ship.addTransform(new Transformation(shipQ.x, shipQ.y, shipQ.z));
@@ -240,12 +241,16 @@ public class ShootEmUpScene extends Scene {
 	
 	public void draw() {
 		
+		
+		
+		
+		
 //		double currentUpdate = System.currentTimeMillis();
 //		System.out.println(currentUpdate-lastUpdate);
 //		lastUpdate = currentUpdate;
 		if(updateCount > 1 && MyGLSurfaceView.rightTouch == true) {
 			updateCount = 0;
-			modelList.add(new Projectile(shipQ.x, shipQ.y, shipQ.z, MatrixOp.multiplyMM(shipAngle, optionAngle), shipQ.toFloat()));
+			projectileList.add(new Projectile(shipQ.x, shipQ.y, shipQ.z, MatrixOp.multiplyMM(shipAngle, optionAngle), shipQ.toFloat()));
 
 		}
 		updateCount ++;
@@ -291,45 +296,50 @@ public class ShootEmUpScene extends Scene {
 			lightPos[n] = lightPosList.get(n);
 		}
 		
-//		for (Nemesis m : enemyList) {
-//			m.updateKinematics();
-//			//System.out.println("e");
-//			m.draw(mView, mProj, lightPos);
-//			//System.out.println("e done");
-//
-//		}
-//		for(Projectile p: projectileList) {
-//			System.out.println(p.time);
-//			if(p.time > 40) {
-//				modelList.remove(p);
-//				break;
-//			}
-//			p.updateKinematics();
-//
-////			for(Nemesis m: enemyList) {
-////				if(Vector.dot(p.position.toFloat(), m.position.toFloat()) >= .999999) {
-////					if(m.health <= 0 ) {
-////						enemyList.remove(m);
-////						p.destroyed = true;
-////						break;
-////					}
-////					m.health -= 1.0;
-////					continue;
-////
-////				}
-////			}
-////			if(p.destroyed) {
-////				projectileList.remove(p);
-////				enemyList.add(new Nemesis());
-////				break;
-////			}
-////			else {
-//				System.out.println("p");
-//
-//				p.draw(mView, mProj, lightPos);
-////			}
-//
-//		}
+		for (Nemesis m : enemyList) {
+			m.updateKinematics();
+			//System.out.println("e");
+			m.draw(mView, mProj, lightPos);
+			//System.out.println("e done");
+
+		}
+		for(Projectile p: projectileList) {
+			System.out.println(p.time);
+			if(p.time > 40) {
+				projectileList.remove(p);
+				break;
+			}
+			p.updateKinematics();
+
+			for(Nemesis m: enemyList) {
+				float[] p1 = Vector.normalize(p.position.toFloat());
+				float[] e1 = Vector.normalize(m.position.toFloat());
+
+				if(Vector.dot(p1, e1) >= .99) {
+					if(m.health <= 0 ) {
+						enemyList.remove(m);
+						p.destroyed = true;
+						break;
+					}
+					m.amb = new float[]{0.0f, 1.0f, 0.0f};
+
+					m.health -= 10.0;
+					continue;
+
+				}
+			}
+			if(p.destroyed) {
+				projectileList.remove(p);
+				enemyList.add(new Nemesis());
+				break;
+			}
+			else {
+				System.out.println("p");
+
+				p.draw(mView, mProj, lightPos);
+			}
+
+		}
 
 
 		for (Model m : modelList) {

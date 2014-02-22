@@ -31,7 +31,8 @@ public abstract class Model {
 	protected int mMVPMatrixHandle;
 	protected int mMVMatrixHandle;
 	private int mLightPosHandle;
-	private float coords[], normals[], spec[], diff[], amb[]; 
+	private float coords[], normals[], spec[], diff[];
+	public float amb[]; 
 	private float shine;
 	public int time = 0;
 
