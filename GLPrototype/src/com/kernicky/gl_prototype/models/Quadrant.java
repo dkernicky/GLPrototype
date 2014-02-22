@@ -16,7 +16,7 @@ public class Quadrant extends Model {
 		float normals[] = { -0.341816f, -0.341815f, -0.8754f, -0.341816f, -0.341815f, -0.8754f, -0.341816f, -0.341815f, -0.8754f };
 		return normals; }
 	public float[] setAmb() {
-		float[] amb = {0.0f, 0.0f, 0.0f};
+		float[] amb = {1.0f, 0.0f, 0.0f};
 		return amb; 
 	}
 	public float[] setDiff() {

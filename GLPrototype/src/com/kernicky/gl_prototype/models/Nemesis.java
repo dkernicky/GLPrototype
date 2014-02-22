@@ -71,11 +71,11 @@ public class Nemesis extends Model {
 		float angle = Vector.dot(a, b);
 
 		if(angle > 0) {
-			seek();
+			seek(ShootEmUpScene.shipQ);
 		}
 		else {
 			//wander();
-			seek();
+			seek(ShootEmUpScene.shipQ);
 		}
 		if(time > 10) {
 		this.amb = new float[]{0.3f, 0, 0};

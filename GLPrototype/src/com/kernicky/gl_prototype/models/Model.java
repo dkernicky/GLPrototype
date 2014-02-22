@@ -19,6 +19,8 @@ import com.kernicky.gl_prototype.math.Vector;
 public abstract class Model {
 	
 	protected int mProgram;
+	protected int mVert;
+	protected int mFrag;
 	protected FloatBuffer vertexBuffer;
 	private FloatBuffer normalBuffer;
 
@@ -85,8 +87,8 @@ public abstract class Model {
 		transList.set(2, new Transformation(staticAngle));
 	}
 	
-	public void seek() {
-		float[] axis = Vector.cross(ShootEmUpScene.shipQ.toFloat(), position.toFloat());
+	public void seek(Quaternion q) {
+		float[] axis = Vector.cross(q.toFloat(), position.toFloat());
 		axis = Vector.normalize(axis);
 		applyRot(.035f, axis);
 	}
@@ -113,11 +115,11 @@ public abstract class Model {
 		float angle = Vector.dot(a, b);
 
 		if(angle > 0) {
-			seek();
+			seek(ShootEmUpScene.shipQ);
 		}
 		else {
 			//wander();
-			seek();
+			seek(ShootEmUpScene.shipQ);
 		}
 	}
 	
@@ -165,19 +167,40 @@ public abstract class Model {
 
 	public void createShaderProgram() {
 		// prepare shaders and OpenGL program
-		int vertexShader = MyGLRenderer.loadShader(GLES20.GL_VERTEX_SHADER,
+		mVert = MyGLRenderer.loadShader(GLES20.GL_VERTEX_SHADER,
 				ShaderData.singleColorVertexShaderCode);
-		int fragmentShader = MyGLRenderer.loadShader(GLES20.GL_FRAGMENT_SHADER,
+		mFrag = MyGLRenderer.loadShader(GLES20.GL_FRAGMENT_SHADER,
 				ShaderData.singleColorFragmentShaderCode);
 
 		mProgram = GLES20.glCreateProgram(); 					// create empty OpenGL Program
 
-		GLES20.glAttachShader(mProgram, vertexShader); 			// add vertex shader									
-		GLES20.glAttachShader(mProgram, fragmentShader); 		// add fragment shader
-															
-		GLES20.glBindAttribLocation(mProgram, 1, "a_Position");
-		GLES20.glBindAttribLocation(mProgram, 2, "a_Normal");
+		GLES20.glAttachShader(mProgram, mVert); 			// add vertex shader									
+		GLES20.glAttachShader(mProgram, mFrag); 		// add fragment shader												
+		
+		//GLES20.glBindAttribLocation(mProgram, 1, "a_Position");
+		//GLES20.glBindAttribLocation(mProgram, 2, "a_Normal");
+		
+		
+		
 		GLES20.glLinkProgram(mProgram); 						// create OpenGL program executables
+
+		
+		int[] linkStatus = new int[1];
+		GLES20.glGetProgramiv(mProgram, GLES20.GL_LINK_STATUS, linkStatus, 0);
+		if (linkStatus[0] != GLES20.GL_TRUE) {
+            System.out.println("Error: Could not link program: ");
+            System.out.println("Error" + GLES20.glGetProgramInfoLog(mProgram));
+            GLES20.glDeleteProgram(mProgram);
+            mProgram = 0;
+        }
+	}
+	
+	public void destroyProgram() {		
+		GLES20.glDeleteShader(mVert);
+		GLES20.glDeleteShader(mFrag);
+
+		 GLES20.glDeleteProgram(mProgram);
+         mProgram = 0;
 	}
 	
 	public void createShaderProgram(String vertShaderCode, String fragShaderCode) {
@@ -195,6 +218,8 @@ public abstract class Model {
 		GLES20.glBindAttribLocation(mProgram, 1, "a_Position");
 		GLES20.glBindAttribLocation(mProgram, 2, "a_Normal");
 		GLES20.glLinkProgram(mProgram); 						// create OpenGL program executables
+		
+		
 	}
 	
 	public void updateMaxTick() {
@@ -223,8 +248,8 @@ public abstract class Model {
 		
 
 		for(Model m: subList) {
-			m.transList.set(0, new Transformation(mModel));
-
+			//m.transList.set(0, new Transformation(mModel));
+			m.addTransformToFront(new Transformation(mModel));
 			m.draw(mModel, mView, mProj, mLightPos);
 		}
 		mModel = MatrixOp.identity();
@@ -292,14 +317,17 @@ public abstract class Model {
 		Matrix.setIdentityM(mModel, 0);
 		mModel = applyTransforms(mModel);
 
-		for(Model m: subList) {
-			m.draw(mModel, mView, mProj, mLightPos);
-		}
+//		for(Model m: subList) {
+//			m.draw(mModel, mView, mProj, mLightPos);
+//		}
 		
 		Matrix.multiplyMM(mModelView, 0, mView, 0, mModel, 0);
 		Matrix.multiplyMM(mModelViewProj, 0, mProj, 0, mModelView, 0);		
 		
-
+//		int[] numAttributes = new int[1];
+//		GLES20.glGetProgramiv(mProgram, GLES20.GL_ACTIVE_UNIFORM_MAX_LENGTH, numAttributes, 0);
+//		System.out.println(numAttributes[0]);
+		
 		GLES20.glUseProgram(mProgram);
 
 		vertexBuffer.position(0);
@@ -308,6 +336,7 @@ public abstract class Model {
 		GLES20.glVertexAttribPointer(mPositionHandle, COORDS_PER_VERTEX,
 				GLES20.GL_FLOAT, false, vertexStride, vertexBuffer);
 		MyGLRenderer.checkGlError("position");
+
 
 		mNormalHandle = GLES20.glGetAttribLocation(mProgram, "a_Normal");
 		GLES20.glEnableVertexAttribArray(mNormalHandle);
@@ -340,7 +369,7 @@ public abstract class Model {
 
 		mLightPosHandle = GLES20.glGetUniformLocation(mProgram, "u_LightPos");
 		GLES20.glUniform3fv(mLightPosHandle, mLightPos.length/3, mLightPos, 0);
-
+		
 		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, getCoords().length / 3);
 		GLES20.glDisableVertexAttribArray(mPositionHandle);
 		

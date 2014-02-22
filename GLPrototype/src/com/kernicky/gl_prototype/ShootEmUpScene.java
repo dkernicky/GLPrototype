@@ -7,13 +7,6 @@ import android.opengl.Matrix;
 import com.kernicky.gl_prototype.math.MatrixOp;
 import com.kernicky.gl_prototype.math.Quaternion;
 import com.kernicky.gl_prototype.math.Vector;
-import com.kernicky.gl_prototype.models.BlackIco;
-import com.kernicky.gl_prototype.models.Compilation;
-import com.kernicky.gl_prototype.models.GoldenShip;
-import com.kernicky.gl_prototype.models.Lamp;
-import com.kernicky.gl_prototype.models.Model;
-import com.kernicky.gl_prototype.models.NewIco;
-import com.kernicky.gl_prototype.models.PhongCube;
 import com.kernicky.gl_prototype.models.*;
 
 public class ShootEmUpScene extends Scene {
@@ -54,6 +47,8 @@ public class ShootEmUpScene extends Scene {
 	private double lastTime = 0.0f;
 	private int updateCount = 0;
 	private NewIco ico = new NewIco();
+	private ArrayList<Num>numList = new ArrayList<Num>();
+	private int score = 0;
 
 	public ShootEmUpScene() {
 		//PhongCube cube = new PhongCube();
@@ -66,20 +61,29 @@ public class ShootEmUpScene extends Scene {
 //
 //		modelList.add(ship2);
 		
-		//Compilation c = new Compilation();
-		//Nemesis c = new Nemesis(0, 0, -7);
-		//c.addTransform(new Transformation(360, 0, 1, 0, 0, 157));
-
-
-		//enemyList.add(new Nemesis(7, 0, 0));
-		//enemyList.add(new Nemesis(-7, 0, 0));
-		//enemyList.add(new Nemesis(0, 7, 0));
-		//enemyList.add(new Nemesis(0, -7, 0));
+//		Compilation c = new Compilation();
+//		c.addTransform(new Transformation(360, 0, 1, 0, 0, 157));
+//		modelList.add(c);
+		Num num = new Num(1, 0);
+		Num num2 = new Num(2, 1);
+		//num.addTransform(new Transformation(.5f));
+		numList.add(num);
+		numList.add(num2);
+		numList.add(new Num(1, 2));
+		numList.add(new Num(9, 3));
+		numList.add(new Num(1, 4));
+		numList.add(new Num(9, 5));
+		//numList.add(new Num(8, 6));
+		
 		for(int n = 0; n < 15; n ++) {
-			enemyList.add(new Nemesis());
+			//enemyList.add(new Nemesis());
 		}
 		//modelList.add(new Zero(shipQ.x, shipQ.y, shipQ.z));
+		//Quadrant q = new Quadrant();
+		//q.addTransform(new Transformation(shipQ.x, shipQ.y, shipQ.z));
+		//q.addTransform(new Transformation(90.0f, MyGLSurfaceView.x_axis[0], MyGLSurfaceView.x_axis[1], MyGLSurfaceView.x_axis[2]));
 
+		//modelList.add(q);
 
 		ship.addTransform(new Transformation(shipQ.x, shipQ.y, shipQ.z));
 		ship.addTransform(new Transformation(MatrixOp.identity()));
@@ -184,7 +188,19 @@ public class ShootEmUpScene extends Scene {
 
 
 	}
-	
+	public void updateScore() {
+		//int pow = 10;
+		int newScore = score;
+		for(int n = numList.size()-1; n >= 0; n --) {
+			int newNum = newScore %10;
+			if(numList.get(n).getNum() != newNum) {
+				numList.get(n).destroyProgram();
+				numList.set(n, new Num(newNum, n));
+			}
+			newScore /= 10;
+		}
+
+	}
 	public void updateTransforms() {
 
     	float[] inputVector = Vector.normalize(new float[]{1*MyGLSurfaceView.dxLeft, -1*MyGLSurfaceView.dyLeft, 0, 0});
@@ -241,13 +257,21 @@ public class ShootEmUpScene extends Scene {
 	
 	public void draw() {
 		
+		score ++;
+//		
+//		new Thread(new Runnable() {
+//
+//		@Override
+//		public void run() {
+//			// TODO Auto-generated method stub
+			updateScore();
+//
+//		}
+//		}).start();
 		
-		
-		
-		
-		double currentUpdate = System.currentTimeMillis();
-		System.out.println(currentUpdate-lastUpdate);
-		lastUpdate = currentUpdate;
+//		double currentUpdate = System.currentTimeMillis();
+//		System.out.println(currentUpdate-lastUpdate);
+//		lastUpdate = currentUpdate;
 		
 		if(updateCount > 1 && MyGLSurfaceView.rightTouch == true) {
 			updateCount = 0;
@@ -302,15 +326,34 @@ public class ShootEmUpScene extends Scene {
 			//System.out.println("e");
 			m.draw(mView, mProj, lightPos);
 			//System.out.println("e done");
+//			for (Nemesis e : enemyList) {
+//				float[] p1 = Vector.normalize(e.position.toFloat());
+//				float[] e1 = Vector.normalize(m.position.toFloat());
+//				if(Vector.dot(p1, e1) >= .999) {
+//				
+//					float[] f = new float[3];
+//					f[0] = (float) Math.random();
+//					f[1] = (float) Math.random();
+//					f[2] = (float) Math.random();
+//					
+//					f = Vector.normalize(f);
+//					e.applyRot(.04f, f);
+//				}
+//			}
 
 		}
+
+		
+		
 		for(Projectile p: projectileList) {
 			//System.out.println(p.time);
 			if(p.time > 40) {
+				p.destroyProgram();
 				projectileList.remove(p);
 				break;
 			}
 			p.updateKinematics();
+			
 
 			for(Nemesis m: enemyList) {
 				float[] p1 = Vector.normalize(p.position.toFloat());
@@ -329,6 +372,8 @@ public class ShootEmUpScene extends Scene {
 
 				}
 			}
+
+					
 			if(p.destroyed) {
 				projectileList.remove(p);
 				enemyList.add(new Nemesis());
@@ -341,7 +386,9 @@ public class ShootEmUpScene extends Scene {
 			}
 
 		}
-
+		for (Num m : numList) {
+			m.draw(mView, mProj, lightPos);
+		}
 
 		for (Model m : modelList) {
 			if(m.getClass().equals(GoldenShip.class)) {
@@ -351,21 +398,21 @@ public class ShootEmUpScene extends Scene {
 				m.transList.set(2, new Transformation(staticAngle));
 
 			}
-			if(m.getClass().equals(Nemesis.class)) {
-				//m.angle = MyGLSurfaceView.angleLeft;
-				m.updateKinematics();
-
-			}
-			if(m.getClass().equals(Projectile.class)) {
-				//m.angle = MyGLSurfaceView.angleLeft;
-				m.updateKinematics();
-				System.out.println(m.time);
-				if(m.time > 40) {
-					modelList.remove(m);
-					break;
-				}
-
-			}
+//			if(m.getClass().equals(Nemesis.class)) {
+//				//m.angle = MyGLSurfaceView.angleLeft;
+//				m.updateKinematics();
+//
+//			}
+//			if(m.getClass().equals(Projectile.class)) {
+//				//m.angle = MyGLSurfaceView.angleLeft;
+//				m.updateKinematics();
+//				System.out.println(m.time);
+//				if(m.time > 40) {
+//					modelList.remove(m);
+//					break;
+//				}
+//
+//			}
 			m.draw(mView, mProj, lightPos);
 		}
 		ico.draw(mView, mProj, lightPos);

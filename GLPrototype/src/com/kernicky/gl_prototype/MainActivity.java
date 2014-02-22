@@ -21,11 +21,10 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-import com.kernicky.gl_prototype.math.Quaternion;
 import com.kernicky.gl_prototype.math.MatrixOp;
-import com.kernicky.gl_prototype.math.Vector;
 
 public class MainActivity extends Activity {
 
@@ -42,6 +41,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
+
         mGLView.onPause();
     }
 
@@ -86,6 +86,8 @@ class MyGLSurfaceView extends GLSurfaceView {
         
         Matrix.setIdentityM(transformMatrix, 0);
     }
+
+   
 
     private final float TOUCH_SCALE_FACTOR = 180.0f / 320;
     private float mPreviousXRight;
