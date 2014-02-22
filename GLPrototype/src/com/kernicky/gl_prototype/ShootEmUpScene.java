@@ -245,9 +245,10 @@ public class ShootEmUpScene extends Scene {
 		
 		
 		
-//		double currentUpdate = System.currentTimeMillis();
-//		System.out.println(currentUpdate-lastUpdate);
-//		lastUpdate = currentUpdate;
+		double currentUpdate = System.currentTimeMillis();
+		System.out.println(currentUpdate-lastUpdate);
+		lastUpdate = currentUpdate;
+		
 		if(updateCount > 1 && MyGLSurfaceView.rightTouch == true) {
 			updateCount = 0;
 			projectileList.add(new Projectile(shipQ.x, shipQ.y, shipQ.z, MatrixOp.multiplyMM(shipAngle, optionAngle), shipQ.toFloat()));
@@ -304,7 +305,7 @@ public class ShootEmUpScene extends Scene {
 
 		}
 		for(Projectile p: projectileList) {
-			System.out.println(p.time);
+			//System.out.println(p.time);
 			if(p.time > 40) {
 				projectileList.remove(p);
 				break;
@@ -334,7 +335,7 @@ public class ShootEmUpScene extends Scene {
 				break;
 			}
 			else {
-				System.out.println("p");
+				//System.out.println("p");
 
 				p.draw(mView, mProj, lightPos);
 			}
