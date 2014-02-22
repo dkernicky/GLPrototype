@@ -73,10 +73,10 @@ public class ShootEmUpScene extends Scene {
 		numList.add(new Num(9, 3));
 		numList.add(new Num(1, 4));
 		numList.add(new Num(9, 5));
-		//numList.add(new Num(8, 6));
+		numList.add(new Num(8, 6));
 		
 		for(int n = 0; n < 15; n ++) {
-			//enemyList.add(new Nemesis());
+			enemyList.add(new Nemesis());
 		}
 		//modelList.add(new Zero(shipQ.x, shipQ.y, shipQ.z));
 		//Quadrant q = new Quadrant();
@@ -93,14 +93,14 @@ public class ShootEmUpScene extends Scene {
 		ship.addTransform(new Transformation(0.5f));
 		modelList.add(ship);
 
-		Lamp l1 = new Lamp(0.0f, 0.0f, 0.0f);
-		Lamp l2 = new Lamp(0.0f, 0.0f, 0.0f);
-		Lamp l3 = new Lamp(0.0f, 0.0f, 0.0f);
-		Lamp l4 = new Lamp(0.0f, 0.0f, 0.0f);
-		Lamp l5 = new Lamp(0.0f, 0.0f, 0.0f);
-		Lamp l6 = new Lamp(0.0f, 0.0f, 0.0f);
-		Lamp l7 = new Lamp(0.0f, 0.0f, 0.0f);
-		Lamp l8 = new Lamp(0.0f, 0.0f, 0.0f);
+//		Lamp l1 = new Lamp(0.0f, 0.0f, 0.0f);
+//		Lamp l2 = new Lamp(0.0f, 0.0f, 0.0f);
+//		Lamp l3 = new Lamp(0.0f, 0.0f, 0.0f);
+//		Lamp l4 = new Lamp(0.0f, 0.0f, 0.0f);
+//		Lamp l5 = new Lamp(0.0f, 0.0f, 0.0f);
+//		Lamp l6 = new Lamp(0.0f, 0.0f, 0.0f);
+//		Lamp l7 = new Lamp(0.0f, 0.0f, 0.0f);
+//		Lamp l8 = new Lamp(0.0f, 0.0f, 0.0f);
 		Lamp lo = new Lamp(0.0f, 0.0f, 0.0f);
 		
 		PhongCube cube = new PhongCube();
@@ -137,54 +137,54 @@ public class ShootEmUpScene extends Scene {
 		lo.addTransform(new Transformation(0.05f));
 
 		lightList.add(lo);
-		
-		l1.addTransform(new Transformation(0, 0, 0, 1));
-		l1.addTransform(new Transformation(0, 0, 0));
-		l1.addTransform(new Transformation(5f, 5f, 5f));
-		l1.addTransform(new Transformation(0.025f));
-		lightList.add(l1);
-
-		l2.addTransform(new Transformation(0, 0, 0, 1));
-		l2.addTransform(new Transformation(0, 0, 0));
-		l2.addTransform(new Transformation(-5f, 5f, 5f));
-		l2.addTransform(new Transformation(0.025f));
-		lightList.add(l2);
-
-		l3.addTransform(new Transformation(0, 0, 0, 1));
-		l3.addTransform(new Transformation(0, 0, 0));
-		l3.addTransform(new Transformation(-5f, -5f, 5f));
-		l3.addTransform(new Transformation(0.025f));
-		lightList.add(l3);
-
-		l4.addTransform(new Transformation(0, 0, 0, 1));
-		l4.addTransform(new Transformation(0, 0, 0));
-		l4.addTransform(new Transformation(5, -5f, 5f));
-		l4.addTransform(new Transformation(0.025f));
-		lightList.add(l4);
-		
-		l5.addTransform(new Transformation(0, 0, 0, 1));
-		l5.addTransform(new Transformation(0, 0, 0));
-		l5.addTransform(new Transformation(5f, 5f, -5f));
-		l5.addTransform(new Transformation(0.025f));
-		lightList.add(l5);
-
-		l6.addTransform(new Transformation(0, 0, 0, 1));
-		l6.addTransform(new Transformation(0, 0, 0));
-		l6.addTransform(new Transformation(-5f, 5f, -5f));
-		l6.addTransform(new Transformation(0.025f));
-		lightList.add(l6);
-
-		l7.addTransform(new Transformation(0, 0, 0, 1));
-		l7.addTransform(new Transformation(0, 0, 0));
-		l7.addTransform(new Transformation(-1f, -1.f, -1.0f));
-		l7.addTransform(new Transformation(0.025f));
-		lightList.add(l7);
-
-		l8.addTransform(new Transformation(0, 0, 0, 1));
-		l8.addTransform(new Transformation(0, 0, 0));
-		l8.addTransform(new Transformation(1f, -1f, -1.0f));
-		l8.addTransform(new Transformation(0.025f));
-		lightList.add(l8);
+//		
+//		l1.addTransform(new Transformation(0, 0, 0, 1));
+//		l1.addTransform(new Transformation(0, 0, 0));
+//		l1.addTransform(new Transformation(5f, 5f, 5f));
+//		l1.addTransform(new Transformation(0.025f));
+//		lightList.add(l1);
+//
+//		l2.addTransform(new Transformation(0, 0, 0, 1));
+//		l2.addTransform(new Transformation(0, 0, 0));
+//		l2.addTransform(new Transformation(-5f, 5f, 5f));
+//		l2.addTransform(new Transformation(0.025f));
+//		lightList.add(l2);
+//
+//		l3.addTransform(new Transformation(0, 0, 0, 1));
+//		l3.addTransform(new Transformation(0, 0, 0));
+//		l3.addTransform(new Transformation(-5f, -5f, 5f));
+//		l3.addTransform(new Transformation(0.025f));
+//		lightList.add(l3);
+//
+//		l4.addTransform(new Transformation(0, 0, 0, 1));
+//		l4.addTransform(new Transformation(0, 0, 0));
+//		l4.addTransform(new Transformation(5, -5f, 5f));
+//		l4.addTransform(new Transformation(0.025f));
+//		lightList.add(l4);
+//		
+//		l5.addTransform(new Transformation(0, 0, 0, 1));
+//		l5.addTransform(new Transformation(0, 0, 0));
+//		l5.addTransform(new Transformation(5f, 5f, -5f));
+//		l5.addTransform(new Transformation(0.025f));
+//		lightList.add(l5);
+//
+//		l6.addTransform(new Transformation(0, 0, 0, 1));
+//		l6.addTransform(new Transformation(0, 0, 0));
+//		l6.addTransform(new Transformation(-5f, 5f, -5f));
+//		l6.addTransform(new Transformation(0.025f));
+//		lightList.add(l6);
+//
+//		l7.addTransform(new Transformation(0, 0, 0, 1));
+//		l7.addTransform(new Transformation(0, 0, 0));
+//		l7.addTransform(new Transformation(-1f, -1.f, -1.0f));
+//		l7.addTransform(new Transformation(0.025f));
+//		lightList.add(l7);
+//
+//		l8.addTransform(new Transformation(0, 0, 0, 1));
+//		l8.addTransform(new Transformation(0, 0, 0));
+//		l8.addTransform(new Transformation(1f, -1f, -1.0f));
+//		l8.addTransform(new Transformation(0.025f));
+//		lightList.add(l8);
 
 
 	}
@@ -194,7 +194,7 @@ public class ShootEmUpScene extends Scene {
 		for(int n = numList.size()-1; n >= 0; n --) {
 			int newNum = newScore %10;
 			if(numList.get(n).getNum() != newNum) {
-				numList.get(n).destroyProgram();
+				//numList.get(n).destroyProgram();
 				numList.set(n, new Num(newNum, n));
 			}
 			newScore /= 10;
@@ -256,22 +256,15 @@ public class ShootEmUpScene extends Scene {
 	
 	
 	public void draw() {
-		
-		score ++;
-//		
-//		new Thread(new Runnable() {
-//
-//		@Override
-//		public void run() {
-//			// TODO Auto-generated method stub
+		//score ++;
+	
+
 			updateScore();
-//
-//		}
-//		}).start();
+
 		
-//		double currentUpdate = System.currentTimeMillis();
-//		System.out.println(currentUpdate-lastUpdate);
-//		lastUpdate = currentUpdate;
+		double currentUpdate = System.currentTimeMillis();
+		System.out.println(currentUpdate-lastUpdate);
+		lastUpdate = currentUpdate;
 		
 		if(updateCount > 1 && MyGLSurfaceView.rightTouch == true) {
 			updateCount = 0;
@@ -279,7 +272,6 @@ public class ShootEmUpScene extends Scene {
 
 		}
 		updateCount ++;
-		
 		
 		updateTransforms();
 
@@ -331,24 +323,36 @@ public class ShootEmUpScene extends Scene {
 //				float[] e1 = Vector.normalize(m.position.toFloat());
 //				if(Vector.dot(p1, e1) >= .999) {
 //				
-//					float[] f = new float[3];
-//					f[0] = (float) Math.random();
-//					f[1] = (float) Math.random();
-//					f[2] = (float) Math.random();
+////					float[] f = new float[3];
+////					f[0] = (float) Math.random();
+////					f[1] = (float) Math.random();
+////					f[2] = (float) Math.random();
 //					
-//					f = Vector.normalize(f);
-//					e.applyRot(.04f, f);
+//					//f = Vector.normalize(f);
+//					float[] a = shipQ.toFloat();
+//					float[] b = m.position.toFloat();
+//					a = Vector.normalize(a);
+//					b = Vector.normalize(b);
+//					float[] normalRotAxis = Vector.cross(a, b);
+//					
+//					b = m.position.toFloat();
+//					b = Vector.normalize(b);
+//					a = e.position.toFloat();
+//					a = Vector.normalize(a);
+//					float[] awayAxis = Vector.cross(b,  a);
+//					e.applyRot(.35f, awayAxis);
+//					//m.applyRot(-.04f, awayAxis);
+//
 //				}
 //			}
 
 		}
 
 		
-		
 		for(Projectile p: projectileList) {
 			//System.out.println(p.time);
 			if(p.time > 40) {
-				p.destroyProgram();
+				//p.destroyProgram();
 				projectileList.remove(p);
 				break;
 			}
@@ -362,6 +366,7 @@ public class ShootEmUpScene extends Scene {
 				if(Vector.dot(p1, e1) >= .99) {
 					if(m.health <= 0 ) {
 						enemyList.remove(m);
+						score += 1;
 						p.destroyed = true;
 						break;
 					}

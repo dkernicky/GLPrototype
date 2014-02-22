@@ -20,6 +20,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import com.kernicky.gl_prototype.models.PhongCube;
+import com.kernicky.gl_prototype.models.ShaderData;
 
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
@@ -30,7 +31,11 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
 	private static final String TAG = "MyGLRenderer";
 	private Scene s;
+	
+	public static int reflectiveProgram;
+	public static int emissiveProgram;
 
+	
 	private final float[] mProjMatrix = new float[16];
 
 	// Declare as volatile because we are updating it from another thread
@@ -44,10 +49,43 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
 		//mTriangle = new Triangle();
 		//mShip = new PhongCube();
+		createShaderPrograms();
 		s = new ShootEmUpScene();
 
 	}
 
+	public void createShaderPrograms() {
+		// prepare shaders and OpenGL program
+		int mVert = MyGLRenderer.loadShader(GLES20.GL_VERTEX_SHADER,
+				ShaderData.singleColorVertexShaderCode);
+		int mFrag = MyGLRenderer.loadShader(GLES20.GL_FRAGMENT_SHADER,
+				ShaderData.singleColorFragmentShaderCode);
+
+		reflectiveProgram = GLES20.glCreateProgram(); 					// create empty OpenGL Program
+
+		GLES20.glAttachShader(reflectiveProgram, mVert); 			// add vertex shader									
+		GLES20.glAttachShader(reflectiveProgram, mFrag); 		// add fragment shader												
+		
+		//GLES20.glBindAttribLocation(mProgram, 1, "a_Position");
+		//GLES20.glBindAttribLocation(mProgram, 2, "a_Normal");
+		GLES20.glLinkProgram(reflectiveProgram); 						// create OpenGL program executables
+
+		
+		
+		mVert = MyGLRenderer.loadShader(GLES20.GL_VERTEX_SHADER,
+				ShaderData.lightVertexShaderCode);
+		mFrag = MyGLRenderer.loadShader(GLES20.GL_FRAGMENT_SHADER,
+				ShaderData.lightFragmentShaderCode);
+
+		emissiveProgram = GLES20.glCreateProgram(); 					// create empty OpenGL Program
+
+		GLES20.glAttachShader(emissiveProgram, mVert); 			// add vertex shader									
+		GLES20.glAttachShader(emissiveProgram, mFrag); 		// add fragment shader												
+		
+
+		GLES20.glLinkProgram(emissiveProgram); 				
+	}
+	
 	@Override
 	public void onDrawFrame(GL10 unused) {
 
@@ -73,6 +111,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
 		float ratio = (float) width / height;
 
+		
 		// this projection matrix is applied to object coordinates
 		// in the onDrawFrame() method
 		Matrix.frustumM(mProjMatrix, 0, -ratio, ratio, -1, 1, 1, 25);

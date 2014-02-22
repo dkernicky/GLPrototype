@@ -135,6 +135,7 @@ public class Num extends Model {
 	
 	@Override
 	public void draw(float[] mView, float[] mProj, float[] mLightPos) {	
+
 		float[] mModel = new float[16];
 		float[] mModelView = new float[16];
 		float[] mModelViewProj = new float[16];

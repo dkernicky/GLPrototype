@@ -23,7 +23,7 @@ public class Lamp extends Model {
 		float[] diff = {.0f, .0f, 1.0f};
 		float[] amb = {.0f, .0f, 1.0f};
 		float shine = 96;
-		this.setData(coords, normals, amb, diff, spec, shine, ShaderData.lightVertexShaderCode, ShaderData.lightFragmentShaderCode);
+		this.setData(coords, normals, amb, diff, spec, shine);
 	}
 	
 	public void draw(float[] mView, float[] mProj) {
@@ -42,23 +42,23 @@ public class Lamp extends Model {
 		Matrix.multiplyMM(mModelViewProj, 0, mProj, 0, mModelView, 0);		
 		Matrix.multiplyMV(mELightPos, 0, mModelView, 0, mLightPos, 0);
 
-		GLES20.glUseProgram(mProgram);
+		GLES20.glUseProgram(MyGLRenderer.emissiveProgram);
 
 		vertexBuffer.position(0);
-		mPositionHandle = GLES20.glGetAttribLocation(mProgram, "a_Position");
+		mPositionHandle = GLES20.glGetAttribLocation(MyGLRenderer.emissiveProgram, "a_Position");
 		GLES20.glEnableVertexAttribArray(mPositionHandle);
 		GLES20.glVertexAttribPointer(mPositionHandle, COORDS_PER_VERTEX,
 				GLES20.GL_FLOAT, false, vertexStride, vertexBuffer);
 		MyGLRenderer.checkGlError("position");
 
 
-		mMVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "u_MVPMatrix");
+		mMVPMatrixHandle = GLES20.glGetUniformLocation(MyGLRenderer.emissiveProgram, "u_MVPMatrix");
 		// System.out.println("M**************" + mMVPMatrixHandle);
 		MyGLRenderer.checkGlError("glGetUniformLocation");
 		GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mModelViewProj, 0);
 		MyGLRenderer.checkGlError("glUniformMatrix4fv");
 
-		mMVMatrixHandle = GLES20.glGetUniformLocation(mProgram, "u_MVMatrix");
+		mMVMatrixHandle = GLES20.glGetUniformLocation(MyGLRenderer.emissiveProgram, "u_MVMatrix");
 		// System.out.println("M**************" + mMVPMatrixHandle);
 		MyGLRenderer.checkGlError("glGetUniformLocation");
 		GLES20.glUniformMatrix4fv(mMVMatrixHandle, 1, false, mModelView, 0);
