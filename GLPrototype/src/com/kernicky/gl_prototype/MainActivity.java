@@ -41,7 +41,6 @@ public class MainActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-
         mGLView.onPause();
     }
 
@@ -99,7 +98,10 @@ class MyGLSurfaceView extends GLSurfaceView {
     private float leftX, leftY, rightX, rightY;
     private float[] transformMatrix = new float[16];
  
-
+    @Override
+	public void onPause() {
+    }
+    
     @Override
     public boolean onTouchEvent(MotionEvent e) {
 

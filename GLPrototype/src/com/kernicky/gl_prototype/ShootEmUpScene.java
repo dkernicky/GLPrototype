@@ -64,16 +64,13 @@ public class ShootEmUpScene extends Scene {
 //		Compilation c = new Compilation();
 //		c.addTransform(new Transformation(360, 0, 1, 0, 0, 157));
 //		modelList.add(c);
-		Num num = new Num(1, 0);
-		Num num2 = new Num(2, 1);
-		//num.addTransform(new Transformation(.5f));
-		numList.add(num);
-		numList.add(num2);
-		numList.add(new Num(1, 2));
-		numList.add(new Num(9, 3));
-		numList.add(new Num(1, 4));
-		numList.add(new Num(9, 5));
-		numList.add(new Num(8, 6));
+
+		for(int n = 0; n < 9; n ++) {
+			Num num = new Num(0, n);
+			num.addTransform(new Transformation(MatrixOp.identity()));
+			//num.addTransform(new Transformation(MatrixOp.identity()));
+			numList.add(num);
+		}
 		
 		for(int n = 0; n < 15; n ++) {
 			enemyList.add(new Nemesis());
@@ -196,6 +193,7 @@ public class ShootEmUpScene extends Scene {
 			if(numList.get(n).getNum() != newNum) {
 				//numList.get(n).destroyProgram();
 				numList.set(n, new Num(newNum, n));
+				numList.get(n).addTransform(new Transformation(MatrixOp.identity()));
 			}
 			newScore /= 10;
 		}
@@ -259,12 +257,12 @@ public class ShootEmUpScene extends Scene {
 		//score ++;
 	
 
-			updateScore();
+
 
 		
-		double currentUpdate = System.currentTimeMillis();
-		System.out.println(currentUpdate-lastUpdate);
-		lastUpdate = currentUpdate;
+//		double currentUpdate = System.currentTimeMillis();
+//		System.out.println(currentUpdate-lastUpdate);
+//		lastUpdate = currentUpdate;
 		
 		if(updateCount > 1 && MyGLSurfaceView.rightTouch == true) {
 			updateCount = 0;
@@ -367,6 +365,7 @@ public class ShootEmUpScene extends Scene {
 					if(m.health <= 0 ) {
 						enemyList.remove(m);
 						score += 1;
+						updateScore();
 						p.destroyed = true;
 						break;
 					}
@@ -392,6 +391,8 @@ public class ShootEmUpScene extends Scene {
 
 		}
 		for (Num m : numList) {
+			m.transList.set(0, new Transformation(shipAngle));
+			//m.transList.set(1, new Transformation(staticAngle));
 			m.draw(mView, mProj, lightPos);
 		}
 

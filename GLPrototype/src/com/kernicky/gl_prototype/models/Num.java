@@ -1,6 +1,8 @@
 package com.kernicky.gl_prototype.models;
 
 
+import com.kernicky.gl_prototype.math.MatrixOp;
+
 import android.opengl.Matrix;
 
 
@@ -19,38 +21,59 @@ public class Num extends Model {
 		float z = 7;
 		
 		Rect r1 = new Rect();
+		r1.addTransform(new Transformation(MatrixOp.identity()));
+		r1.addTransform(new Transformation(MatrixOp.identity()));
+		r1.addTransform(new Transformation(MatrixOp.identity()));
 		r1.addTransform(new Transformation(x, y, z));
 		r1.addTransform(new Transformation(90.0f, 1, 0, 0));
 		r1.addTransform(new Transformation(.1f));
 		
 		Rect r2 = new Rect();
+		r2.addTransform(new Transformation(MatrixOp.identity()));
+		r2.addTransform(new Transformation(MatrixOp.identity()));
+		r2.addTransform(new Transformation(MatrixOp.identity()));
 		r2.addTransform(new Transformation(x-.2f, y, z));
 		r2.addTransform(new Transformation(90.0f, 1, 0, 0));
 		r2.addTransform(new Transformation(.1f));
 		
 		Rect r3 = new Rect();
+		r3.addTransform(new Transformation(MatrixOp.identity()));
+		r3.addTransform(new Transformation(MatrixOp.identity()));
+		r3.addTransform(new Transformation(MatrixOp.identity()));
 		r3.addTransform(new Transformation(x-.1f, y-.1f, z));
 		r3.addTransform(new Transformation(90.0f, 0, 0, 1));
 		r3.addTransform(new Transformation(90.0f, 1, 0, 0));
 		r3.addTransform(new Transformation(.1f));
 		
 		Rect r4 = new Rect();
+		r4.addTransform(new Transformation(MatrixOp.identity()));
+		r4.addTransform(new Transformation(MatrixOp.identity()));
+		r4.addTransform(new Transformation(MatrixOp.identity()));
 		r4.addTransform(new Transformation(x-.1f, y+.1f, z));
 		r4.addTransform(new Transformation(90.0f, 0, 0, 1));
 		r4.addTransform(new Transformation(90.0f, 1, 0, 0));
 		r4.addTransform(new Transformation(.1f));
 		
 		Rect r5 = new Rect();
+		r5.addTransform(new Transformation(MatrixOp.identity()));
+		r5.addTransform(new Transformation(MatrixOp.identity()));
+		r5.addTransform(new Transformation(MatrixOp.identity()));
 		r5.addTransform(new Transformation(x, y+.2f, z));
 		r5.addTransform(new Transformation(90.0f, 1, 0, 0));
 		r5.addTransform(new Transformation(.1f));
 		
 		Rect r6 = new Rect();
+		r6.addTransform(new Transformation(MatrixOp.identity()));
+		r6.addTransform(new Transformation(MatrixOp.identity()));
+		r6.addTransform(new Transformation(MatrixOp.identity()));
 		r6.addTransform(new Transformation(x-.2f, y+.2f, z));
 		r6.addTransform(new Transformation(90.0f, 1, 0, 0));
 		r6.addTransform(new Transformation(.1f));
 		
 		Rect r7 = new Rect();
+		r7.addTransform(new Transformation(MatrixOp.identity()));
+		r7.addTransform(new Transformation(MatrixOp.identity()));
+		r7.addTransform(new Transformation(MatrixOp.identity()));
 		r7.addTransform(new Transformation(x-.1f, y+.3f, z));
 		r7.addTransform(new Transformation(90.0f, 0, 0, 1));
 		r7.addTransform(new Transformation(90.0f, 1, 0, 0));
@@ -147,8 +170,9 @@ public class Num extends Model {
 		for(Model m: subList) {
 			//m.position.print();
 			//m.addTransformToFront(new Transformation(mModel));
-			m.draw(mView, mProj, mLightPos);
+			m.draw(mModel, mView, mProj, mLightPos);
 		}
+		currentTick = (currentTick + 1) % maxTick;
 
 	}
 	

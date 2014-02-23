@@ -54,7 +54,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
 	}
 
-	public void createShaderPrograms() {
+	private void createShaderPrograms() {
 		// prepare shaders and OpenGL program
 		int mVert = MyGLRenderer.loadShader(GLES20.GL_VERTEX_SHADER,
 				ShaderData.singleColorVertexShaderCode);

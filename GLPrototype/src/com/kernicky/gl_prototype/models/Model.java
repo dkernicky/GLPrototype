@@ -219,11 +219,12 @@ public abstract class Model {
 		float[] mModelView = new float[16];
 		float[] mModelViewProj = new float[16];
 		
-		for(Model m: subList) {
-			//m.transList.set(0, new Transformation(mModel));
-			m.addTransformToFront(new Transformation(mModel));
-			m.draw(mModel, mView, mProj, mLightPos);
-		}
+//		for(Model m: subList) {
+//			m.transList.set(0, new Transformation(mModel));
+//			//m.addTransformToFront(new Transformation(mModel));
+//			m.draw(mModel, mView, mProj, mLightPos);
+//		}
+		transList.set(0, new Transformation(mModel));
 		mModel = MatrixOp.identity();
 
 		mModel = applyTransforms(mModel);
@@ -239,13 +240,11 @@ public abstract class Model {
 		GLES20.glEnableVertexAttribArray(mPositionHandle);
 		GLES20.glVertexAttribPointer(mPositionHandle, COORDS_PER_VERTEX,
 				GLES20.GL_FLOAT, false, vertexStride, vertexBuffer);
-		MyGLRenderer.checkGlError("position");
 
 		mNormalHandle = GLES20.glGetAttribLocation(MyGLRenderer.reflectiveProgram, "a_Normal");
 		GLES20.glEnableVertexAttribArray(mNormalHandle);
 		GLES20.glVertexAttribPointer(mNormalHandle, COORDS_PER_VERTEX,
 				GLES20.GL_FLOAT, false, vertexStride, normalBuffer);
-		MyGLRenderer.checkGlError("normal");
 
 		
 		mAmbHandle = GLES20.glGetUniformLocation(MyGLRenderer.reflectiveProgram, "u_Ambient");
@@ -263,12 +262,10 @@ public abstract class Model {
 		mMVPMatrixHandle = GLES20.glGetUniformLocation(MyGLRenderer.reflectiveProgram, "u_MVPMatrix");
 		MyGLRenderer.checkGlError("glGetUniformLocation");
 		GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mModelViewProj, 0);
-		MyGLRenderer.checkGlError("glUniformMatrix4fv");
 
 		mMVMatrixHandle = GLES20.glGetUniformLocation(MyGLRenderer.reflectiveProgram, "u_MVMatrix");
 		MyGLRenderer.checkGlError("glGetUniformLocation");
 		GLES20.glUniformMatrix4fv(mMVMatrixHandle, 1, false, mModelView, 0);
-		MyGLRenderer.checkGlError("glUniformMatrix4fv");
 
 		mLightPosHandle = GLES20.glGetUniformLocation(MyGLRenderer.reflectiveProgram, "u_LightPos");
 		GLES20.glUniform3fv(mLightPosHandle, mLightPos.length/3, mLightPos, 0);
@@ -306,14 +303,12 @@ public abstract class Model {
 		GLES20.glEnableVertexAttribArray(mPositionHandle);
 		GLES20.glVertexAttribPointer(mPositionHandle, COORDS_PER_VERTEX,
 				GLES20.GL_FLOAT, false, vertexStride, vertexBuffer);
-		MyGLRenderer.checkGlError("position");
 
 
 		mNormalHandle = GLES20.glGetAttribLocation(MyGLRenderer.reflectiveProgram, "a_Normal");
 		GLES20.glEnableVertexAttribArray(mNormalHandle);
 		GLES20.glVertexAttribPointer(mNormalHandle, COORDS_PER_VERTEX,
 				GLES20.GL_FLOAT, false, vertexStride, normalBuffer);
-		MyGLRenderer.checkGlError("normal");
 
 		
 		mAmbHandle = GLES20.glGetUniformLocation(MyGLRenderer.reflectiveProgram, "u_Ambient");
@@ -331,12 +326,10 @@ public abstract class Model {
 		mMVPMatrixHandle = GLES20.glGetUniformLocation(MyGLRenderer.reflectiveProgram, "u_MVPMatrix");
 		MyGLRenderer.checkGlError("glGetUniformLocation");
 		GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mModelViewProj, 0);
-		MyGLRenderer.checkGlError("glUniformMatrix4fv");
 
 		mMVMatrixHandle = GLES20.glGetUniformLocation(MyGLRenderer.reflectiveProgram, "u_MVMatrix");
 		MyGLRenderer.checkGlError("glGetUniformLocation");
 		GLES20.glUniformMatrix4fv(mMVMatrixHandle, 1, false, mModelView, 0);
-		MyGLRenderer.checkGlError("glUniformMatrix4fv");
 
 		mLightPosHandle = GLES20.glGetUniformLocation(MyGLRenderer.reflectiveProgram, "u_LightPos");
 		GLES20.glUniform3fv(mLightPosHandle, mLightPos.length/3, mLightPos, 0);
