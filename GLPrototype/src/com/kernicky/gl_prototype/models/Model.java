@@ -134,18 +134,6 @@ public abstract class Model {
 		initBuffers();
 		//createShaderProgram();
 	}
-	
-//	public void setData(float[] coords, float[] normals, float[] amb, float[] diff,
-//			float[] spec, float shine, String vertShaderCode, String fragShaderCode) {
-//		this.setCoords(coords);
-//		this.setNormals(normals);
-//		this.setAmb(amb);
-//		this.setDiff(diff);
-//		this.setSpec(spec);
-//		this.setShine(shine);
-//		initBuffers();
-//		createShaderProgram(vertShaderCode, fragShaderCode);
-//	}
 
 	public void initBuffers() {
 		// initialize vertex byte buffer for shape coordinates
@@ -164,35 +152,6 @@ public abstract class Model {
 		normalBuffer.position(0);
 
 	}
-
-
-	
-//	public void destroyProgram() {		
-//		GLES20.glDeleteShader(mVert);
-//		GLES20.glDeleteShader(mFrag);
-//
-//		 GLES20.glDeleteProgram(mProgram);
-//         mProgram = 0;
-//	}
-	
-//	public void createShaderProgram(String vertShaderCode, String fragShaderCode) {
-//		// prepare shaders and OpenGL program
-//		int vertexShader = MyGLRenderer.loadShader(GLES20.GL_VERTEX_SHADER,
-//				vertShaderCode);
-//		int fragmentShader = MyGLRenderer.loadShader(GLES20.GL_FRAGMENT_SHADER,
-//				fragShaderCode);
-//
-//		mProgram = GLES20.glCreateProgram(); 					// create empty OpenGL Program
-//
-//		GLES20.glAttachShader(mProgram, vertexShader); 			// add vertex shader									
-//		GLES20.glAttachShader(mProgram, fragmentShader); 		// add fragment shader
-//															
-//		GLES20.glBindAttribLocation(mProgram, 1, "a_Position");
-//		GLES20.glBindAttribLocation(mProgram, 2, "a_Normal");
-//		GLES20.glLinkProgram(mProgram); 						// create OpenGL program executables
-//		
-//		
-//	}
 	
 	public void updateMaxTick() {
 		Iterator<Transformation> i = transList.iterator();
@@ -309,7 +268,6 @@ public abstract class Model {
 		GLES20.glEnableVertexAttribArray(mNormalHandle);
 		GLES20.glVertexAttribPointer(mNormalHandle, COORDS_PER_VERTEX,
 				GLES20.GL_FLOAT, false, vertexStride, normalBuffer);
-
 		
 		mAmbHandle = GLES20.glGetUniformLocation(MyGLRenderer.reflectiveProgram, "u_Ambient");
 		GLES20.glUniform3fv(mAmbHandle, 1, getAmb(), 0);
@@ -348,7 +306,6 @@ public abstract class Model {
 		transList.add(0, t);
 		this.updateMaxTick();
 	}
-	
 
 	protected float[] getCoords() {
 		return coords;
