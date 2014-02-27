@@ -17,6 +17,7 @@ public class Nemesis extends ReflectiveModel {
 		super();
 		this.position = new Quaternion(x, y, z, 0);
 		position.normalize();
+		position.multiply(7);
 		addTransform(new Transformation(position.x, position.y, position.z));
 		addTransform(new Transformation(MatrixOp.identity()));
 		addTransform(new Transformation(MatrixOp.identity()));
@@ -86,10 +87,10 @@ public class Nemesis extends ReflectiveModel {
 		
 		float angle = Vector.dot(a, b);
 
-		if(angle > 0) {
+		if(angle > 0 && angle != 1) {
 			seek(ShootEmUpScene.shipQ);
 		}
-		else {
+		else if (angle != 1) {
 			//wander();
 			seek(ShootEmUpScene.shipQ);
 		}

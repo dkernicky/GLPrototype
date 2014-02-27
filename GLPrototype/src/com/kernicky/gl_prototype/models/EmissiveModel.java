@@ -16,7 +16,7 @@ import com.kernicky.gl_prototype.math.Quaternion;
 import com.kernicky.gl_prototype.math.Vector;
 
 
-public abstract class NewModel {
+public abstract class EmissiveModel {
 	
 //	protected int mProgram;
 //	protected int mVert;
@@ -41,7 +41,7 @@ public abstract class NewModel {
 	protected final int vertexStride = COORDS_PER_VERTEX * 4;
 	
 	public ArrayList<Transformation> transList = new ArrayList<Transformation>();
-	public ArrayList<NewModel> subList = new ArrayList<NewModel>();
+	public ArrayList<EmissiveModel> subList = new ArrayList<EmissiveModel>();
 	
 	protected int currentTick = 0;
 	protected int maxTick = 1;
@@ -51,7 +51,7 @@ public abstract class NewModel {
 	protected float[] angle = MatrixOp.identity();
 	protected float[] staticAngle = MatrixOp.identity();
 
-	NewModel() {
+	EmissiveModel() {
 		setData();
 		setProgram();
 
@@ -63,6 +63,9 @@ public abstract class NewModel {
 		setProgramID(MyGLRenderer.emissiveProgram);
 	}
 
+	public void applyMovement() {
+		
+	}
 	
 	public void applyRot(float speed, float[] axis) {
 		//float[] inputVector = Vector.normalize(new float[]{dx, dy, 0, 0});
@@ -79,7 +82,7 @@ public abstract class NewModel {
 		position.normalize();;
 		
 		float[] shipDir = {0, 1, 0, 0};
-		float[] inputVector = {position.x-prevPos.x, position.y-prevPos.y, position.z-prevPos.z};
+		float[] inputVector = {position.x-prevPos.x, position.y-prevPos.y, 0};
 		inputVector = Vector.normalize(inputVector);
 		//MatrixOp.printV(inputVector);
 		staticAngle = Quaternion.rotateTo(shipDir, inputVector);
@@ -120,26 +123,13 @@ public abstract class NewModel {
 		float angle = Vector.dot(a, b);
 
 		if(angle > 0) {
-			seek(ShootEmUpScene.shipQ);
+			//seek(ShootEmUpScene.shipQ);
 		}
 		else {
 			//wander();
-			seek(ShootEmUpScene.shipQ);
+			//seek(ShootEmUpScene.shipQ);
 		}
 	}
-	
-//	public void setData(float[] coords, float[] normals, float[] amb, float[] diff,
-//			float[] spec, float shine, int programID) {
-//		this.programID = programID;
-//		this.setCoords(coords);
-//		this.setNormals(normals);
-//		this.setAmb(amb);
-//		this.setDiff(diff);
-//		this.setSpec(spec);
-//		this.setShine(shine);
-//		initBuffers();
-//		//createShaderProgram();
-//	}
 	
 
 	public void initBuffers() {
@@ -161,7 +151,6 @@ public abstract class NewModel {
 		while(i.hasNext()) {
 			int t = i.next().getEndTick();
 			maxTick = Math.max(t,  maxTick);
-
 		}
 	}	
 	
@@ -178,18 +167,13 @@ public abstract class NewModel {
 		draw(mView, mProj, mLightPos);
 	}
 	
-
-
-	
 	public void draw(float[] mView, float[] mProj, float[] mLightPos) {
-
 		float[] mModel = new float[16];
 		float[] mModelView = new float[16];
 		float[] mModelViewProj = new float[16];
 		
 		Matrix.setIdentityM(mModel, 0);
 		mModel = applyTransforms(mModel);
-		
 		Matrix.multiplyMM(mModelView, 0, mView, 0, mModel, 0);
 		Matrix.multiplyMM(mModelViewProj, 0, mProj, 0, mModelView, 0);	
 		
@@ -227,28 +211,21 @@ public abstract class NewModel {
 		transList.add(t);
 		this.updateMaxTick();
 	}
-
 	protected float[] getCoords() {
 		return coords;
 	}
-
 	protected void setCoords(float coords[]) {
 		this.coords = coords;
 	}
-
 	protected float[] getNormals() {
 		return normals;
 	}
-
 	protected void setNormals(float normals[]) {
 		this.normals = normals;
 	}
-
-	
 	protected float[] getAmb() {
 		return amb;
 	}
-
 	public void setAmb(float amb[]) {
 		this.amb = amb;
 	}

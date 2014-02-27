@@ -171,7 +171,7 @@ public class Num extends ReflectiveModel {
 		mModel = applyTransforms(mModel);
 
 		//System.out.println("****");
-		for(NewModel m: subList) {
+		for(EmissiveModel m: subList) {
 			//m.position.print();
 			//m.addTransformToFront(new Transformation(mModel));
 			m.draw(mModel, mView, mProj, mLightPos);

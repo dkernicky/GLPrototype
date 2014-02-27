@@ -60,16 +60,11 @@ public class ShootEmUpScene extends Scene {
 			numList.add(num);
 		}
 		
+		//enemyList.add(new Nemesis(0, 0, 1));
 		for(int n = 0; n < 15; n ++) {
 			enemyList.add(new Nemesis());
 		}
-		//modelList.add(new Zero(shipQ.x, shipQ.y, shipQ.z));
-		//Quadrant q = new Quadrant();
-		//q.addTransform(new Transformation(shipQ.x, shipQ.y, shipQ.z));
-		//q.addTransform(new Transformation(90.0f, MyGLSurfaceView.x_axis[0], MyGLSurfaceView.x_axis[1], MyGLSurfaceView.x_axis[2]));
-
-		//modelList.add(q);
-
+	
 		ship.addTransform(new Transformation(shipQ.x, shipQ.y, shipQ.z));
 		ship.addTransform(new Transformation(MatrixOp.identity()));
 		ship.addTransform(new Transformation(MatrixOp.identity()));
@@ -88,10 +83,6 @@ public class ShootEmUpScene extends Scene {
 //		Lamp l8 = new Lamp(0.0f, 0.0f, 0.0f);
 		Lamp lo = new Lamp(0.0f, 0.0f, 0.0f);
 		
-//		PhongCube cube = new PhongCube();
-//		cube.addTransform(new Transformation(7f));
-		//modelList.add(cube);
-		
 		NewIco b = new NewIco();
 		//Base b = new Base();
 		//Frame b = new Frame();
@@ -99,19 +90,12 @@ public class ShootEmUpScene extends Scene {
 		//b.addTransform(new Transformation(0, 0, -5, 0));
 		b.addTransform(new Transformation(0.0f, 1, 0, 0, 0, 360));
 		b.addTransform(new Transformation(0.0f, 1, 0, 0, 0, 360));
-		//b.addTransform(new Transformation(0, 0, 4, 0));
 
-		//b.addTransform(new Transformation(1.9f));
-		//b.addTransform(new Transformation(.5f));
 		b.addTransform(new Transformation(12f));
 		modelList.add(b);
 		
 		ico.addTransform(new Transformation(0.0f, 1, 0, 0, 0, 360));
 		ico.addTransform(new Transformation(0.0f, 1, 0, 0, 0, 360));
-		//b.addTransform(new Transformation(0, 0, 4, 0));
-
-		//b.addTransform(new Transformation(1.9f));
-		//b.addTransform(new Transformation(.5f));
 		ico.addTransform(new Transformation(14f));	
 
 
@@ -120,7 +104,6 @@ public class ShootEmUpScene extends Scene {
 		lo.addTransform(new Transformation(MatrixOp.identity()));
 		lo.addTransform(new Transformation(0, .25f, 0));	
 		lo.addTransform(new Transformation(0.05f));
-
 		lightList.add(lo);
 		
 //		
@@ -175,19 +158,17 @@ public class ShootEmUpScene extends Scene {
 
 	}
 	public void updateScore() {
-		//int pow = 10;
 		int newScore = score;
 		for(int n = numList.size()-1; n >= 0; n --) {
 			int newNum = newScore %10;
 			if(numList.get(n).getNum() != newNum) {
-				//numList.get(n).destroyProgram();
 				numList.set(n, new Num(newNum, n));
 				numList.get(n).addTransform(new Transformation(MatrixOp.identity()));
 			}
 			newScore /= 10;
 		}
-
 	}
+	
 	public void updateTransforms() {
 
     	float[] inputVector = Vector.normalize(new float[]{1*MyGLSurfaceView.dxLeft, -1*MyGLSurfaceView.dyLeft, 0, 0});
@@ -225,11 +206,7 @@ public class ShootEmUpScene extends Scene {
 		}
 		
 
-		MyGLSurfaceView.currentTransform = MatrixOp.multiplyMM(transform, MyGLSurfaceView.currentTransform);
-//		ShootEmUpScene.viewQ = new Quaternion(ShootEmUpScene.shipQ.toFloat());
-//		ShootEmUpScene.viewQ.multiply(3);
-		
-		
+		MyGLSurfaceView.currentTransform = MatrixOp.multiplyMM(transform, MyGLSurfaceView.currentTransform);		
 		ShootEmUpScene.shipAngle = MyGLSurfaceView.currentTransform;
 		
 		Quaternion newPosQ = new Quaternion(shipQ.toFloat());
@@ -261,7 +238,7 @@ public class ShootEmUpScene extends Scene {
 		updateCount ++;
 		
 		updateTransforms();
-
+		//enemyList.get(0).position.print();
 		
 		Matrix.setLookAtM(mView, 0, viewQ.x, viewQ.y,
 				viewQ.z, mCenterPos[0], mCenterPos[1], mCenterPos[2],
@@ -387,7 +364,7 @@ public class ShootEmUpScene extends Scene {
 			m.draw(mView, mProj, lightPos);
 		}
 
-		for (NewModel m : modelList) {
+		for (EmissiveModel m : modelList) {
 			if(m.getClass().equals(GoldenShip.class)) {
 				//m.angle = MyGLSurfaceView.angleLeft;
 				m.transList.set(0, new Transformation(shipQ.x, shipQ.y, shipQ.z));

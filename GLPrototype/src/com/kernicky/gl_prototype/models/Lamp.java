@@ -6,7 +6,7 @@ import android.opengl.Matrix;
 import com.kernicky.gl_prototype.MyGLRenderer;
 
 
-public class Lamp extends NewModel {
+public class Lamp extends EmissiveModel {
 	private float rot = 0.0f;
 	private float[] mModel = new float[16];
 	private float[] mELightPos = new float[4];

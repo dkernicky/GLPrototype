@@ -6,7 +6,7 @@ import com.kernicky.gl_prototype.math.Quaternion;
 import com.kernicky.gl_prototype.math.Vector;
 
 
-public class Projectile extends ReflectiveModel {
+public class Projectile extends EmissiveModel {
 	public float[] axis = {1, 0, 0};
 	public boolean destroyed = false;
 	
@@ -40,9 +40,9 @@ public class Projectile extends ReflectiveModel {
 		setCoords(coords);
 		setNormals(normals);
 		setAmb(new float[]{0.0f, 1f, 0.0f});
-		setDiff(new float[]{0f, 0f, 0f});
-		setSpec(new float[]{0.0f, 0.0f, 0.0f});
-		setShine(300);
+		//setDiff(new float[]{0f, 0f, 0f});
+		//setSpec(new float[]{0.0f, 0.0f, 0.0f});
+		//setShine(300);
 	}
 	
 	public void calculateAxis(float[] transform, float[] z_axis) {

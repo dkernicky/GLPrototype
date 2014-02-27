@@ -8,7 +8,7 @@ import android.opengl.Matrix;
 
 import com.kernicky.gl_prototype.MyGLRenderer;
 
-public abstract class ReflectiveModel extends NewModel {
+public abstract class ReflectiveModel extends EmissiveModel {
 	
 	private int mDiffHandle;
 	private int mSpecHandle;
