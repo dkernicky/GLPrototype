@@ -7,12 +7,16 @@ import android.opengl.Matrix;
 
 
 
-public class Num extends Model {
+public class Num extends ReflectiveModel {
 	private int num;
 	
 	public Num(int n, int pos) {
 		num = n;
 		loadList(n, pos);
+	}
+	@Override
+	public void initBuffers() {
+		
 	}
 	
 	public void loadList(int n, int pos) {
@@ -167,7 +171,7 @@ public class Num extends Model {
 		mModel = applyTransforms(mModel);
 
 		//System.out.println("****");
-		for(Model m: subList) {
+		for(NewModel m: subList) {
 			//m.position.print();
 			//m.addTransformToFront(new Transformation(mModel));
 			m.draw(mModel, mView, mProj, mLightPos);
@@ -178,6 +182,12 @@ public class Num extends Model {
 	
 	public int getNum() {
 		return num;
+	}
+
+	@Override
+	void setData() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	

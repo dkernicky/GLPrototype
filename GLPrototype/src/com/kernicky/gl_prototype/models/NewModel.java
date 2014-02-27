@@ -16,7 +16,7 @@ import com.kernicky.gl_prototype.math.Quaternion;
 import com.kernicky.gl_prototype.math.Vector;
 
 
-public class Model {
+public abstract class NewModel {
 	
 //	protected int mProgram;
 //	protected int mVert;
@@ -27,15 +27,12 @@ public class Model {
 	protected int mPositionHandle;
 	private int mNormalHandle;
 	private int mAmbHandle;
-	private int mDiffHandle;
-	private int mSpecHandle;
-	private int mShinHandle;
+	
 	protected int mMVPMatrixHandle;
 	protected int mMVMatrixHandle;
-	
 	private int mLightPosHandle;
-	private float coords[], normals[];
-	public float amb[]; 
+	private float coords[], normals[], amb[]; 
+
 	
 	public int time = 0;
 	private int programID;
@@ -54,6 +51,19 @@ public class Model {
 	protected float[] angle = MatrixOp.identity();
 	protected float[] staticAngle = MatrixOp.identity();
 
+	NewModel() {
+		setData();
+		setProgram();
+
+		initBuffers();
+
+	}
+	abstract void setData();
+	public void setProgram() {
+		setProgramID(MyGLRenderer.emissiveProgram);
+	}
+
+	
 	public void applyRot(float speed, float[] axis) {
 		//float[] inputVector = Vector.normalize(new float[]{dx, dy, 0, 0});
 		position.normalize();
@@ -118,15 +128,19 @@ public class Model {
 		}
 	}
 	
-	public void setData(float[] coords, float[] normals, float[] amb, float[] diff,
-			float[] spec, float shine, int programID) {
-		this.setProgramID(programID);
-		this.setCoords(coords);
-		this.setNormals(normals);
-		this.setAmb(amb);
-		initBuffers();
-		//createShaderProgram();
-	}
+//	public void setData(float[] coords, float[] normals, float[] amb, float[] diff,
+//			float[] spec, float shine, int programID) {
+//		this.programID = programID;
+//		this.setCoords(coords);
+//		this.setNormals(normals);
+//		this.setAmb(amb);
+//		this.setDiff(diff);
+//		this.setSpec(spec);
+//		this.setShine(shine);
+//		initBuffers();
+//		//createShaderProgram();
+//	}
+	
 
 	public void initBuffers() {
 		// initialize vertex byte buffer for shape coordinates
@@ -137,13 +151,6 @@ public class Model {
 		vertexBuffer = bbp.asFloatBuffer();
 		vertexBuffer.put(getCoords());
 		vertexBuffer.position(0);
-
-		ByteBuffer bbn = ByteBuffer.allocateDirect(getNormals().length * 4);
-		bbn.order(ByteOrder.nativeOrder());
-		setNormalBuffer(bbn.asFloatBuffer());
-		getNormalBuffer().put(getNormals());
-		getNormalBuffer().position(0);
-
 	}
 	
 	public void updateMaxTick() {
@@ -171,6 +178,9 @@ public class Model {
 		draw(mView, mProj, mLightPos);
 	}
 	
+
+
+	
 	public void draw(float[] mView, float[] mProj, float[] mLightPos) {
 
 		float[] mModel = new float[16];
@@ -191,14 +201,11 @@ public class Model {
 		GLES20.glVertexAttribPointer(mPositionHandle, COORDS_PER_VERTEX,
 				GLES20.GL_FLOAT, false, vertexStride, vertexBuffer);
 
-		setmNormalHandle(GLES20.glGetAttribLocation(getProgramID(), "a_Normal"));
-		GLES20.glEnableVertexAttribArray(getmNormalHandle());
-		GLES20.glVertexAttribPointer(getmNormalHandle(), COORDS_PER_VERTEX,
-				GLES20.GL_FLOAT, false, vertexStride, getNormalBuffer());
+		
 		
 		setmAmbHandle(GLES20.glGetUniformLocation(getProgramID(), "u_Ambient"));
 		GLES20.glUniform3fv(getmAmbHandle(), 1, getAmb(), 0);
-
+		
 		mMVPMatrixHandle = GLES20.glGetUniformLocation(getProgramID(), "u_MVPMatrix");
 		MyGLRenderer.checkGlError("glGetUniformLocation");
 		GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mModelViewProj, 0);
@@ -237,53 +244,45 @@ public class Model {
 		this.normals = normals;
 	}
 
+	
 	protected float[] getAmb() {
 		return amb;
 	}
 
-	protected void setAmb(float amb[]) {
+	public void setAmb(float amb[]) {
 		this.amb = amb;
 	}
-
 	public int getProgramID() {
 		return programID;
 	}
-
 	public void setProgramID(int programID) {
 		this.programID = programID;
 	}
-
 	public int getmNormalHandle() {
 		return mNormalHandle;
 	}
-
 	public void setmNormalHandle(int mNormalHandle) {
 		this.mNormalHandle = mNormalHandle;
 	}
-
 	public FloatBuffer getNormalBuffer() {
 		return normalBuffer;
 	}
-
 	public void setNormalBuffer(FloatBuffer normalBuffer) {
 		this.normalBuffer = normalBuffer;
 	}
-
 	public int getmAmbHandle() {
 		return mAmbHandle;
 	}
-
 	public void setmAmbHandle(int mAmbHandle) {
 		this.mAmbHandle = mAmbHandle;
 	}
-
 	public int getmLightPosHandle() {
 		return mLightPosHandle;
 	}
-
 	public void setmLightPosHandle(int mLightPosHandle) {
 		this.mLightPosHandle = mLightPosHandle;
 	}
 
+	
 	
 }

@@ -38,7 +38,7 @@ public class ShootEmUpScene extends Scene {
 	public static Quaternion optionQ = new Quaternion(0, 0f, 8f, 0);
 	public static float[] optionAngle = MatrixOp.identity();
 
-	private ArrayList<Model> modelList = new ArrayList<Model>();
+	private ArrayList<ReflectiveModel> modelList = new ArrayList<ReflectiveModel>();
 	private ArrayList<Nemesis> enemyList = new ArrayList<Nemesis>();
 	private ArrayList<Projectile> projectileList = new ArrayList<Projectile>();
 
@@ -51,24 +51,12 @@ public class ShootEmUpScene extends Scene {
 	private int score = 0;
 
 	public ShootEmUpScene() {
-		//PhongCube cube = new PhongCube();
 		GoldenShip ship = new GoldenShip();
-
-//		GoldenShip ship2 = new GoldenShip();
-//		ship2.addTransform(new Transformation(7, 0, 0));
-//		ship2.addTransform(new Transformation(90.0f, MyGLSurfaceView.x_axis[0], MyGLSurfaceView.x_axis[1], MyGLSurfaceView.x_axis[2]));
-//		ship2.addTransform(new Transformation(0.5f));
-//
-//		modelList.add(ship2);
-		
-//		Compilation c = new Compilation();
-//		c.addTransform(new Transformation(360, 0, 1, 0, 0, 157));
-//		modelList.add(c);
 
 		for(int n = 0; n < 9; n ++) {
 			Num num = new Num(0, n);
 			num.addTransform(new Transformation(MatrixOp.identity()));
-			//num.addTransform(new Transformation(MatrixOp.identity()));
+			num.addTransform(new Transformation(MatrixOp.identity()));
 			numList.add(num);
 		}
 		
@@ -100,11 +88,11 @@ public class ShootEmUpScene extends Scene {
 //		Lamp l8 = new Lamp(0.0f, 0.0f, 0.0f);
 		Lamp lo = new Lamp(0.0f, 0.0f, 0.0f);
 		
-		PhongCube cube = new PhongCube();
-		cube.addTransform(new Transformation(7f));
+//		PhongCube cube = new PhongCube();
+//		cube.addTransform(new Transformation(7f));
 		//modelList.add(cube);
 		
-		BlackIco b = new BlackIco();
+		NewIco b = new NewIco();
 		//Base b = new Base();
 		//Frame b = new Frame();
 		//PhongCube b = new PhongCube();
@@ -134,6 +122,7 @@ public class ShootEmUpScene extends Scene {
 		lo.addTransform(new Transformation(0.05f));
 
 		lightList.add(lo);
+		
 //		
 //		l1.addTransform(new Transformation(0, 0, 0, 1));
 //		l1.addTransform(new Transformation(0, 0, 0));
@@ -282,7 +271,6 @@ public class ShootEmUpScene extends Scene {
 		
 		//MatrixOp.printM(optionAngle);
 		
-		
 		lightList.get(0).transList.set(2, new Transformation(optionAngle));
 		lightList.get(0).transList.set(1, new Transformation(shipAngle));
 		lightList.get(0).transList.set(0, new Transformation(optionQ.x, optionQ.y, optionQ.z));
@@ -310,6 +298,9 @@ public class ShootEmUpScene extends Scene {
 		for (int n = 0; n < lightPos.length; n++) {
 			lightPos[n] = lightPosList.get(n);
 		}
+		
+		//lightPos = new float[]{1.0f, 1.0f, 0.0f};
+
 		
 		for (Nemesis m : enemyList) {
 			m.updateKinematics();
@@ -369,7 +360,7 @@ public class ShootEmUpScene extends Scene {
 						p.destroyed = true;
 						break;
 					}
-					m.amb = new float[]{0.0f, 1.0f, 0.0f};
+					m.setAmb(new float[]{0.0f, 1.0f, 0.0f});
 
 					m.health -= 10.0;
 					continue;
@@ -396,7 +387,7 @@ public class ShootEmUpScene extends Scene {
 			m.draw(mView, mProj, lightPos);
 		}
 
-		for (Model m : modelList) {
+		for (NewModel m : modelList) {
 			if(m.getClass().equals(GoldenShip.class)) {
 				//m.angle = MyGLSurfaceView.angleLeft;
 				m.transList.set(0, new Transformation(shipQ.x, shipQ.y, shipQ.z));

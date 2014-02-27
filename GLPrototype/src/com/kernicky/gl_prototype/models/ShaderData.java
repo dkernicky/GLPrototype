@@ -182,6 +182,7 @@ public class ShaderData {
 	public static final String lightFragmentShaderCode = 
 			"precision mediump float;" + 
 			"varying vec3 v_Position;" +
+			"uniform vec3 u_Ambient;" +
 			"void main() {  " +
 			"  vec3 amb = vec3(0.0, 0.0, 0.0);" +
 			"  gl_FragColor = vec4(.0, .0, 1.0, 1.0);" + 
