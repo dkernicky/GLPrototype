@@ -61,7 +61,7 @@ public class ShootEmUpScene extends Scene {
 		}
 		
 		//enemyList.add(new Nemesis(0, 0, 1));
-		for(int n = 0; n < 15; n ++) {
+		for(int n = 0; n < 1; n ++) {
 			enemyList.add(new Nemesis());
 		}
 	

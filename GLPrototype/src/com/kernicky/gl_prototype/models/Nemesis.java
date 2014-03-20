@@ -17,7 +17,16 @@ public class Nemesis extends ReflectiveModel {
 		super();
 		this.position = new Quaternion(x, y, z, 0);
 		position.normalize();
+		this.angle = Quaternion.rotateTo(new Quaternion(0, 0, 1, 0), this.position);
+		
+//		float[] shipDir = {0, 1, 0, 0};
+//		float[] inputVector = {position.x, position.y, position.z-1.0f, 0};
+//		inputVector = Vector.normalize(inputVector);
+//		//MatrixOp.printV(inputVector);
+//		angle = Quaternion.rotateTo(shipDir, inputVector);
+		
 		position.multiply(7);
+
 		addTransform(new Transformation(position.x, position.y, position.z));
 		addTransform(new Transformation(MatrixOp.identity()));
 		addTransform(new Transformation(MatrixOp.identity()));
@@ -35,6 +44,14 @@ public class Nemesis extends ReflectiveModel {
 		f[3] = 0;
 		this.position = new Quaternion(f);
 		position.normalize();
+		this.angle = Quaternion.rotateTo(new Quaternion(0, 0, 1, 0), this.position);
+		
+//		float[] shipDir = {0, 1, 0, 0};
+//		float[] inputVector = {position.x, position.y, position.z-1.0f, 0};
+//		inputVector = Vector.normalize(inputVector);
+//		//MatrixOp.printV(inputVector);
+//		angle = Quaternion.rotateTo(shipDir, inputVector);
+		
 		position.multiply(7);
 		addTransform(new Transformation(position.x, position.y, position.z));
 		addTransform(new Transformation(MatrixOp.identity()));

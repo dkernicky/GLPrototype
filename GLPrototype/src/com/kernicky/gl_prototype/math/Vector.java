@@ -11,10 +11,18 @@ public class Vector {
 		return new float[]{a*b[0], a*b[1], a*b[2]};
 	}
 	public static float[] normalize(float[] a) {
-		float mag = (float) Math.sqrt(a[0]*a[0]+a[1]*a[1]+a[2]*a[2]);
+		if(a.length == 3) {
+			float mag = (float) Math.sqrt(a[0]*a[0]+a[1]*a[1]+a[2]*a[2]);
+			a[0] /= mag;
+			a[1] /= mag;
+			a[2] /= mag;
+			return a;
+		}
+		float mag = (float) Math.sqrt(a[0]*a[0]+a[1]*a[1]+a[2]*a[2]+a[3]*a[3]);
 		a[0] /= mag;
 		a[1] /= mag;
 		a[2] /= mag;
+		a[3] /= mag;
 		return a;
 	}
 }
