@@ -1,6 +1,7 @@
-package com.kernicky.gl_prototype.models;
+package com.kernicky.gl_prototype;
 
 public class ShaderData {
+	// single-color-per-triangle reflective shader code
 	public static final String singleColorVertexShaderCode =
 			"uniform mat4 u_MVPMatrix;" +
 			"uniform mat4 u_MVMatrix;" +
@@ -8,8 +9,18 @@ public class ShaderData {
 			"attribute vec3 a_Normal;" +
 			"varying vec3 v_Position;" +
 			"varying vec3 v_Normal;" +
+			"varying vec3 v_Radial;" +
+			"varying float v_Bool;" +
 			"void main() {" +
 			"  v_Position = vec3(u_MVMatrix * a_Position);" +
+			"  v_Radial = vec3(u_MVMatrix * vec4(0, 0, 5, 0));" +
+			"  v_Bool = 0.0;" +
+			"  if(length(vec3(u_MVMatrix * a_Position)-vec3(0, 0, 7)) < 10.5) {" +
+			"    v_Bool = 1.0;" +
+			"  }" +
+			//"  if(length(a_Position-vec4(0, 0, 7, 0)) < 1.0) {" +
+			//"    v_bool = 1.0f;" +
+			//"  }" +
 			"  v_Normal = normalize(vec3(u_MVMatrix * vec4(normalize(a_Normal), 0.0)));" +
 			"  gl_Position = u_MVPMatrix * a_Position;" +
 			"}";
@@ -18,6 +29,8 @@ public class ShaderData {
 			"uniform vec3 u_LightPos[16];" +
 			"varying vec3 v_Position;" +
 			"varying vec3 v_Normal;" +
+			"varying vec3 v_Radial;" +
+			"varying float v_Bool;" +
 			"uniform vec3 u_Ambient;" +
 			"uniform vec3 u_Diffuse;" +
 			"uniform vec3 u_Specular;" +
@@ -48,7 +61,14 @@ public class ShaderData {
 			"    intensity = pow(intensity, u_Shininess);" +
 			"    spec += intensity*lc*u_Specular/distance;" +
 			"  }" +
-						
+			"  vec3 v_Amb = u_Ambient;" +
+			"  float f = length(v_Position - vec3(0, 0, 6.0));" +
+			"  if(f < 10.0 && f > 9.9) {" +
+			//"  if(v_Bool == 1.0) {" +
+			"    v_Amb = vec3(1.0, 1.0, 1.0);" +
+			"  }" +
+			//"  if(v_bool < 1) {" +
+			//"  }" +			
 //			"  if(diff.x >.75) { " +
 //			"    diff.x = 1.0; " +
 //			"  }" +
@@ -97,9 +117,10 @@ public class ShaderData {
 //			"    diff.z = 0.0;" +
 //			"  }" +
 			//"  gl_FragColor = vec4(u_Diffuse, 0.3);" + 
-			"  gl_FragColor = vec4(u_Ambient+diff+spec, 0.3);" + 
+			"  gl_FragColor = vec4(v_Amb+diff+spec, 0.3);" + 
 			"}";
 	
+	// shader code for emissive (ambient light only) objects
 	public static final String lightVertexShaderCode =
 			"uniform mat4 u_MVPMatrix;" +
 			"uniform mat4 u_MVMatrix;" +

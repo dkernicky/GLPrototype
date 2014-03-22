@@ -23,7 +23,11 @@ public class Model {
 	protected float[] staticAngle = MatrixOp.identity();
 	protected float[] initialAngle = MatrixOp.identity();
 	
+	
+	// rotate the model about an axis by a magnitude (speed)
 	public void applyRot(float speed, float[] axis) {
+		
+		// normalize in order to perform computations on unit quaternions
 		position.normalize();
 		Quaternion prevPos = new Quaternion(position.toFloat());
 		Quaternion q = Quaternion.rotate(-1*speed, prevPos.toFloat(), axis);
@@ -61,7 +65,7 @@ public class Model {
 		//staticAngle = Quaternion.rotateTo(new float[]{0, 1, 0, 0}, new float[]{1, 0, 0, 0});
 //		staticAngle = transform;
 		
-		MatrixOp.printM(staticAngle);
+		//MatrixOp.printM(staticAngle);
 
 		position.multiply(7);
 		transList.set(0, new Transformation(position.x, position.y, position.z));
@@ -69,12 +73,14 @@ public class Model {
 		transList.set(2, new Transformation(staticAngle));
 	}
 
+	// ai seek behavior
 	public void seek(Quaternion q) {
 		float[] axis = Vector.cross(q.toFloat(), position.toFloat());
 		axis = Vector.normalize(axis);
 		applyRot(.035f, axis);
 	}
 
+	// ai wander behavior
 	public void wander() {
 		float[] f = new float[3];
 		f[0] = (float) Math.random();
@@ -87,6 +93,7 @@ public class Model {
 	
 	}
 
+	// determine movement behaviors
 	public void updateKinematics() {
 		//applyRot(.04f, new float[]{0, 1, 0});
 		float[] a = ShootEmUpScene.shipQ.toFloat();
@@ -105,6 +112,7 @@ public class Model {
 		}
 	}
 
+	// find maximum tick among transformations
 	public void updateMaxTick() {
 		Iterator<Transformation> i = transList.iterator();
 		if(i.hasNext()) {
@@ -116,6 +124,7 @@ public class Model {
 		}
 	}
 
+	// modify model matrix to represent transformations
 	public float[] applyTransforms(float[] mModel) {
 		for(int n = 0; n < transList.size(); n ++) {
 			Transformation t = transList.get(n);
@@ -124,6 +133,7 @@ public class Model {
 		return mModel;
 	}
 
+	// add new transformation to list
 	public void addTransform(Transformation t) {
 		transList.add(t);
 		this.updateMaxTick();

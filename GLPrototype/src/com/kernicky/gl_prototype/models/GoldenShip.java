@@ -18,8 +18,8 @@ public class GoldenShip extends ReflectiveModel {
 		setAmb(new float[]{0.0f, .0f, 0.0f});
 		setDiff(new float[]{0.64f, .402f, 0.0f});
 		setSpec(new float[]{0.75f, 0.75f, 0.75f});
-		setCoords(ModelData.GoldenShipCoords);
-		setNormals(ModelData.GoldenShipNormals);
+		setCoords(GoldenShipCoords);
+		setNormals(GoldenShipNormals);
 		setShine(20);
 	}
 

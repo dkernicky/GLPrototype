@@ -15,6 +15,7 @@ public class NewIco extends ReflectiveModel {
 		setDiff(new float[]{0f, 0f, 1f});
 		setSpec(new float[]{0.5f, 0.5f, 0.5f});
 		setShine(300);
+	
 	}
 
 }

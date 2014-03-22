@@ -19,7 +19,6 @@ package com.kernicky.gl_prototype;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import com.kernicky.gl_prototype.models.ShaderData;
 
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
@@ -95,7 +94,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 		GLES20.glEnable( GLES20.GL_CULL_FACE);
 		GLES20.glCullFace(GLES20.GL_BACK);
 		GLES20.glEnable( GLES20.GL_BLEND);
-	    GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+	    //GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
 
 		//s.draw(mShip);
 		s.draw();
