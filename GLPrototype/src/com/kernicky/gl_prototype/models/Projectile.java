@@ -20,11 +20,11 @@ public class Projectile extends EmissiveModel {
 		time = 0;
 		this.position = new Quaternion(x, y, z, 0);
 		//position.normalize();
-		addTransform(new Transformation(position.x, position.y, position.z));
-		addTransform(new Transformation(MatrixOp.identity()));
-		addTransform(new Transformation(MatrixOp.identity()));
-		addTransform(new Transformation(90.0f, 1, 0, 0));
-		addTransform(new Transformation(0.2f));
+		transList.set(0, new Transformation(position.x, position.y, position.z));
+		transList.set(1, new Transformation(MatrixOp.identity()));
+		transList.set(2, new Transformation(MatrixOp.identity()));
+		transList.set(3, new Transformation(90.0f, 1, 0, 0));
+		transList.set(4, new Transformation(0.2f));
 	}
 	
 	public void loadCoords() {

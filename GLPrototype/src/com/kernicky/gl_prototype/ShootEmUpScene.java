@@ -29,8 +29,9 @@ public class ShootEmUpScene extends Scene {
 		   0, 1, 0, 0,
 		   0, 0, 1, 0,
 		   0, 0, 0, 1};
+	
 	public static Quaternion viewQ = new Quaternion(0.0f, 0.0f, 10.0f, 0.0f);
-	public static Quaternion shipQ = new Quaternion(0.0f, 0.0f, 7.0f, 0.0f);
+	//public static Quaternion shipQ = new Quaternion(0.0f, 0.0f, 7.0f, 0.0f);
 	public static Quaternion shipDirQ = new Quaternion(0.0f, 1.0f, 0.0f, 0.0f);
 	public static final float viewDist = 10.0f;
 	public static final float shipDist = 7.0f;
@@ -49,9 +50,11 @@ public class ShootEmUpScene extends Scene {
 	private NewIco ico = new NewIco();
 	private ArrayList<Num>numList = new ArrayList<Num>();
 	private int score = 0;
+	
+	public static GoldenShip ship = new GoldenShip();
 
 	public ShootEmUpScene() {
-		GoldenShip ship = new GoldenShip();
+		//GoldenShip ship = new GoldenShip();
 
 		for(int n = 0; n < 9; n ++) {
 			Num num = new Num(0, n);
@@ -65,12 +68,7 @@ public class ShootEmUpScene extends Scene {
 			enemyList.add(new Nemesis());
 		}
 	
-		ship.addTransform(new Transformation(shipQ.x, shipQ.y, shipQ.z));
-		ship.addTransform(new Transformation(MatrixOp.identity()));
-		ship.addTransform(new Transformation(MatrixOp.identity()));
-		ship.addTransform(new Transformation(90.0f, MyGLSurfaceView.x_axis[0], MyGLSurfaceView.x_axis[1], MyGLSurfaceView.x_axis[2]));
-		//ship.addTransform(new Transformation(0.2f));
-		ship.addTransform(new Transformation(0.5f));
+		
 		modelList.add(ship);
 
 //		Lamp l1 = new Lamp(0.0f, 0.0f, 0.0f);
@@ -88,22 +86,22 @@ public class ShootEmUpScene extends Scene {
 		//Frame b = new Frame();
 		//PhongCube b = new PhongCube();
 		//b.addTransform(new Transformation(0, 0, -5, 0));
-		b.addTransform(new Transformation(0.0f, 1, 0, 0, 0, 360));
-		b.addTransform(new Transformation(0.0f, 1, 0, 0, 0, 360));
+		b.transList.set(0, new Transformation(0.0f, 1, 0, 0, 0, 360));
+		b.transList.set(1, new Transformation(0.0f, 1, 0, 0, 0, 360));
 
-		b.addTransform(new Transformation(12f));
+		b.transList.set(2, new Transformation(12f));
 		modelList.add(b);
 		
-		ico.addTransform(new Transformation(0.0f, 1, 0, 0, 0, 360));
-		ico.addTransform(new Transformation(0.0f, 1, 0, 0, 0, 360));
-		ico.addTransform(new Transformation(14f));	
+		ico.transList.set(0, new Transformation(0.0f, 1, 0, 0, 0, 360));
+		ico.transList.set(1, new Transformation(0.0f, 1, 0, 0, 0, 360));
+		ico.transList.set(2, new Transformation(14f));	
 
 
-		lo.addTransform(new Transformation(MatrixOp.identity()));
-		lo.addTransform(new Transformation(MatrixOp.identity()));
-		lo.addTransform(new Transformation(MatrixOp.identity()));
-		lo.addTransform(new Transformation(0, .25f, 0));	
-		lo.addTransform(new Transformation(0.05f));
+		lo.transList.set(0, new Transformation(MatrixOp.identity()));
+		lo.transList.set(1, new Transformation(MatrixOp.identity()));
+		lo.transList.set(2, new Transformation(MatrixOp.identity()));
+		lo.transList.set(3, new Transformation(0, .25f, 0));	
+		lo.transList.set(4, new Transformation(0.05f));
 		lightList.add(lo);
 		
 //		
@@ -172,7 +170,7 @@ public class ShootEmUpScene extends Scene {
 	public void updateTransforms() {
 
     	float[] inputVector = Vector.normalize(new float[]{1*MyGLSurfaceView.dxLeft, -1*MyGLSurfaceView.dyLeft, 0, 0});
-    	Quaternion prevPosQ = new Quaternion(ShootEmUpScene.shipQ.toFloat());
+    	Quaternion prevPosQ = new Quaternion(ship.position.toFloat());
     	prevPosQ.normalize();
     	
 		Quaternion q = Quaternion.rotate(.04f*MyGLSurfaceView.dyLeft, prevPosQ.toFloat(), MyGLSurfaceView.x_axis);
@@ -181,7 +179,7 @@ public class ShootEmUpScene extends Scene {
 		float[] b = Quaternion.rotateTo(prevPosQ, r);
 		float[] transform = MatrixOp.multiplyMM(a, b);
 		
-		ShootEmUpScene.shipQ = new Quaternion(MatrixOp.multiplyMV(transform, ShootEmUpScene.shipQ.toFloat()));
+		ship.position = new Quaternion(MatrixOp.multiplyMV(transform, ship.position.toFloat()));
 		ShootEmUpScene.optionQ = new Quaternion(MatrixOp.multiplyMV(transform, ShootEmUpScene.optionQ.toFloat()));
 		ShootEmUpScene.viewQ = new Quaternion(MatrixOp.multiplyMV(transform, ShootEmUpScene.viewQ.toFloat()));
 		MyGLSurfaceView.x_axis = MatrixOp.multiplyMV(transform, MyGLSurfaceView.x_axis);
@@ -209,12 +207,12 @@ public class ShootEmUpScene extends Scene {
 		MyGLSurfaceView.currentTransform = MatrixOp.multiplyMM(transform, MyGLSurfaceView.currentTransform);		
 		ShootEmUpScene.shipAngle = MyGLSurfaceView.currentTransform;
 		
-		Quaternion newPosQ = new Quaternion(shipQ.toFloat());
+		Quaternion newPosQ = new Quaternion(ship.position.toFloat());
 		newPosQ.normalize();
 		viewQ = new Quaternion(newPosQ.toFloat());
 		viewQ.multiply(viewDist);
-		shipQ = new Quaternion(newPosQ.toFloat());
-		shipQ.multiply(shipDist);
+		ship.position = new Quaternion(newPosQ.toFloat());
+		ship.position.multiply(shipDist);
 		
 	}
 	
@@ -232,7 +230,7 @@ public class ShootEmUpScene extends Scene {
 		
 		if(updateCount > 1 && MyGLSurfaceView.rightTouch == true) {
 			updateCount = 0;
-			projectileList.add(new Projectile(shipQ.x, shipQ.y, shipQ.z, MatrixOp.multiplyMM(shipAngle, optionAngle), shipQ.toFloat()));
+			projectileList.add(new Projectile(ship.position.x, ship.position.y, ship.position.z, MatrixOp.multiplyMM(shipAngle, optionAngle), ship.position.toFloat()));
 
 		}
 		updateCount ++;
@@ -367,7 +365,7 @@ public class ShootEmUpScene extends Scene {
 		for (EmissiveModel m : modelList) {
 			if(m.getClass().equals(GoldenShip.class)) {
 				//m.angle = MyGLSurfaceView.angleLeft;
-				m.transList.set(0, new Transformation(shipQ.x, shipQ.y, shipQ.z));
+				m.transList.set(0, new Transformation(ship.position.x, ship.position.y, ship.position.z));
 				m.transList.set(1, new Transformation(shipAngle));
 				m.transList.set(2, new Transformation(staticAngle));
 

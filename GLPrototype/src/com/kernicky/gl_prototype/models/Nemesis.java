@@ -27,11 +27,11 @@ public class Nemesis extends ReflectiveModel {
 		
 		position.multiply(7);
 
-		addTransform(new Transformation(position.x, position.y, position.z));
-		addTransform(new Transformation(MatrixOp.identity()));
-		addTransform(new Transformation(MatrixOp.identity()));
-		addTransform(new Transformation(90.0f, 1, 0, 0));
-		addTransform(new Transformation(0.8f));
+		transList.set(0, new Transformation(position.x, position.y, position.z));
+		transList.set(1, new Transformation(MatrixOp.identity()));
+		transList.set(2, new Transformation(MatrixOp.identity()));
+		transList.set(3, new Transformation(90.0f, 1, 0, 0));
+		transList.set(4, new Transformation(0.8f));
 		//this.setData(setCoords(), setNormals(), setAmb(), setDiff(), setSpec(), setShine(), MyGLRenderer.reflectiveProgram);
 	}
 	public Nemesis() {
@@ -53,11 +53,11 @@ public class Nemesis extends ReflectiveModel {
 //		angle = Quaternion.rotateTo(shipDir, inputVector);
 		
 		position.multiply(7);
-		addTransform(new Transformation(position.x, position.y, position.z));
-		addTransform(new Transformation(MatrixOp.identity()));
-		addTransform(new Transformation(MatrixOp.identity()));
-		addTransform(new Transformation(90.0f, 1, 0, 0));
-		addTransform(new Transformation(0.8f));
+		transList.set(0, new Transformation(position.x, position.y, position.z));
+		transList.set(1, new Transformation(MatrixOp.identity()));
+		transList.set(2, new Transformation(MatrixOp.identity()));
+		transList.set(3, new Transformation(90.0f, 1, 0, 0));
+		transList.set(4, new Transformation(0.8f));
 		//this.setData(setCoords(), setNormals(), setAmb(), setDiff(), setSpec(), setShine(), MyGLRenderer.reflectiveProgram);
 	}
 	
@@ -97,7 +97,7 @@ public class Nemesis extends ReflectiveModel {
 	public void updateKinematics() {
 		time ++;
 		//applyRot(.04f, new float[]{0, 1, 0});
-		float[] a = ShootEmUpScene.shipQ.toFloat();
+		float[] a = ShootEmUpScene.ship.position.toFloat();
 		a = Vector.normalize(a);
 		float[] b = position.toFloat();
 		b = Vector.normalize(b);
@@ -105,11 +105,11 @@ public class Nemesis extends ReflectiveModel {
 		float angle = Vector.dot(a, b);
 
 		if(angle > 0 && angle != 1) {
-			seek(ShootEmUpScene.shipQ);
+			seek(ShootEmUpScene.ship.position);
 		}
 		else if (angle != 1) {
 			//wander();
-			seek(ShootEmUpScene.shipQ);
+			seek(ShootEmUpScene.ship.position);
 		}
 		if(time > 10) {
 		this.setAmb(new float[]{0.3f, 0, 0});

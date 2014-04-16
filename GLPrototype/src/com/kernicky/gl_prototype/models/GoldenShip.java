@@ -1,8 +1,7 @@
 package com.kernicky.gl_prototype.models;
 
-import com.kernicky.gl_prototype.MyGLRenderer;
-
-import android.opengl.Matrix;
+import com.kernicky.gl_prototype.math.MatrixOp;
+import com.kernicky.gl_prototype.math.Quaternion;
 
 public class GoldenShip extends ReflectiveModel {
 	
@@ -11,6 +10,19 @@ public class GoldenShip extends ReflectiveModel {
 
 	public GoldenShip() {
 		super();
+		position = new Quaternion(0, 0, 7, 0);
+		transList.set(0, new Transformation(MatrixOp.identity()));
+		transList.set(1, new Transformation(MatrixOp.identity()));
+		transList.set(2, new Transformation(MatrixOp.identity()));
+		transList.set(3, new Transformation(90.0f, 1, 0, 0));
+		transList.set(4, new Transformation(0.5f));
+		
+//		addTransform(new Transformation(position.x, position.y, position.z));
+//		addTransform(new Transformation(MatrixOp.identity()));
+//		addTransform(new Transformation(MatrixOp.identity()));
+//		addTransform(new Transformation(90.0f, 1, 0, 0));
+//		//ship.addTransform(new Transformation(0.2f));
+//		addTransform(new Transformation(0.5f));
 	}
 
 	@Override

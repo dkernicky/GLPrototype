@@ -3,8 +3,6 @@ package com.kernicky.gl_prototype.models;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import android.opengl.Matrix;
-
 import com.kernicky.gl_prototype.ShootEmUpScene;
 import com.kernicky.gl_prototype.math.MatrixOp;
 import com.kernicky.gl_prototype.math.Quaternion;
@@ -12,7 +10,7 @@ import com.kernicky.gl_prototype.math.Vector;
 
 public class Model {
 	public int time = 0;
-	public ArrayList<Transformation> transList = new ArrayList<Transformation>();
+	public ArrayList<Transformation> transList = new ArrayList<Transformation>(10);
 	public ArrayList<EmissiveModel> subList = new ArrayList<EmissiveModel>();
 	
 	protected int currentTick = 0;
@@ -22,6 +20,12 @@ public class Model {
 	protected float[] angle = MatrixOp.identity();
 	protected float[] staticAngle = MatrixOp.identity();
 	protected float[] initialAngle = MatrixOp.identity();
+	
+	public Model() {
+		for(int n = 0; n < 10; n ++) {
+			transList.add(new Transformation(MatrixOp.identity()));
+		}
+	}
 	
 	
 	// rotate the model about an axis by a magnitude (speed)
@@ -96,7 +100,7 @@ public class Model {
 	// determine movement behaviors
 	public void updateKinematics() {
 		//applyRot(.04f, new float[]{0, 1, 0});
-		float[] a = ShootEmUpScene.shipQ.toFloat();
+		float[] a = ShootEmUpScene.ship.position.toFloat();
 		a = Vector.normalize(a);
 		float[] b = position.toFloat();
 		b = Vector.normalize(b);
