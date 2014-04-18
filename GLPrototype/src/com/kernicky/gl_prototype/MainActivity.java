@@ -72,6 +72,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 		// TODO Auto-generated method stub
 		upAccel = event.values[2];
 		
+		
 
 	}
 }

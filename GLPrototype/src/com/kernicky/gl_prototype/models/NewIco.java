@@ -16,7 +16,7 @@ public class NewIco extends ReflectiveModel {
 			inProgress = true;
 		}
 		else {
-			radialEffect = 0;
+			radialEffect = 5;
 			inProgress = false;
 		}
 

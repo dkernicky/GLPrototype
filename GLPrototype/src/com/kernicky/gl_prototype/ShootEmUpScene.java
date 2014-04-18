@@ -52,10 +52,19 @@ public class ShootEmUpScene extends Scene {
 	private int score = 0;
 	
 	public static GoldenShip ship = new GoldenShip();
+	
+	private ArrayList<Bomb> bombList = new ArrayList<Bomb>();
+	private ArrayList<Boost> boostList = new ArrayList<Boost>();
+	private ArrayList<Life> lifeList = new ArrayList<Life>();
 
 	public ShootEmUpScene() {
 		//GoldenShip ship = new GoldenShip();
 
+		for(int n = 0; n < 3; n ++) {
+			bombList.add(new Bomb(n));
+			boostList.add(new Boost(n));
+			lifeList.add(new Life(n));
+		}
 		for(int n = 0; n < 9; n ++) {
 			Num num = new Num(0, n);
 			num.addTransform(new Transformation(MatrixOp.identity()));
@@ -153,7 +162,6 @@ public class ShootEmUpScene extends Scene {
 //		l8.addTransform(new Transformation(0.025f));
 //		lightList.add(l8);
 
-
 	}
 	public void updateScore() {
 		int newScore = score;
@@ -168,13 +176,25 @@ public class ShootEmUpScene extends Scene {
 	}
 	
 	public void updateTransforms() {
-
-    	float[] inputVector = Vector.normalize(new float[]{1*MyGLSurfaceView.dxLeft, -1*MyGLSurfaceView.dyLeft, 0, 0});
+		float dx = MyGLSurfaceView.dxLeft;
+		float dy = MyGLSurfaceView.dyLeft;
+		
+		// if in the middle of a boost, keep last dx, dy
+		if(ship.boostInProgress()) {
+			dx = ship.dxPrev;
+			dy = ship.dyPrev;
+		}
+		if(dx != 0 && dy != 0) {
+			ship.dxPrev = dx;
+			ship.dyPrev = dy;
+		}
+		
+    	float[] inputVector = Vector.normalize(new float[]{1*dx, -1*dy, 0, 0});
     	Quaternion prevPosQ = new Quaternion(ship.position.toFloat());
     	prevPosQ.normalize();
     	
-		Quaternion q = Quaternion.rotate(ship.getSpeed()*MyGLSurfaceView.dyLeft, prevPosQ.toFloat(), MyGLSurfaceView.x_axis);
-		Quaternion r = Quaternion.rotate(ship.getSpeed()*MyGLSurfaceView.dxLeft, prevPosQ.toFloat(), MyGLSurfaceView.y_axis);
+		Quaternion q = Quaternion.rotate(ship.getSpeed()*dy, prevPosQ.toFloat(), MyGLSurfaceView.x_axis);
+		Quaternion r = Quaternion.rotate(ship.getSpeed()*dx, prevPosQ.toFloat(), MyGLSurfaceView.y_axis);
 		float[] a = Quaternion.rotateTo(prevPosQ, q);
 		float[] b = Quaternion.rotateTo(prevPosQ, r);
 		float[] transform = MatrixOp.multiplyMM(a, b);
@@ -192,7 +212,7 @@ public class ShootEmUpScene extends Scene {
 		float[] shipDir = {0, 1, 0, 0};
 		float[] optionDir = {0, 1, 0, 0};
 		float[] t2 = MatrixOp.identity();
-		if(MyGLSurfaceView.dxLeft != 0 && MyGLSurfaceView.dyLeft != 0) {
+		if(dx != 0 && dy != 0) {
 			t2 = Quaternion.rotateTo(shipDir, inputVector);
 			ShootEmUpScene.staticAngle = t2;
 		}
@@ -227,6 +247,10 @@ public class ShootEmUpScene extends Scene {
 //		double currentUpdate = System.currentTimeMillis();
 //		System.out.println(currentUpdate-lastUpdate);
 //		lastUpdate = currentUpdate;
+		if(MainActivity.upAccel > 15 || ico.radialInProgress()) {
+			ico.setRadialEffect();
+		}
+		
 		
 		if(updateCount > 1 && MyGLSurfaceView.rightTouch == true) {
 			updateCount = 0;
@@ -268,7 +292,6 @@ public class ShootEmUpScene extends Scene {
 //			}
 //		}
 
-		
 		float[] lightPos = new float[lightPosList.size()];
 		for (int n = 0; n < lightPos.length; n++) {
 			lightPos[n] = lightPosList.get(n);
@@ -276,7 +299,21 @@ public class ShootEmUpScene extends Scene {
 		
 		//lightPos = new float[]{1.0f, 1.0f, 0.0f};
 
-		
+
+		//bomb.transList.set(0, object);
+		for(Bomb bomb: bombList) {
+			bomb.transList.set(0, new Transformation(shipAngle));
+			bomb.draw(mView, mProj, lightPos);
+		}
+		for(Boost boost: boostList) {
+			boost.transList.set(0, new Transformation(shipAngle));
+			boost.draw(mView, mProj, lightPos);
+		}
+		for(Life life: lifeList) {
+			life.transList.set(0, new Transformation(shipAngle));
+			life.draw(mView, mProj, lightPos);
+		}
+
 		for (Nemesis m : enemyList) {
 			m.updateKinematics();
 			//System.out.println("e");
@@ -390,9 +427,7 @@ public class ShootEmUpScene extends Scene {
 		}
 
 
-		if(MainActivity.upAccel > 15 || ico.radialInProgress()) {
-			ico.setRadialEffect();
-		}
+
 		if(MainActivity.upAccel > 15 || ship.boostInProgress()) {
 			ship.updateSpeed();
 		}
