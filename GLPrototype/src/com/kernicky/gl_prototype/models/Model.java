@@ -21,6 +21,8 @@ public class Model {
 	protected float[] staticAngle = MatrixOp.identity();
 	protected float[] initialAngle = MatrixOp.identity();
 	
+	protected float radialEffect = 0.0f;
+	
 	public Model() {
 		for(int n = 0; n < 10; n ++) {
 			transList.add(new Transformation(MatrixOp.identity()));

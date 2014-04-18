@@ -9,18 +9,8 @@ public class ShaderData {
 			"attribute vec3 a_Normal;" +
 			"varying vec3 v_Position;" +
 			"varying vec3 v_Normal;" +
-			"varying vec3 v_Radial;" +
-			"varying float v_Bool;" +
 			"void main() {" +
 			"  v_Position = vec3(u_MVMatrix * a_Position);" +
-			"  v_Radial = vec3(u_MVMatrix * vec4(0, 0, 5, 0));" +
-			"  v_Bool = 0.0;" +
-			"  if(length(vec3(u_MVMatrix * a_Position)-vec3(0, 0, 7)) < 10.5) {" +
-			"    v_Bool = 1.0;" +
-			"  }" +
-			//"  if(length(a_Position-vec4(0, 0, 7, 0)) < 1.0) {" +
-			//"    v_bool = 1.0f;" +
-			//"  }" +
 			"  v_Normal = normalize(vec3(u_MVMatrix * vec4(normalize(a_Normal), 0.0)));" +
 			"  gl_Position = u_MVPMatrix * a_Position;" +
 			"}";
@@ -29,8 +19,7 @@ public class ShaderData {
 			"uniform vec3 u_LightPos[16];" +
 			"varying vec3 v_Position;" +
 			"varying vec3 v_Normal;" +
-			"varying vec3 v_Radial;" +
-			"varying float v_Bool;" +
+			"uniform float u_Radial;" +
 			"uniform vec3 u_Ambient;" +
 			"uniform vec3 u_Diffuse;" +
 			"uniform vec3 u_Specular;" +
@@ -63,7 +52,7 @@ public class ShaderData {
 			"  }" +
 			"  vec3 v_Amb = u_Ambient;" +
 			"  float f = length(v_Position - vec3(0, 0, 6.0));" +
-			"  if(f < 10.0 && f > 9.9) {" +
+			"  if(f < u_Radial && f > u_Radial - .3) {" +
 			//"  if(v_Bool == 1.0) {" +
 			"    v_Amb = vec3(1.0, 1.0, 1.0);" +
 			"  }" +

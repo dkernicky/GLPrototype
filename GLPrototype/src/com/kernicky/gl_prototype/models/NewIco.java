@@ -8,6 +8,14 @@ public class NewIco extends ReflectiveModel {
 		super();
 	}
 	
+	public void setRadialEffect() {
+		if(radialEffect < 20.0f)
+			radialEffect += .3f;
+		else
+			radialEffect = 0;
+
+	}
+	
 	public void setData() {
 		setCoords(coords);
 		setNormals(normals);

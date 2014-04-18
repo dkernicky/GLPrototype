@@ -362,7 +362,7 @@ public class ShootEmUpScene extends Scene {
 			m.draw(mView, mProj, lightPos);
 		}
 
-		for (EmissiveModel m : modelList) {
+		for (ReflectiveModel m : modelList) {
 			if(m.getClass().equals(GoldenShip.class)) {
 				//m.angle = MyGLSurfaceView.angleLeft;
 				m.transList.set(0, new Transformation(ship.position.x, ship.position.y, ship.position.z));
@@ -387,6 +387,7 @@ public class ShootEmUpScene extends Scene {
 //			}
 			m.draw(mView, mProj, lightPos);
 		}
+		ico.setRadialEffect();
 		ico.draw(mView, mProj, lightPos);
 	
 	}

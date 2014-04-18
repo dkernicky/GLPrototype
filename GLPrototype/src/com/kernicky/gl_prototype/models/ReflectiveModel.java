@@ -13,6 +13,7 @@ public abstract class ReflectiveModel extends EmissiveModel {
 	private int mDiffHandle;
 	private int mSpecHandle;
 	private int mShinHandle;
+	private int mRadialHandle;
 	protected float spec[];
 	protected float diff[];
 	private float shine;
@@ -68,6 +69,9 @@ public abstract class ReflectiveModel extends EmissiveModel {
 		
 		setmAmbHandle(GLES20.glGetUniformLocation(getProgramID(), "u_Ambient"));
 		GLES20.glUniform3fv(getmAmbHandle(), 1, getAmb(), 0);
+		
+		mRadialHandle = GLES20.glGetUniformLocation(getProgramID(), "u_Radial");
+		GLES20.glUniform1f(mRadialHandle, radialEffect);
 		
 		mDiffHandle = GLES20.glGetUniformLocation(getProgramID(), "u_Diffuse");
 		GLES20.glUniform3fv(mDiffHandle, 1, getDiff(), 0);

@@ -18,21 +18,30 @@ package com.kernicky.gl_prototype;
 
 import android.app.Activity;
 import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.os.Bundle;
-import android.util.AttributeSet;
 import android.view.MotionEvent;
 
 import com.kernicky.gl_prototype.math.MatrixOp;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements SensorEventListener {
 
     private GLSurfaceView mGLView;
     public float angle = 0.0f;
+    private SensorManager mSensorManager;
+    private Sensor mAccel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mAccel = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mSensorManager.registerListener(this, mAccel, SensorManager.SENSOR_DELAY_NORMAL);
+        
         super.onCreate(savedInstanceState);
         mGLView = new MyGLSurfaceView(this);
         setContentView(mGLView);
@@ -50,9 +59,29 @@ public class MainActivity extends Activity {
 
         mGLView.onResume();
     }
+    
+	@Override
+	public void onAccuracyChanged(Sensor arg0, int arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onSensorChanged(SensorEvent event) {
+		// TODO Auto-generated method stub
+		float[] values = event.values;
+		if(values[2] > 15) {
+			System.out.println("*******************");
+
+			System.out.println(values[2]);
+			System.out.println("*******************");
+
+		}
+
+	}
 }
 
-class MyGLSurfaceView extends GLSurfaceView {
+class MyGLSurfaceView extends GLSurfaceView implements SensorEventListener {
 
     private final MyGLRenderer mRenderer;
     public static float angleLeft = 0.0f;
@@ -223,6 +252,24 @@ class MyGLSurfaceView extends GLSurfaceView {
 
         return true;
     }
+
+	@Override
+	public void onAccuracyChanged(Sensor arg0, int arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onSensorChanged(SensorEvent event) {
+		// TODO Auto-generated method stub
+		float[] values = event.values;
+		System.out.println("*******************");
+		for(float f: values) {
+			System.out.println(f);
+		}
+		System.out.println("*******************");
+
+	}
     
 }
 
