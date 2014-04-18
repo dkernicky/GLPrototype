@@ -20,6 +20,7 @@ public class ShaderData {
 			"varying vec3 v_Position;" +
 			"varying vec3 v_Normal;" +
 			"uniform float u_Radial;" +
+			"uniform float u_Transparency;" +
 			"uniform vec3 u_Ambient;" +
 			"uniform vec3 u_Diffuse;" +
 			"uniform vec3 u_Specular;" +
@@ -106,7 +107,7 @@ public class ShaderData {
 //			"    diff.z = 0.0;" +
 //			"  }" +
 			//"  gl_FragColor = vec4(u_Diffuse, 0.3);" + 
-			"  gl_FragColor = vec4(v_Amb+diff+spec, 0.3);" + 
+			"  gl_FragColor = vec4(v_Amb+diff+spec, u_Transparency);" + 
 			"}";
 	
 	// shader code for emissive (ambient light only) objects

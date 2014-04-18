@@ -35,6 +35,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     public float angle = 0.0f;
     private SensorManager mSensorManager;
     private Sensor mAccel;
+    public static float upAccel = 0.0f;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,19 +70,13 @@ public class MainActivity extends Activity implements SensorEventListener {
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 		// TODO Auto-generated method stub
-		float[] values = event.values;
-		if(values[2] > 15) {
-			System.out.println("*******************");
-
-			System.out.println(values[2]);
-			System.out.println("*******************");
-
-		}
+		upAccel = event.values[2];
+		
 
 	}
 }
 
-class MyGLSurfaceView extends GLSurfaceView implements SensorEventListener {
+class MyGLSurfaceView extends GLSurfaceView {
 
     private final MyGLRenderer mRenderer;
     public static float angleLeft = 0.0f;
@@ -253,23 +248,5 @@ class MyGLSurfaceView extends GLSurfaceView implements SensorEventListener {
         return true;
     }
 
-	@Override
-	public void onAccuracyChanged(Sensor arg0, int arg1) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onSensorChanged(SensorEvent event) {
-		// TODO Auto-generated method stub
-		float[] values = event.values;
-		System.out.println("*******************");
-		for(float f: values) {
-			System.out.println(f);
-		}
-		System.out.println("*******************");
-
-	}
-    
 }
 

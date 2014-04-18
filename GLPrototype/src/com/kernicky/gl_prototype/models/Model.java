@@ -22,6 +22,7 @@ public class Model {
 	protected float[] initialAngle = MatrixOp.identity();
 	
 	protected float radialEffect = 0.0f;
+	protected float speed = .04f;
 	
 	public Model() {
 		for(int n = 0; n < 10; n ++) {
@@ -143,6 +144,14 @@ public class Model {
 	public void addTransform(Transformation t) {
 		transList.add(t);
 		this.updateMaxTick();
+	}
+	
+	public float getSpeed() {
+		return speed;
+	}
+	
+	public void setSpeed(float f) {
+		speed = f;
 	}
 
 }

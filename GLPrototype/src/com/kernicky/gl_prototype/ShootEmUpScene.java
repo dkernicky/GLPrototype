@@ -69,7 +69,7 @@ public class ShootEmUpScene extends Scene {
 		}
 	
 		
-		modelList.add(ship);
+		//modelList.add(ship);
 
 //		Lamp l1 = new Lamp(0.0f, 0.0f, 0.0f);
 //		Lamp l2 = new Lamp(0.0f, 0.0f, 0.0f);
@@ -173,8 +173,8 @@ public class ShootEmUpScene extends Scene {
     	Quaternion prevPosQ = new Quaternion(ship.position.toFloat());
     	prevPosQ.normalize();
     	
-		Quaternion q = Quaternion.rotate(.04f*MyGLSurfaceView.dyLeft, prevPosQ.toFloat(), MyGLSurfaceView.x_axis);
-		Quaternion r = Quaternion.rotate(.04f*MyGLSurfaceView.dxLeft, prevPosQ.toFloat(), MyGLSurfaceView.y_axis);
+		Quaternion q = Quaternion.rotate(ship.getSpeed()*MyGLSurfaceView.dyLeft, prevPosQ.toFloat(), MyGLSurfaceView.x_axis);
+		Quaternion r = Quaternion.rotate(ship.getSpeed()*MyGLSurfaceView.dxLeft, prevPosQ.toFloat(), MyGLSurfaceView.y_axis);
 		float[] a = Quaternion.rotateTo(prevPosQ, q);
 		float[] b = Quaternion.rotateTo(prevPosQ, r);
 		float[] transform = MatrixOp.multiplyMM(a, b);
@@ -361,15 +361,16 @@ public class ShootEmUpScene extends Scene {
 			//m.transList.set(1, new Transformation(staticAngle));
 			m.draw(mView, mProj, lightPos);
 		}
-
+		ship.transList.set(0, new Transformation(ship.position.x, ship.position.y, ship.position.z));
+		ship.transList.set(1, new Transformation(shipAngle));
+		ship.transList.set(2, new Transformation(staticAngle));
+		ship.draw(mView, mProj, lightPos);
 		for (ReflectiveModel m : modelList) {
-			if(m.getClass().equals(GoldenShip.class)) {
-				//m.angle = MyGLSurfaceView.angleLeft;
-				m.transList.set(0, new Transformation(ship.position.x, ship.position.y, ship.position.z));
-				m.transList.set(1, new Transformation(shipAngle));
-				m.transList.set(2, new Transformation(staticAngle));
-
-			}
+//			if(m.getClass().equals(GoldenShip.class)) {
+//				//m.angle = MyGLSurfaceView.angleLeft;
+//				
+//
+//			}
 //			if(m.getClass().equals(Nemesis.class)) {
 //				//m.angle = MyGLSurfaceView.angleLeft;
 //				m.updateKinematics();
@@ -387,7 +388,14 @@ public class ShootEmUpScene extends Scene {
 //			}
 			m.draw(mView, mProj, lightPos);
 		}
-		ico.setRadialEffect();
+
+
+		if(MainActivity.upAccel > 15 || ico.radialInProgress()) {
+			ico.setRadialEffect();
+		}
+		if(MainActivity.upAccel > 15 || ship.boostInProgress()) {
+			ship.updateSpeed();
+		}
 		ico.draw(mView, mProj, lightPos);
 	
 	}

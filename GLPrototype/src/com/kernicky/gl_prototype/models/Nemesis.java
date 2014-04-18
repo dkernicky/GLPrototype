@@ -65,6 +65,7 @@ public class Nemesis extends ReflectiveModel {
 		setAmb(new float[]{0.3f, 0.0f, 0.0f});
 		setDiff(new float[]{1.0f, 0.0f, 0.0f});
 		setSpec(new float[]{0.5f, 0.5f, 0.5f});
+		setTransparency(1.0f);
 		setCoords(coords);
 		setNormals(normals);
 		setShine(300);
