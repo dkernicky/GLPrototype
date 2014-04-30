@@ -16,6 +16,7 @@ package com.kernicky.gl_prototype;
  * limitations under the License.
  */
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.hardware.Sensor;
@@ -25,7 +26,12 @@ import android.hardware.SensorManager;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.Window;
+import android.widget.Toast;
 
 import com.kernicky.gl_prototype.math.MatrixOp;
 
@@ -39,13 +45,40 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+    	requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
+
+    	ActionBar ab = getActionBar(); 
+    	ab.setDisplayShowTitleEnabled(false); 
+    	ab.setDisplayShowHomeEnabled(false);
+    	ab.setBackgroundDrawable(null);
+    	
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mAccel = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mSensorManager.registerListener(this, mAccel, SensorManager.SENSOR_DELAY_NORMAL);
-        
         super.onCreate(savedInstanceState);
         mGLView = new MyGLSurfaceView(this);
         setContentView(mGLView);
+    }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+    	MenuInflater inflater = getMenuInflater();
+    	inflater.inflate(R.menu.main, menu);
+    	return super.onCreateOptionsMenu(menu);
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                //openSettings();
+            	Toast.makeText(this, "Fuck You", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
     }
 
     @Override
@@ -83,6 +116,7 @@ class MyGLSurfaceView extends GLSurfaceView {
     public static float angleLeft = 0.0f;
     public static float dxLeft = 0.0f;
     public static float dyLeft = 0.0f;
+    public static double leftMagnitude = 0.0f;
     public static float angleRight = 0.0f;
     public static float dxRight = 0.0f;
     public static float dyRight = 0.0f;
@@ -187,6 +221,7 @@ class MyGLSurfaceView extends GLSurfaceView {
 	                }
 	                
 	                double magnitude = Math.sqrt(dx*dx + dy*dy);
+	           
 	                
 	                dx /= Math.max(.000001, magnitude);
 	                dy /= Math.max(.000001, magnitude);
@@ -217,7 +252,6 @@ class MyGLSurfaceView extends GLSurfaceView {
             		}
 	                
 	                double magnitude = Math.sqrt(dx*dx + dy*dy);
-	                
 	                dx /= Math.max(.000001, magnitude);
 	                dy /= Math.max(.000001, magnitude);
 	
@@ -230,6 +264,7 @@ class MyGLSurfaceView extends GLSurfaceView {
 	                	angle += 180.0;
 	                }
 	                if(magnitude > 20) {
+		                leftMagnitude = magnitude;
 		                this.angleLeft = (float) ((float) -1.0f*angle);
 		                
 		                this.dxLeft = (float) dx;
@@ -239,6 +274,8 @@ class MyGLSurfaceView extends GLSurfaceView {
 		                mPreviousXLeft = leftX;
 		                mPreviousYLeft = leftY;
 	                }
+	                else
+	                leftMagnitude = 0.0f;
 
             	}
 

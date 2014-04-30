@@ -40,16 +40,16 @@ public class ShootEmUpScene extends Scene {
 	public static float[] optionAngle = MatrixOp.identity();
 
 	private ArrayList<ReflectiveModel> modelList = new ArrayList<ReflectiveModel>();
-	private ArrayList<Nemesis> enemyList = new ArrayList<Nemesis>();
+	public static ArrayList<Nemesis> enemyList = new ArrayList<Nemesis>();
 	private ArrayList<Projectile> projectileList = new ArrayList<Projectile>();
 
 	private ArrayList<Lamp> lightList = new ArrayList<Lamp>();
 	private ArrayList<Float> lightPosList = new ArrayList<Float>();
 	private double lastTime = 0.0f;
 	private int updateCount = 0;
-	private NewIco ico = new NewIco();
-	private ArrayList<Num>numList = new ArrayList<Num>();
-	private int score = 0;
+	public static NewIco ico = new NewIco();
+	private static ArrayList<Num>numList = new ArrayList<Num>();
+	public static int score = 0;
 	
 	public static GoldenShip ship = new GoldenShip();
 	
@@ -73,7 +73,7 @@ public class ShootEmUpScene extends Scene {
 		}
 		
 		//enemyList.add(new Nemesis(0, 0, 1));
-		for(int n = 0; n < 1; n ++) {
+		for(int n = 0; n < 5; n ++) {
 			enemyList.add(new Nemesis());
 		}
 	
@@ -163,7 +163,7 @@ public class ShootEmUpScene extends Scene {
 //		lightList.add(l8);
 
 	}
-	public void updateScore() {
+	public static void updateScore() {
 		int newScore = score;
 		for(int n = numList.size()-1; n >= 0; n --) {
 			int newNum = newScore %10;
@@ -299,7 +299,32 @@ public class ShootEmUpScene extends Scene {
 		
 		//lightPos = new float[]{1.0f, 1.0f, 0.0f};
 
-
+		for (ReflectiveModel m : modelList) {
+//			if(m.getClass().equals(GoldenShip.class)) {
+//				//m.angle = MyGLSurfaceView.angleLeft;
+//				
+//
+//			}
+//			if(m.getClass().equals(Nemesis.class)) {
+//				//m.angle = MyGLSurfaceView.angleLeft;
+//				m.updateKinematics();
+//
+//			}
+//			if(m.getClass().equals(Projectile.class)) {
+//				//m.angle = MyGLSurfaceView.angleLeft;
+//				m.updateKinematics();
+//				System.out.println(m.time);
+//				if(m.time > 40) {
+//					modelList.remove(m);
+//					break;
+//				}
+//
+//			}
+			m.draw(mView, mProj, lightPos);
+//			if(ico.radialInProgress()) {
+//				draw();
+//			}
+		}
 		//bomb.transList.set(0, object);
 		for(Bomb bomb: bombList) {
 			bomb.transList.set(0, new Transformation(shipAngle));
@@ -361,6 +386,7 @@ public class ShootEmUpScene extends Scene {
 			
 
 			for(Nemesis m: enemyList) {
+				
 				float[] p1 = Vector.normalize(p.position.toFloat());
 				float[] e1 = Vector.normalize(m.position.toFloat());
 
@@ -402,34 +428,16 @@ public class ShootEmUpScene extends Scene {
 		ship.transList.set(1, new Transformation(shipAngle));
 		ship.transList.set(2, new Transformation(staticAngle));
 		ship.draw(mView, mProj, lightPos);
-		for (ReflectiveModel m : modelList) {
-//			if(m.getClass().equals(GoldenShip.class)) {
-//				//m.angle = MyGLSurfaceView.angleLeft;
-//				
-//
-//			}
-//			if(m.getClass().equals(Nemesis.class)) {
-//				//m.angle = MyGLSurfaceView.angleLeft;
-//				m.updateKinematics();
-//
-//			}
-//			if(m.getClass().equals(Projectile.class)) {
-//				//m.angle = MyGLSurfaceView.angleLeft;
-//				m.updateKinematics();
-//				System.out.println(m.time);
-//				if(m.time > 40) {
-//					modelList.remove(m);
-//					break;
-//				}
-//
-//			}
-			m.draw(mView, mProj, lightPos);
-		}
 
 
 
-		if(MainActivity.upAccel > 15 || ship.boostInProgress()) {
+
+//		if(MainActivity.upAccel > 15 || ship.boostInProgress()) {
+//			ship.updateSpeed();
+//		}
+		if(MyGLSurfaceView.leftMagnitude > 100 || ship.boostInProgress()) {
 			ship.updateSpeed();
+			
 		}
 		ico.draw(mView, mProj, lightPos);
 	
