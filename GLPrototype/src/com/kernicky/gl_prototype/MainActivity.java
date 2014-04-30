@@ -42,6 +42,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     private SensorManager mSensorManager;
     private Sensor mAccel;
     public static float upAccel = 0.0f;
+    public static Context context;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,6 +53,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     	ab.setDisplayShowHomeEnabled(false);
     	ab.setBackgroundDrawable(null);
     	
+    	context = getApplicationContext();
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mAccel = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mSensorManager.registerListener(this, mAccel, SensorManager.SENSOR_DELAY_NORMAL);
@@ -268,6 +270,9 @@ class MyGLSurfaceView extends GLSurfaceView {
 	                }
 	                if(magnitude > 20) {
 		                leftMagnitude = magnitude;
+//		    			if(MyGLSurfaceView.leftMagnitude > 100) {
+//		    				Toast.makeText(MainActivity.context, Double.toString(MyGLSurfaceView.leftMagnitude), Toast.LENGTH_SHORT).show();
+//		    			}
 		                this.angleLeft = (float) ((float) -1.0f*angle);
 		                
 		                this.dxLeft = (float) dx;

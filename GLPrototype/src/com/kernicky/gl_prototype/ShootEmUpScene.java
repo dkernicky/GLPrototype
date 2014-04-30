@@ -3,6 +3,7 @@ package com.kernicky.gl_prototype;
 import java.util.ArrayList;
 
 import android.opengl.Matrix;
+import android.widget.Toast;
 
 import com.kernicky.gl_prototype.math.MatrixOp;
 import com.kernicky.gl_prototype.math.Quaternion;
@@ -401,7 +402,8 @@ public class ShootEmUpScene extends Scene {
 		ship.transList.set(2, new Transformation(staticAngle));
 		ship.draw(mView, mProj, lightPos);
 
-		if(MyGLSurfaceView.leftMagnitude > 100 || ship.boostInProgress()) {
+		if((MyGLSurfaceView.leftMagnitude > 150 && MyGLSurfaceView.leftMagnitude < 300) || ship.boostInProgress()) {
+
 			ship.updateSpeed();
 			if(ship.timeInBoost >= 36) {
 				if(boostList.size() > 0) {
