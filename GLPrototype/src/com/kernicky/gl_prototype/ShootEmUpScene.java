@@ -243,6 +243,8 @@ public class ShootEmUpScene extends Scene {
 //		double currentUpdate = System.currentTimeMillis();
 //		System.out.println(currentUpdate-lastUpdate);
 //		lastUpdate = currentUpdate;
+		
+		
 		if(ico.radialInProgress()) {
 			ico.setRadialEffect();
 			if(ico.radialEffect >= 15) {
@@ -402,6 +404,7 @@ public class ShootEmUpScene extends Scene {
 		ship.transList.set(2, new Transformation(staticAngle));
 		ship.draw(mView, mProj, lightPos);
 
+		// TODO: check boost
 		if((MyGLSurfaceView.leftMagnitude > 150 && MyGLSurfaceView.leftMagnitude < 300) || ship.boostInProgress()) {
 
 			ship.updateSpeed();

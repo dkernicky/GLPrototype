@@ -18,6 +18,7 @@ package com.kernicky.gl_prototype;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -31,6 +32,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.Window;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Toast;
 
 import com.kernicky.gl_prototype.math.MatrixOp;
@@ -43,7 +46,13 @@ public class MainActivity extends Activity implements SensorEventListener {
     private Sensor mAccel;
     public static float upAccel = 0.0f;
     public static Context context;
-
+    
+    public static enum Input {TILT, TOUCH_LEFT, TOUCH_RIGHT, BUTTON}
+    public static Input moveInput = Input.TOUCH_LEFT;
+    public static Input shootInput = Input.TOUCH_RIGHT;
+    public static Input boostInput = Input.TOUCH_LEFT;
+    public static Input bombInput = Input.TILT;
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
@@ -60,12 +69,17 @@ public class MainActivity extends Activity implements SensorEventListener {
         super.onCreate(savedInstanceState);
         mGLView = new MyGLSurfaceView(this);
         setContentView(mGLView);
+        
+       
+
     }
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+    	
     	MenuInflater inflater = getMenuInflater();
     	inflater.inflate(R.menu.main, menu);
+
     	return super.onCreateOptionsMenu(menu);
     }
     
@@ -75,11 +89,19 @@ public class MainActivity extends Activity implements SensorEventListener {
         switch (item.getItemId()) {
             case R.id.action_settings:
                 //openSettings();
-            	Toast.makeText(this, "Fuck You", Toast.LENGTH_SHORT).show();
+            	FragmentManager fm = getFragmentManager();
+                ControlsDialogFragment dialog = new ControlsDialogFragment();
+                
+                
+                dialog.show(fm, "fdsah");
+               
+           
+               
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+        
 
     }
 
