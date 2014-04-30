@@ -21,7 +21,7 @@ public class Model {
 	protected float[] staticAngle = MatrixOp.identity();
 	protected float[] initialAngle = MatrixOp.identity();
 	
-	protected float radialEffect = 0.0f;
+	public float radialEffect = 5.0f;
 	protected float speed = .04f;
 	
 	public Model() {

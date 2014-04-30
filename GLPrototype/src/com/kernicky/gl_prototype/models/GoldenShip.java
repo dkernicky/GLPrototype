@@ -11,7 +11,7 @@ public class GoldenShip extends ReflectiveModel {
 	public float dxPrev = 0.0f;
 	public float dyPrev = 1.0f;
 	
-	private int timeInBoost = 0;
+	public int timeInBoost = 0;
 	private boolean inProgress = false;
 	
 	public GoldenShip() {

@@ -104,6 +104,9 @@ public class MainActivity extends Activity implements SensorEventListener {
 	public void onSensorChanged(SensorEvent event) {
 		// TODO Auto-generated method stub
 		upAccel = event.values[2];
+		if(upAccel > 15) {
+			ShootEmUpScene.ico.setRadialEffect();
+		}
 		
 		
 

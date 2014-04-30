@@ -238,17 +238,22 @@ public class ShootEmUpScene extends Scene {
 	
 	
 	public void draw() {
-		//score ++;
 	
-
-
-
-		
 //		double currentUpdate = System.currentTimeMillis();
 //		System.out.println(currentUpdate-lastUpdate);
 //		lastUpdate = currentUpdate;
-		if(MainActivity.upAccel > 15 || ico.radialInProgress()) {
+		if(ico.radialInProgress()) {
 			ico.setRadialEffect();
+			if(ico.radialEffect >= 15) {
+				if(bombList.size() > 0) {
+					bombList.remove(bombList.size()-1);
+					if(bombList.size() == 0) {
+						bombList.add(new Bomb(0));
+						bombList.add(new Bomb(1));
+						bombList.add(new Bomb(2));
+					}
+				}
+			}
 		}
 		
 		
@@ -297,35 +302,9 @@ public class ShootEmUpScene extends Scene {
 			lightPos[n] = lightPosList.get(n);
 		}
 		
-		//lightPos = new float[]{1.0f, 1.0f, 0.0f};
-
 		for (ReflectiveModel m : modelList) {
-//			if(m.getClass().equals(GoldenShip.class)) {
-//				//m.angle = MyGLSurfaceView.angleLeft;
-//				
-//
-//			}
-//			if(m.getClass().equals(Nemesis.class)) {
-//				//m.angle = MyGLSurfaceView.angleLeft;
-//				m.updateKinematics();
-//
-//			}
-//			if(m.getClass().equals(Projectile.class)) {
-//				//m.angle = MyGLSurfaceView.angleLeft;
-//				m.updateKinematics();
-//				System.out.println(m.time);
-//				if(m.time > 40) {
-//					modelList.remove(m);
-//					break;
-//				}
-//
-//			}
 			m.draw(mView, mProj, lightPos);
-//			if(ico.radialInProgress()) {
-//				draw();
-//			}
 		}
-		//bomb.transList.set(0, object);
 		for(Bomb bomb: bombList) {
 			bomb.transList.set(0, new Transformation(shipAngle));
 			bomb.draw(mView, mProj, lightPos);
@@ -340,45 +319,41 @@ public class ShootEmUpScene extends Scene {
 		}
 
 		for (Nemesis m : enemyList) {
-			m.updateKinematics();
-			//System.out.println("e");
-			m.draw(mView, mProj, lightPos);
-			//System.out.println("e done");
-//			for (Nemesis e : enemyList) {
-//				float[] p1 = Vector.normalize(e.position.toFloat());
-//				float[] e1 = Vector.normalize(m.position.toFloat());
-//				if(Vector.dot(p1, e1) >= .999) {
-//				
-////					float[] f = new float[3];
-////					f[0] = (float) Math.random();
-////					f[1] = (float) Math.random();
-////					f[2] = (float) Math.random();
-//					
-//					//f = Vector.normalize(f);
-//					float[] a = shipQ.toFloat();
-//					float[] b = m.position.toFloat();
-//					a = Vector.normalize(a);
-//					b = Vector.normalize(b);
-//					float[] normalRotAxis = Vector.cross(a, b);
-//					
-//					b = m.position.toFloat();
-//					b = Vector.normalize(b);
-//					a = e.position.toFloat();
-//					a = Vector.normalize(a);
-//					float[] awayAxis = Vector.cross(b,  a);
-//					e.applyRot(.35f, awayAxis);
-//					//m.applyRot(-.04f, awayAxis);
-//
-//				}
-//			}
+			if(ico.radialInProgress() && ico.radialEffect > 10) {
+				m.setAmb(new float[]{0.0f, 1.0f, 0.0f});
+				m.draw(mView, mProj, lightPos);
+				enemyList.remove(m);
+				score += 1;
+				updateScore();
+				enemyList.add(new Nemesis());
+				break;
+			}
+			else if(ship.boostInProgress()){
+				m.updateKinematics();
+				float[] sp = Vector.normalize(ship.position.toFloat());
+				float[] ep = Vector.normalize(m.position.toFloat());
+				if(Vector.dot(sp, ep) >= .99) {
+					m.setAmb(new float[]{0.0f, 1.0f, 0.0f});
+					m.draw(mView, mProj, lightPos);
+					enemyList.remove(m);
+					score += 1;
+					updateScore();
+					enemyList.add(new Nemesis());
+					break;
+				}
+				else
+					m.draw(mView, mProj, lightPos);
+			}
+			else {
+				m.updateKinematics();
+				m.draw(mView, mProj, lightPos);			
+			}
 
 		}
 
 		
 		for(Projectile p: projectileList) {
-			//System.out.println(p.time);
 			if(p.time > 40) {
-				//p.destroyProgram();
 				projectileList.remove(p);
 				break;
 			}
@@ -413,15 +388,12 @@ public class ShootEmUpScene extends Scene {
 				break;
 			}
 			else {
-				//System.out.println("p");
-
 				p.draw(mView, mProj, lightPos);
 			}
 
 		}
 		for (Num m : numList) {
 			m.transList.set(0, new Transformation(shipAngle));
-			//m.transList.set(1, new Transformation(staticAngle));
 			m.draw(mView, mProj, lightPos);
 		}
 		ship.transList.set(0, new Transformation(ship.position.x, ship.position.y, ship.position.z));
@@ -429,15 +401,18 @@ public class ShootEmUpScene extends Scene {
 		ship.transList.set(2, new Transformation(staticAngle));
 		ship.draw(mView, mProj, lightPos);
 
-
-
-
-//		if(MainActivity.upAccel > 15 || ship.boostInProgress()) {
-//			ship.updateSpeed();
-//		}
 		if(MyGLSurfaceView.leftMagnitude > 100 || ship.boostInProgress()) {
 			ship.updateSpeed();
-			
+			if(ship.timeInBoost >= 36) {
+				if(boostList.size() > 0) {
+					boostList.remove(0);
+					if(boostList.size() == 0) {
+						boostList.add(new Boost(0));
+						boostList.add(new Boost(1));
+						boostList.add(new Boost(2));
+					}
+				}
+			}
 		}
 		ico.draw(mView, mProj, lightPos);
 	
