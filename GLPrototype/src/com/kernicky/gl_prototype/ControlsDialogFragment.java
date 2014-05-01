@@ -20,6 +20,7 @@ public class ControlsDialogFragment extends DialogFragment {
 	private int shootSelected;
 	private int boostSelected;
 	private int bombSelected;
+	private boolean changeInProgress = false;
    private View view;
 	
 	
@@ -62,27 +63,34 @@ public class ControlsDialogFragment extends DialogFragment {
 				moveSelected = moveRadioGroup.getCheckedRadioButtonId();
 				switch(moveSelected) {
 				case R.id.move_touch_left:
-					if(shootSelected == R.id.shoot_touch_left) {
-						//Toast.makeText(MainActivity.context, "Haha", Toast.LENGTH_SHORT).show();
+					if(shootSelected == R.id.shoot_touch_left  && changeInProgress == false) {
+						changeInProgress = true;
 						shootRadioGroup.check(R.id.shoot_touch_right);
-						MainActivity.shootInput = MainActivity.Input.TOUCH_RIGHT;
+						//MainActivity.shootInput = MainActivity.Input.TOUCH_RIGHT;
+						changeInProgress = false;
 
 					}
+					moveSelected = moveRadioGroup.getCheckedRadioButtonId();
 					MainActivity.moveInput = MainActivity.Input.TOUCH_LEFT;
+					System.out.println("Move to left touch");
+
 
 					break;
 				case R.id.move_touch_right:
-					if(shootSelected == R.id.shoot_touch_right) {
-						//Toast.makeText(MainActivity.context, "Haha", Toast.LENGTH_SHORT).show();
-
+					if(shootSelected == R.id.shoot_touch_right && changeInProgress == false) {
+						changeInProgress = true;
 						shootRadioGroup.check(R.id.shoot_touch_left);
-						MainActivity.shootInput = MainActivity.Input.TOUCH_LEFT;
+						//MainActivity.shootInput = MainActivity.Input.TOUCH_LEFT;
+						changeInProgress = false;
 					}
+					moveSelected = moveRadioGroup.getCheckedRadioButtonId();
 					MainActivity.moveInput = MainActivity.Input.TOUCH_RIGHT;
-					moveRadioGroup.check(R.id.move_touch_right);
 					break;
 				case R.id.move_tilt:
+					moveSelected = moveRadioGroup.getCheckedRadioButtonId();
 					MainActivity.moveInput = MainActivity.Input.TILT;
+					System.out.println("Shoot to right touch");
+
 					break;
 				}
 			}
@@ -91,92 +99,126 @@ public class ControlsDialogFragment extends DialogFragment {
 			@Override
 			public void onCheckedChanged(RadioGroup group, int checkedId) {
 				shootSelected = shootRadioGroup.getCheckedRadioButtonId();
-		        moveRadioGroup = (RadioGroup) view.findViewById(R.id.move);
-		        moveSelected = moveRadioGroup.getCheckedRadioButtonId();
-				//Toast.makeText(MainActivity.context, shootSelected, Toast.LENGTH_SHORT);
+				//View v = shootRadioGroup.findViewById(R.id.move);
+				
+		        //moveRadioGroup = (RadioGroup) view.findViewById(R.id.move);
+		        //moveSelected = moveRadioGroup.getCheckedRadioButtonId();
+
 				switch(shootSelected) {
 				case R.id.shoot_touch_left:
-					if(moveSelected == R.id.move_touch_left) {
-						//moveRadioGroup.check(R.id.move_touch_right);
-						MainActivity.moveInput = MainActivity.Input.TOUCH_RIGHT;
+					if(moveSelected == R.id.move_touch_left  && changeInProgress == false) {
+						changeInProgress = true;
+						moveRadioGroup.check(R.id.move_touch_right);
+						changeInProgress = false;
+						//MainActivity.moveInput = MainActivity.Input.TOUCH_RIGHT;
 					}
+					System.out.println("Shoot to left touch");
+					shootSelected = shootRadioGroup.getCheckedRadioButtonId();
 					MainActivity.shootInput = MainActivity.Input.TOUCH_LEFT;
 					break;
 				case R.id.shoot_touch_right:
-					if(moveSelected == R.id.move_touch_right) {
-						//moveRadioGroup.check(R.id.move_touch_left);
-						MainActivity.moveInput = MainActivity.Input.TOUCH_LEFT;
+					if(moveSelected == R.id.move_touch_right  && changeInProgress == false) {
+						changeInProgress = true;
+						moveRadioGroup.check(R.id.move_touch_left);
+						changeInProgress = false;
+						//MainActivity.moveInput = MainActivity.Input.TOUCH_LEFT;
 					}
+					System.out.println("Shoot to right touch");
+					shootSelected = shootRadioGroup.getCheckedRadioButtonId();
+
 					MainActivity.shootInput = MainActivity.Input.TOUCH_RIGHT;
 					break;
 				}
 			}
         });
-//        boostRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-//			@Override
-//			public void onCheckedChanged(RadioGroup group, int checkedId) {
-//				boostSelected = shootRadioGroup.getCheckedRadioButtonId();
-//
-//				switch(boostSelected) {
-//				case R.id.boost_touch_left:
-//					if(bombSelected == R.id.bomb_touch_left) {
-//						bombRadioGroup.check(R.id.bomb_touch_right);
-//						MainActivity.bombInput = MainActivity.Input.TOUCH_LEFT;
-//					}
-//					MainActivity.boostInput = MainActivity.Input.TOUCH_LEFT;
-//					break;
-//				case R.id.boost_touch_right:
-//					if(bombSelected == R.id.bomb_touch_right) {
-//						bombRadioGroup.check(R.id.bomb_touch_left);
-//						MainActivity.bombInput = MainActivity.Input.TOUCH_LEFT;
-//					}
-//					MainActivity.boostInput = MainActivity.Input.TOUCH_RIGHT;
-//					break;
-//				case R.id.boost_tilt:
-//					if(bombSelected == R.id.bomb_tilt) {
-//						bombRadioGroup.check(R.id.bomb_touch_right);
-//						MainActivity.bombInput = MainActivity.Input.TOUCH_RIGHT;
-//					}
-//					MainActivity.boostInput = MainActivity.Input.TILT;
-//					break;
-//				case R.id.boost_button:
-//				
-//					break;
-//				}
-//			}
-//        });
-//        bombRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-//			@Override
-//			public void onCheckedChanged(RadioGroup group, int checkedId) {
-//				bombSelected = shootRadioGroup.getCheckedRadioButtonId();
-//
-//				switch(bombSelected) {
-//				case R.id.bomb_touch_left:
-//					if(boostSelected == R.id.boost_touch_left) {
-//						boostRadioGroup.check(R.id.boost_touch_right);
-//						MainActivity.boostInput = MainActivity.Input.TOUCH_RIGHT;
-//					}
-//					MainActivity.bombInput = MainActivity.Input.TOUCH_LEFT;
-//					break;
-//				case R.id.bomb_touch_right:
-//					if(boostSelected == R.id.boost_touch_right) {
-//						boostRadioGroup.check(R.id.boost_touch_left);
-//						MainActivity.boostInput = MainActivity.Input.TOUCH_LEFT;
-//					}
-//					MainActivity.bombInput = MainActivity.Input.TOUCH_RIGHT;
-//					break;
-//				case R.id.bomb_tilt:
-//					if(boostSelected == R.id.boost_tilt) {
-//						boostRadioGroup.check(R.id.boost_touch_left);
-//						MainActivity.boostInput = MainActivity.Input.TOUCH_LEFT;
-//					}
-//					MainActivity.bombInput = MainActivity.Input.TILT;
-//					break;
-//				case R.id.bomb_button:
-//					break;
-//				}
-//			}
-//        });
+        boostRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(RadioGroup group, int checkedId) {
+				boostSelected = shootRadioGroup.getCheckedRadioButtonId();
+
+				switch(boostSelected) {
+				case R.id.boost_touch_left:
+					if(bombSelected == R.id.bomb_touch_left  && changeInProgress == false) {
+						changeInProgress = true;
+						bombRadioGroup.check(R.id.bomb_touch_right);
+						changeInProgress = false;
+
+						//MainActivity.bombInput = MainActivity.Input.TOUCH_LEFT;
+					}
+					MainActivity.boostInput = MainActivity.Input.TOUCH_LEFT;
+					break;
+				case R.id.boost_touch_right:
+					if(bombSelected == R.id.bomb_touch_right  && changeInProgress == false) {
+						changeInProgress = true;
+
+						bombRadioGroup.check(R.id.bomb_touch_left);
+						changeInProgress = false;
+
+						//MainActivity.bombInput = MainActivity.Input.TOUCH_LEFT;
+					}
+					MainActivity.boostInput = MainActivity.Input.TOUCH_RIGHT;
+					break;
+				case R.id.boost_tilt:
+					if(bombSelected == R.id.bomb_tilt  && changeInProgress == false) {
+						changeInProgress = true;
+
+						bombRadioGroup.check(R.id.bomb_touch_right);
+						changeInProgress = false;
+
+						//MainActivity.bombInput = MainActivity.Input.TOUCH_RIGHT;
+					}
+					MainActivity.boostInput = MainActivity.Input.TILT;
+					break;
+				case R.id.boost_button:
+				
+					break;
+				}
+			}
+        });
+        bombRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(RadioGroup group, int checkedId) {
+				bombSelected = shootRadioGroup.getCheckedRadioButtonId();
+
+				switch(bombSelected) {
+				case R.id.bomb_touch_left:
+					if(boostSelected == R.id.boost_touch_left  && changeInProgress == false) {
+						changeInProgress = true;
+
+						boostRadioGroup.check(R.id.boost_touch_right);
+						changeInProgress = false;
+
+						//MainActivity.boostInput = MainActivity.Input.TOUCH_RIGHT;
+					}
+					MainActivity.bombInput = MainActivity.Input.TOUCH_LEFT;
+					break;
+				case R.id.bomb_touch_right:
+					if(boostSelected == R.id.boost_touch_right  && changeInProgress == false) {
+						changeInProgress = true;
+
+						boostRadioGroup.check(R.id.boost_touch_left);
+						changeInProgress = false;
+
+						//MainActivity.boostInput = MainActivity.Input.TOUCH_LEFT;
+					}
+					MainActivity.bombInput = MainActivity.Input.TOUCH_RIGHT;
+					break;
+				case R.id.bomb_tilt:
+					if(boostSelected == R.id.boost_tilt  && changeInProgress == false) {
+						changeInProgress = true;
+
+						boostRadioGroup.check(R.id.boost_touch_left);
+						changeInProgress = false;
+
+						//MainActivity.boostInput = MainActivity.Input.TOUCH_LEFT;
+					}
+					MainActivity.bombInput = MainActivity.Input.TILT;
+					break;
+				case R.id.bomb_button:
+					break;
+				}
+			}
+        });
         
         return builder.create();
     }
