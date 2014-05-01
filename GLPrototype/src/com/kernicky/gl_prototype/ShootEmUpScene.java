@@ -177,25 +177,49 @@ public class ShootEmUpScene extends Scene {
 	}
 	
 	public void updateTransforms() {
-		float dx = MyGLSurfaceView.dxLeft;
-		float dy = MyGLSurfaceView.dyLeft;
+		float dxMove = 0;
+		float dyMove = 0;
+		float dxShoot = 0;
+		float dyShoot = 0;
+		
+		switch(MainActivity.moveInput) {
+		case TOUCH_LEFT:
+			dxMove = MyGLSurfaceView.dxLeft;
+			dyMove = MyGLSurfaceView.dyLeft;
+			break;
+		case TOUCH_RIGHT:
+			dxMove = MyGLSurfaceView.dxRight;
+			dyMove = MyGLSurfaceView.dyRight;
+			break;
+		}
+		switch(MainActivity.shootInput) {
+		case TOUCH_LEFT:
+			dxShoot = MyGLSurfaceView.dxLeft;
+			dyShoot = MyGLSurfaceView.dyLeft;
+			break;
+		case TOUCH_RIGHT:
+			dxShoot = MyGLSurfaceView.dxRight;
+			dyShoot = MyGLSurfaceView.dyRight;
+			break;
+		}
+
 		
 		// if in the middle of a boost, keep last dx, dy
 		if(ship.boostInProgress()) {
-			dx = ship.dxPrev;
-			dy = ship.dyPrev;
+			dxMove = ship.dxPrev;
+			dyMove = ship.dyPrev;
 		}
-		if(dx != 0 && dy != 0) {
-			ship.dxPrev = dx;
-			ship.dyPrev = dy;
+		if(dxMove != 0 && dyMove != 0) {
+			ship.dxPrev = dxMove;
+			ship.dyPrev = dyMove;
 		}
 		
-    	float[] inputVector = Vector.normalize(new float[]{1*dx, -1*dy, 0, 0});
+    	float[] inputVector = Vector.normalize(new float[]{1*dxMove, -1*dyMove, 0, 0});
     	Quaternion prevPosQ = new Quaternion(ship.position.toFloat());
     	prevPosQ.normalize();
     	
-		Quaternion q = Quaternion.rotate(ship.getSpeed()*dy, prevPosQ.toFloat(), MyGLSurfaceView.x_axis);
-		Quaternion r = Quaternion.rotate(ship.getSpeed()*dx, prevPosQ.toFloat(), MyGLSurfaceView.y_axis);
+		Quaternion q = Quaternion.rotate(ship.getSpeed()*dyMove, prevPosQ.toFloat(), MyGLSurfaceView.x_axis);
+		Quaternion r = Quaternion.rotate(ship.getSpeed()*dxMove, prevPosQ.toFloat(), MyGLSurfaceView.y_axis);
 		float[] a = Quaternion.rotateTo(prevPosQ, q);
 		float[] b = Quaternion.rotateTo(prevPosQ, r);
 		float[] transform = MatrixOp.multiplyMM(a, b);
@@ -213,13 +237,13 @@ public class ShootEmUpScene extends Scene {
 		float[] shipDir = {0, 1, 0, 0};
 		float[] optionDir = {0, 1, 0, 0};
 		float[] t2 = MatrixOp.identity();
-		if(dx != 0 && dy != 0) {
+		if(dxMove != 0 && dyMove != 0) {
 			t2 = Quaternion.rotateTo(shipDir, inputVector);
 			ShootEmUpScene.staticAngle = t2;
 		}
-		float[] input2Vector = Vector.normalize(new float[]{1*MyGLSurfaceView.dxRight, -1*MyGLSurfaceView.dyRight, 0, 0});
+		float[] input2Vector = Vector.normalize(new float[]{1*dxShoot, -1*dyShoot, 0, 0});
 		float[] lightRot = MatrixOp.identity();
-		if(MyGLSurfaceView.dxRight != 0 && MyGLSurfaceView.dyRight != 0) {
+		if(dxShoot != 0 && dyShoot != 0) {
 			lightRot = Quaternion.rotateTo(optionDir, input2Vector);
 			ShootEmUpScene.optionAngle = lightRot;
 		}
@@ -260,7 +284,7 @@ public class ShootEmUpScene extends Scene {
 		}
 		
 		
-		if(updateCount > 1 && MyGLSurfaceView.rightTouch == true) {
+		if(updateCount > 1 && ((MyGLSurfaceView.rightTouch == true && MainActivity.shootInput == MainActivity.Input.TOUCH_RIGHT) || (MyGLSurfaceView.leftTouch == true && MainActivity.shootInput == MainActivity.Input.TOUCH_LEFT))) {
 			updateCount = 0;
 			projectileList.add(new Projectile(ship.position.x, ship.position.y, ship.position.z, MatrixOp.multiplyMM(shipAngle, optionAngle), ship.position.toFloat()));
 

@@ -16,9 +16,10 @@ package com.kernicky.gl_prototype;
  * limitations under the License.
  */
 
+
+
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -32,9 +33,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.Window;
-import android.widget.RadioGroup;
-import android.widget.RadioGroup.OnCheckedChangeListener;
-import android.widget.Toast;
 
 import com.kernicky.gl_prototype.math.MatrixOp;
 
@@ -89,7 +87,8 @@ public class MainActivity extends Activity implements SensorEventListener {
         switch (item.getItemId()) {
             case R.id.action_settings:
                 //openSettings();
-            	FragmentManager fm = getFragmentManager();
+            	//android.support.v4.app.FragmentManager fm = getFragmentManager();
+            	android.app.FragmentTransaction fm = getFragmentManager().beginTransaction();
                 ControlsDialogFragment dialog = new ControlsDialogFragment();
                 
                 
@@ -129,7 +128,10 @@ public class MainActivity extends Activity implements SensorEventListener {
 		// TODO Auto-generated method stub
 		upAccel = event.values[2];
 		if(upAccel > 15) {
-			ShootEmUpScene.ico.setRadialEffect();
+			if(MainActivity.bombInput == MainActivity.Input.TILT)
+				ShootEmUpScene.ico.setRadialEffect();
+			else if(MainActivity.boostInput == MainActivity.Input.TILT) 
+				ShootEmUpScene.ship.updateSpeed();
 		}
 		
 		
@@ -179,7 +181,7 @@ class MyGLSurfaceView extends GLSurfaceView {
     private float mPreviousYRight;
     private float mPreviousXLeft;
     private float mPreviousYLeft;
-    public boolean leftTouch;
+    public static boolean leftTouch;
 	public static boolean rightTouch;
     private float leftX, leftY, rightX, rightY;
     private float[] transformMatrix = new float[16];
