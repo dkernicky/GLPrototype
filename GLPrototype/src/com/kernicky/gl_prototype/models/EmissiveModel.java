@@ -92,7 +92,6 @@ public abstract class EmissiveModel extends Model {
 				GLES20.GL_FLOAT, false, vertexStride, vertexBuffer);
 
 		
-		
 		setmAmbHandle(GLES20.glGetUniformLocation(getProgramID(), "u_Ambient"));
 		GLES20.glUniform3fv(getmAmbHandle(), 1, getAmb(), 0);
 		
