@@ -28,8 +28,8 @@ public final class R {
         public static final int bomb=0x7f080011;
         public static final int bomb_button=0x7f080015;
         public static final int bomb_tilt=0x7f080014;
-        public static final int bomb_touch_left=0x7f080013;
-        public static final int bomb_touch_right=0x7f080012;
+        public static final int bomb_touch_left=0x7f080012;
+        public static final int bomb_touch_right=0x7f080013;
         public static final int boost=0x7f08000c;
         public static final int boost_button=0x7f080010;
         public static final int boost_tilt=0x7f08000f;

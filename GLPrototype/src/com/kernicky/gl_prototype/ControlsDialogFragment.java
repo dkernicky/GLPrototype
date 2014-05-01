@@ -53,9 +53,9 @@ public class ControlsDialogFragment extends DialogFragment {
         bombRadioGroup = (RadioGroup) view.findViewById(R.id.bomb); 
         
         moveSelected = moveRadioGroup.getCheckedRadioButtonId();
-        shootSelected = moveRadioGroup.getCheckedRadioButtonId();
-        boostSelected = moveRadioGroup.getCheckedRadioButtonId();
-        bombSelected = moveRadioGroup.getCheckedRadioButtonId();
+        shootSelected = shootRadioGroup.getCheckedRadioButtonId();
+        boostSelected = boostRadioGroup.getCheckedRadioButtonId();
+        bombSelected = bombRadioGroup.getCheckedRadioButtonId();
         
         moveRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
@@ -134,7 +134,7 @@ public class ControlsDialogFragment extends DialogFragment {
         boostRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(RadioGroup group, int checkedId) {
-				boostSelected = shootRadioGroup.getCheckedRadioButtonId();
+				boostSelected = boostRadioGroup.getCheckedRadioButtonId();
 
 				switch(boostSelected) {
 				case R.id.boost_touch_left:
@@ -145,6 +145,8 @@ public class ControlsDialogFragment extends DialogFragment {
 
 						//MainActivity.bombInput = MainActivity.Input.TOUCH_LEFT;
 					}
+					boostSelected = boostRadioGroup.getCheckedRadioButtonId();
+
 					MainActivity.boostInput = MainActivity.Input.TOUCH_LEFT;
 					break;
 				case R.id.boost_touch_right:
@@ -156,6 +158,8 @@ public class ControlsDialogFragment extends DialogFragment {
 
 						//MainActivity.bombInput = MainActivity.Input.TOUCH_LEFT;
 					}
+					boostSelected = boostRadioGroup.getCheckedRadioButtonId();
+
 					MainActivity.boostInput = MainActivity.Input.TOUCH_RIGHT;
 					break;
 				case R.id.boost_tilt:
@@ -167,6 +171,8 @@ public class ControlsDialogFragment extends DialogFragment {
 
 						//MainActivity.bombInput = MainActivity.Input.TOUCH_RIGHT;
 					}
+					boostSelected = boostRadioGroup.getCheckedRadioButtonId();
+
 					MainActivity.boostInput = MainActivity.Input.TILT;
 					break;
 				case R.id.boost_button:
@@ -178,7 +184,7 @@ public class ControlsDialogFragment extends DialogFragment {
         bombRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(RadioGroup group, int checkedId) {
-				bombSelected = shootRadioGroup.getCheckedRadioButtonId();
+				bombSelected = bombRadioGroup.getCheckedRadioButtonId();
 
 				switch(bombSelected) {
 				case R.id.bomb_touch_left:
@@ -190,6 +196,8 @@ public class ControlsDialogFragment extends DialogFragment {
 
 						//MainActivity.boostInput = MainActivity.Input.TOUCH_RIGHT;
 					}
+					bombSelected = bombRadioGroup.getCheckedRadioButtonId();
+
 					MainActivity.bombInput = MainActivity.Input.TOUCH_LEFT;
 					break;
 				case R.id.bomb_touch_right:
@@ -201,6 +209,8 @@ public class ControlsDialogFragment extends DialogFragment {
 
 						//MainActivity.boostInput = MainActivity.Input.TOUCH_LEFT;
 					}
+					bombSelected = bombRadioGroup.getCheckedRadioButtonId();
+
 					MainActivity.bombInput = MainActivity.Input.TOUCH_RIGHT;
 					break;
 				case R.id.bomb_tilt:
@@ -212,6 +222,8 @@ public class ControlsDialogFragment extends DialogFragment {
 
 						//MainActivity.boostInput = MainActivity.Input.TOUCH_LEFT;
 					}
+					bombSelected = bombRadioGroup.getCheckedRadioButtonId();
+
 					MainActivity.bombInput = MainActivity.Input.TILT;
 					break;
 				case R.id.bomb_button:
