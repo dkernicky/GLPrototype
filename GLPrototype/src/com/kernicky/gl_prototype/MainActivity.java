@@ -35,6 +35,7 @@ import android.view.MotionEvent;
 import android.view.Window;
 
 import com.kernicky.gl_prototype.math.MatrixOp;
+import com.kernicky.gl_prototype.models.Transformation;
 
 public class MainActivity extends Activity implements SensorEventListener {
 
@@ -227,11 +228,14 @@ class MyGLSurfaceView extends GLSurfaceView {
 
             			leftX = e.getX(n);
             			leftY = e.getY(n);
+            			
             		}
             		else {
             			rightTouch = true;
             			rightX = e.getX(n);
             			rightY = e.getY(n);
+      
+            			
             		}
             	}
             	if(!leftTouch) {
@@ -242,8 +246,21 @@ class MyGLSurfaceView extends GLSurfaceView {
         		break;
             case MotionEvent.ACTION_MOVE:
             	if(rightTouch) {
+            		
 	                double dx = rightX - mPreviousXRight;
 	                double dy = rightY - mPreviousYRight;
+	                
+	                if(MainActivity.shootInput == MainActivity.Input.TOUCH_RIGHT) {
+	                	float x = modelLocationX(rightX);
+	                	float y = modelLocationY(rightY);
+        				ShootEmUpScene.shoot.transList.set(1, new Transformation(x, -1*y, 7));
+        			}
+        			else if(MainActivity.moveInput == MainActivity.Input.TOUCH_RIGHT) {
+	                	float x = modelLocationX(rightX);
+	                	float y = modelLocationY(rightY);
+        				ShootEmUpScene.pad.transList.set(1, new Transformation(x, -1*y, 7));
+        			}
+        			
 
 	                if(dx == 0) {
 	                	dx = .000001f;
@@ -276,6 +293,19 @@ class MyGLSurfaceView extends GLSurfaceView {
             	if(leftTouch) {
             		double dx = leftX - mPreviousXLeft;
             		double dy = leftY - mPreviousYLeft;
+            		
+            		
+            		if(MainActivity.shootInput == MainActivity.Input.TOUCH_LEFT) {
+	                	float x = modelLocationX(leftX);
+	                	float y = modelLocationY(leftY);
+        				ShootEmUpScene.shoot.transList.set(1, new Transformation(x, -1*y, 7));
+        			}
+        			else if(MainActivity.moveInput == MainActivity.Input.TOUCH_LEFT) {
+	                	float x = modelLocationX(leftX);
+	                	float y = modelLocationY(leftY);
+        				ShootEmUpScene.pad.transList.set(1, new Transformation(x, -1*y, 7));
+        			}
+            		
             		if(dx == 0) {
             			dx = .000001f;
             		}
@@ -316,6 +346,15 @@ class MyGLSurfaceView extends GLSurfaceView {
 
 
         return true;
+    }
+    
+    public float modelLocationX(float screenX) {
+    	float t = screenX/getWidth();
+    	return -5 + 10*t;
+    }
+    public float modelLocationY(float screenY) {
+    	float t = screenY/getHeight();
+    	return -3 + 6*t;
     }
 
 }

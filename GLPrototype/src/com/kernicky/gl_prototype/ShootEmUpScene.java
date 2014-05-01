@@ -57,8 +57,8 @@ public class ShootEmUpScene extends Scene {
 	private ArrayList<Bomb> bombList = new ArrayList<Bomb>();
 	private ArrayList<Boost> boostList = new ArrayList<Boost>();
 	private ArrayList<Life> lifeList = new ArrayList<Life>();
-	private DPad pad = new DPad();
-	private ShootButton shoot = new ShootButton();
+	public static DPad pad = new DPad();
+	public static ShootButton shoot = new ShootButton();
 
 	public ShootEmUpScene() {
 		//GoldenShip ship = new GoldenShip();
