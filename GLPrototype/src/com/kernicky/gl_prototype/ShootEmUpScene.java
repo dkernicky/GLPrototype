@@ -57,6 +57,8 @@ public class ShootEmUpScene extends Scene {
 	private ArrayList<Bomb> bombList = new ArrayList<Bomb>();
 	private ArrayList<Boost> boostList = new ArrayList<Boost>();
 	private ArrayList<Life> lifeList = new ArrayList<Life>();
+	private DPad pad = new DPad();
+	private ShootButton shoot = new ShootButton();
 
 	public ShootEmUpScene() {
 		//GoldenShip ship = new GoldenShip();
@@ -332,6 +334,10 @@ public class ShootEmUpScene extends Scene {
 		for (ReflectiveModel m : modelList) {
 			m.draw(mView, mProj, lightPos);
 		}
+		pad.transList.set(0, new Transformation(shipAngle));
+		pad.draw(mView, mProj, lightPos);
+		shoot.transList.set(0, new Transformation(shipAngle));
+		shoot.draw(mView, mProj, lightPos);
 		for(Bomb bomb: bombList) {
 			bomb.transList.set(0, new Transformation(shipAngle));
 			bomb.draw(mView, mProj, lightPos);
