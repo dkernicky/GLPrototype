@@ -1,14 +1,33 @@
 package com.kernicky.gl_prototype;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
+import android.graphics.Bitmap;
 import android.opengl.Matrix;
-import android.widget.Toast;
+import android.os.Environment;
+import android.view.View;
 
 import com.kernicky.gl_prototype.math.MatrixOp;
 import com.kernicky.gl_prototype.math.Quaternion;
 import com.kernicky.gl_prototype.math.Vector;
-import com.kernicky.gl_prototype.models.*;
+import com.kernicky.gl_prototype.models.Bomb;
+import com.kernicky.gl_prototype.models.Boost;
+import com.kernicky.gl_prototype.models.DPad;
+import com.kernicky.gl_prototype.models.GoldenShip;
+import com.kernicky.gl_prototype.models.Lamp;
+import com.kernicky.gl_prototype.models.Life;
+import com.kernicky.gl_prototype.models.Nemesis;
+import com.kernicky.gl_prototype.models.NewIco;
+import com.kernicky.gl_prototype.models.Num;
+import com.kernicky.gl_prototype.models.Projectile;
+import com.kernicky.gl_prototype.models.ReflectiveModel;
+import com.kernicky.gl_prototype.models.ShootButton;
+import com.kernicky.gl_prototype.models.Transformation;
 
 public class ShootEmUpScene extends Scene {
 	private double lastUpdate = 0.0f;
@@ -59,6 +78,8 @@ public class ShootEmUpScene extends Scene {
 	private ArrayList<Life> lifeList = new ArrayList<Life>();
 	public static DPad pad = new DPad();
 	public static ShootButton shoot = new ShootButton();
+	
+	private int numScreenShots = 0;
 
 	public ShootEmUpScene() {
 		//GoldenShip ship = new GoldenShip();
@@ -283,6 +304,7 @@ public class ShootEmUpScene extends Scene {
 					}
 				}
 			}
+	
 		}
 		
 		
