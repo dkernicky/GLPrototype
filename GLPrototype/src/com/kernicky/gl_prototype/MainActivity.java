@@ -33,8 +33,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.Window;
+import android.widget.Toast;
 
 import com.kernicky.gl_prototype.math.MatrixOp;
+import com.kernicky.gl_prototype.math.Vector;
 import com.kernicky.gl_prototype.models.Transformation;
 
 public class MainActivity extends Activity implements SensorEventListener {
@@ -43,7 +45,13 @@ public class MainActivity extends Activity implements SensorEventListener {
     public float angle = 0.0f;
     private SensorManager mSensorManager;
     private Sensor mAccel;
+    private Sensor mMagnet;
+    public static float[] accel = new float[3];
+    public static float[] magnet = new float[3];
+    public static float[] orientation = new float[3];
     public static float upAccel = 0.0f;
+    public static float xOrientation = 0.0f;
+    public static float yOrientation = 0.0f;
     public static Context context;
     
     public static enum Input {TILT, TOUCH_LEFT, TOUCH_RIGHT, BUTTON}
@@ -64,7 +72,9 @@ public class MainActivity extends Activity implements SensorEventListener {
     	context = getApplicationContext();
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mAccel = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mMagnet = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         mSensorManager.registerListener(this, mAccel, SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(this, mMagnet, SensorManager.SENSOR_DELAY_NORMAL);
         super.onCreate(savedInstanceState);
         mGLView = new MyGLSurfaceView(this);
         setContentView(mGLView);
@@ -127,16 +137,26 @@ public class MainActivity extends Activity implements SensorEventListener {
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 		// TODO Auto-generated method stub
-		upAccel = event.values[2];
-		if(upAccel > 15) {
-			if(MainActivity.bombInput == MainActivity.Input.TILT)
-				ShootEmUpScene.ico.setRadialEffect();
-			else if(MainActivity.boostInput == MainActivity.Input.TILT) 
-				ShootEmUpScene.ship.updateSpeed();
+		switch(event.sensor.getType()) {
+		case Sensor.TYPE_ACCELEROMETER:
+			accel = event.values;
+			upAccel = event.values[2];
+			if(upAccel > 15) {
+				if(MainActivity.bombInput == MainActivity.Input.TILT)
+					ShootEmUpScene.ico.setRadialEffect();
+				else if(MainActivity.boostInput == MainActivity.Input.TILT) 
+					ShootEmUpScene.ship.updateSpeed();
+			}
+			break;
+		case Sensor.TYPE_MAGNETIC_FIELD:
+			magnet = event.values;
+			break;
 		}
-		
-		
-
+		float[] mRotationMatrix = new float[9];
+		SensorManager.getRotationMatrix(mRotationMatrix, null, accel, magnet);
+		SensorManager.getOrientation(mRotationMatrix, orientation);
+		orientation = Vector.normalize(new float[]{0, orientation[1], orientation[2]});
+		System.out.println(orientation[0] + " " + orientation[1] + " " + orientation[2]);
 	}
 }
 

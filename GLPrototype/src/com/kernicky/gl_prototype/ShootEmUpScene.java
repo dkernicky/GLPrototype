@@ -123,7 +123,7 @@ public class ShootEmUpScene extends Scene {
 		b.transList.set(1, new Transformation(0.0f, 1, 0, 0, 0, 360));
 
 		b.transList.set(2, new Transformation(12f));
-		modelList.add(b);
+		//modelList.add(b);
 		
 		ico.transList.set(0, new Transformation(0.0f, 1, 0, 0, 0, 360));
 		ico.transList.set(1, new Transformation(0.0f, 1, 0, 0, 0, 360));
@@ -206,6 +206,10 @@ public class ShootEmUpScene extends Scene {
 		float dyShoot = 0;
 		
 		switch(MainActivity.moveInput) {
+		case TILT:
+			dxMove = MainActivity.orientation[2];
+			dyMove = -1*MainActivity.orientation[1];
+			break;
 		case TOUCH_LEFT:
 			dxMove = MyGLSurfaceView.dxLeft;
 			dyMove = MyGLSurfaceView.dyLeft;
