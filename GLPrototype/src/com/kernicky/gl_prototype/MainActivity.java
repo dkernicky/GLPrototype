@@ -156,7 +156,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 		SensorManager.getRotationMatrix(mRotationMatrix, null, accel, magnet);
 		SensorManager.getOrientation(mRotationMatrix, orientation);
 		orientation = Vector.normalize(new float[]{0, orientation[1], orientation[2]});
-		System.out.println(orientation[0] + " " + orientation[1] + " " + orientation[2]);
+//		System.out.println(orientation[0] + " " + orientation[1] + " " + orientation[2]);
 	}
 }
 
@@ -167,6 +167,7 @@ class MyGLSurfaceView extends GLSurfaceView {
     public static float dxLeft = 0.0f;
     public static float dyLeft = 0.0f;
     public static double leftMagnitude = 0.0f;
+    public static double rightMagnitude = 0.0f;
     public static float angleRight = 0.0f;
     public static float dxRight = 0.0f;
     public static float dyRight = 0.0f;
@@ -233,6 +234,10 @@ class MyGLSurfaceView extends GLSurfaceView {
     	if(!leftTouch) {
     		this.dxLeft = 0;
     		this.dyLeft = 0;
+    	}
+    	if(!rightTouch) {
+    		this.dxRight = 0;
+    		this.dyRight = 0;
     	}
 
 
@@ -302,6 +307,7 @@ class MyGLSurfaceView extends GLSurfaceView {
 	                }
 	                
 	                if(magnitude > 2) {
+	                	rightMagnitude = magnitude;
 		                this.angleRight = (float) ((float) -1.0f*angle);
 		                
 		                this.dxRight = (float) dx;

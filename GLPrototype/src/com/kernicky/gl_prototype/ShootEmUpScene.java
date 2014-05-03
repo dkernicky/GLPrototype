@@ -460,8 +460,17 @@ public class ShootEmUpScene extends Scene {
 		ship.transList.set(2, new Transformation(staticAngle));
 		ship.draw(mView, mProj, lightPos);
 
-		// TODO: check boost
-		if((MyGLSurfaceView.leftMagnitude > 150 && MyGLSurfaceView.leftMagnitude < 300) || ship.boostInProgress()) {
+		boolean boostMagnitude = false;
+		if(MainActivity.boostInput == MainActivity.Input.TOUCH_LEFT) {
+			boostMagnitude = (MyGLSurfaceView.leftMagnitude > 150 && MyGLSurfaceView.leftMagnitude < 300);
+		}
+		else if(MainActivity.boostInput == MainActivity.Input.TOUCH_RIGHT) {
+			boostMagnitude = (MyGLSurfaceView.rightMagnitude > 150 && MyGLSurfaceView.rightMagnitude < 300);
+		}
+		else if(MainActivity.boostInput == MainActivity.Input.TILT) {
+			boostMagnitude = MainActivity.upAccel > 15;
+		}
+		if(boostMagnitude || ship.boostInProgress()) {
 
 			ship.updateSpeed();
 			if(ship.timeInBoost >= 36) {
