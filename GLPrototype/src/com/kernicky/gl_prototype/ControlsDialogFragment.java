@@ -1,5 +1,7 @@
 package com.kernicky.gl_prototype;
 
+import com.kernicky.gl_prototype.models.Transformation;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -67,6 +69,8 @@ public class ControlsDialogFragment extends DialogFragment {
 						changeInProgress = true;
 						shootRadioGroup.check(R.id.shoot_touch_right);
 						//MainActivity.shootInput = MainActivity.Input.TOUCH_RIGHT;
+						ShootEmUpScene.pad.transList.set(1, new Transformation(-5+.75f, 0, 7));
+
 						changeInProgress = false;
 
 					}
@@ -81,6 +85,8 @@ public class ControlsDialogFragment extends DialogFragment {
 						changeInProgress = true;
 						shootRadioGroup.check(R.id.shoot_touch_left);
 						//MainActivity.shootInput = MainActivity.Input.TOUCH_LEFT;
+						ShootEmUpScene.pad.transList.set(1, new Transformation(5-.75f, 0, 7));
+
 						changeInProgress = false;
 					}
 					moveSelected = moveRadioGroup.getCheckedRadioButtonId();
@@ -110,9 +116,10 @@ public class ControlsDialogFragment extends DialogFragment {
 						changeInProgress = true;
 						moveRadioGroup.check(R.id.move_touch_right);
 						changeInProgress = false;
+						ShootEmUpScene.shoot.transList.set(1, new Transformation(-5+.75f, 0, 7));
+
 						//MainActivity.moveInput = MainActivity.Input.TOUCH_RIGHT;
 					}
-					System.out.println("Shoot to left touch");
 					shootSelected = shootRadioGroup.getCheckedRadioButtonId();
 					MainActivity.shootInput = MainActivity.Input.TOUCH_LEFT;
 					break;
@@ -120,10 +127,10 @@ public class ControlsDialogFragment extends DialogFragment {
 					if(moveSelected == R.id.move_touch_right  && changeInProgress == false) {
 						changeInProgress = true;
 						moveRadioGroup.check(R.id.move_touch_left);
+						ShootEmUpScene.shoot.transList.set(1, new Transformation(5-.75f, 0, 7));
 						changeInProgress = false;
 						//MainActivity.moveInput = MainActivity.Input.TOUCH_LEFT;
 					}
-					System.out.println("Shoot to right touch");
 					shootSelected = shootRadioGroup.getCheckedRadioButtonId();
 
 					MainActivity.shootInput = MainActivity.Input.TOUCH_RIGHT;

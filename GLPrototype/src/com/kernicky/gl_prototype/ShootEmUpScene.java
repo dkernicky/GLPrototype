@@ -360,10 +360,16 @@ public class ShootEmUpScene extends Scene {
 		for (ReflectiveModel m : modelList) {
 			m.draw(mView, mProj, lightPos);
 		}
-		pad.transList.set(0, new Transformation(shipAngle));
-		pad.draw(mView, mProj, lightPos);
-		shoot.transList.set(0, new Transformation(shipAngle));
-		shoot.draw(mView, mProj, lightPos);
+		
+		if(MainActivity.moveInput == MainActivity.Input.TOUCH_LEFT || MainActivity.moveInput == MainActivity.Input.TOUCH_RIGHT) {
+			pad.transList.set(0, new Transformation(shipAngle));
+			pad.draw(mView, mProj, lightPos);
+		}
+		if(MainActivity.shootInput == MainActivity.Input.TOUCH_LEFT || MainActivity.shootInput == MainActivity.Input.TOUCH_RIGHT) {
+			shoot.transList.set(0, new Transformation(shipAngle));
+			shoot.draw(mView, mProj, lightPos);
+		}
+		
 		for(Bomb bomb: bombList) {
 			bomb.transList.set(0, new Transformation(shipAngle));
 			bomb.draw(mView, mProj, lightPos);
