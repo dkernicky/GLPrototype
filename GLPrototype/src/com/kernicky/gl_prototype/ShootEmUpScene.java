@@ -484,6 +484,20 @@ public class ShootEmUpScene extends Scene {
 				}
 			}
 		}
+		boolean bombMagnitude = false;
+		if(MainActivity.bombInput == MainActivity.Input.TOUCH_LEFT) {
+			bombMagnitude = (MyGLSurfaceView.leftMagnitude > 150 && MyGLSurfaceView.leftMagnitude < 300);
+		}
+		else if(MainActivity.bombInput == MainActivity.Input.TOUCH_RIGHT) {
+			bombMagnitude = (MyGLSurfaceView.rightMagnitude > 150 && MyGLSurfaceView.rightMagnitude < 300);
+		}
+		else if(MainActivity.bombInput == MainActivity.Input.TILT) {
+			bombMagnitude = MainActivity.upAccel > 15;
+		}
+		if(bombMagnitude) {
+			ShootEmUpScene.ico.setRadialEffect();
+		}
+
 		ico.draw(mView, mProj, lightPos);
 	
 	}
