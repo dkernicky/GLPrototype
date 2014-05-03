@@ -20,6 +20,7 @@ package com.kernicky.gl_prototype;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -28,12 +29,14 @@ import android.hardware.SensorManager;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.Window;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.kernicky.gl_prototype.math.MatrixOp;
 import com.kernicky.gl_prototype.math.Vector;
@@ -101,13 +104,36 @@ public class MainActivity extends Activity implements SensorEventListener {
             	//android.support.v4.app.FragmentManager fm = getFragmentManager();
             	android.app.FragmentTransaction fm = getFragmentManager().beginTransaction();
                 ControlsDialogFragment dialog = new ControlsDialogFragment();
-                
-                
-                dialog.show(fm, "fdsah");
                
-           
+                dialog.show(fm, "Controls");
                
                 return true;
+            case R.id.action_help:
+            	AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            	String instructions = "Abilities: \n\n" +
+            			"	Move: Move the ship about the level \n" +
+            			"	Shoot: Shoot projectiles radially from the ship \n" +
+            			"	Boost: Increase speed for a limited amount of time \n" +
+            			"	Bomb: Send out a shockwave from the ship to destroy enemies \n" +
+            			"\n" +
+            			"Input Types: \n\n" +
+            			"	Touch (consists of finger movement on the screen): \n" +
+            			"		   For movement and shooting, this is basic finger movement. \n" +
+            			"		   For boosting and bombing, this is sudden finger movement. \n\n" +
+            			"	Tilt (consists of physical device movements): \n" +
+            			"		   For movement, this is basic basic device tilting. \n" +
+            			"	   	 For boosting and bombing, this is sudden device movement. \n";
+            	alert.setTitle("Help");
+            	// Create TextView
+            	final TextView input = new TextView (this);
+                //LayoutInflater inflater = getLayoutInflater();
+            	//final TextView input = new TextView (this);
+            	alert.setMessage(instructions);
+            	alert.setView(input);
+                //View view = inflater.inflate(R.layout.help_layout, null);
+            	//alert.setView(view);
+            	alert.show();
+            	return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

@@ -1,17 +1,16 @@
 package com.kernicky.gl_prototype;
 
-import com.kernicky.gl_prototype.models.Transformation;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
-import android.widget.Toast;
+
+import com.kernicky.gl_prototype.models.Transformation;
 
 
 
@@ -25,15 +24,15 @@ public class ControlsDialogFragment extends DialogFragment {
 	private boolean changeInProgress = false;
    private View view;
 	
-	
+
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // Get the layout inflater
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        
-
+      
         view = inflater.inflate(R.layout.controls_layout, null);
         
         builder.setView(view);
@@ -113,14 +112,14 @@ public class ControlsDialogFragment extends DialogFragment {
 						changeInProgress = true;
 						shootRadioGroup.check(R.id.shoot_touch_right);
 						//MainActivity.shootInput = MainActivity.Input.TOUCH_RIGHT;
-						ShootEmUpScene.pad.transList.set(1, new Transformation(-5+.75f, 0, 7));
 
 						changeInProgress = false;
 
 					}
+					ShootEmUpScene.pad.transList.set(1, new Transformation(-5+.75f, 0, 7));
+
 					moveSelected = moveRadioGroup.getCheckedRadioButtonId();
 					MainActivity.moveInput = MainActivity.Input.TOUCH_LEFT;
-					System.out.println("Move to left touch");
 
 
 					break;
@@ -129,10 +128,11 @@ public class ControlsDialogFragment extends DialogFragment {
 						changeInProgress = true;
 						shootRadioGroup.check(R.id.shoot_touch_left);
 						//MainActivity.shootInput = MainActivity.Input.TOUCH_LEFT;
-						ShootEmUpScene.pad.transList.set(1, new Transformation(5-.75f, 0, 7));
 
 						changeInProgress = false;
 					}
+					ShootEmUpScene.pad.transList.set(1, new Transformation(5-.75f, 0, 7));
+
 					moveSelected = moveRadioGroup.getCheckedRadioButtonId();
 					MainActivity.moveInput = MainActivity.Input.TOUCH_RIGHT;
 					break;
@@ -160,10 +160,11 @@ public class ControlsDialogFragment extends DialogFragment {
 						changeInProgress = true;
 						moveRadioGroup.check(R.id.move_touch_right);
 						changeInProgress = false;
-						ShootEmUpScene.shoot.transList.set(1, new Transformation(-5+.75f, 0, 7));
 
 						//MainActivity.moveInput = MainActivity.Input.TOUCH_RIGHT;
 					}
+					ShootEmUpScene.shoot.transList.set(1, new Transformation(-5+.75f, 0, 7));
+
 					shootSelected = shootRadioGroup.getCheckedRadioButtonId();
 					MainActivity.shootInput = MainActivity.Input.TOUCH_LEFT;
 					break;
@@ -171,10 +172,11 @@ public class ControlsDialogFragment extends DialogFragment {
 					if(moveSelected == R.id.move_touch_right  && changeInProgress == false) {
 						changeInProgress = true;
 						moveRadioGroup.check(R.id.move_touch_left);
-						ShootEmUpScene.shoot.transList.set(1, new Transformation(5-.75f, 0, 7));
 						changeInProgress = false;
 						//MainActivity.moveInput = MainActivity.Input.TOUCH_LEFT;
 					}
+					ShootEmUpScene.shoot.transList.set(1, new Transformation(5-.75f, 0, 7));
+
 					shootSelected = shootRadioGroup.getCheckedRadioButtonId();
 
 					MainActivity.shootInput = MainActivity.Input.TOUCH_RIGHT;
@@ -279,8 +281,9 @@ public class ControlsDialogFragment extends DialogFragment {
 				}
 			}
         });
-        
-        return builder.create();
+        Dialog dialog = builder.create();
+        dialog.setTitle("Edit Controls");
+        return dialog;
     }
     
     
