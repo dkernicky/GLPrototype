@@ -36,12 +36,7 @@
             android:layout_weight="1"
             android:text="Tilt" />
 
-        <TextView
-            android:id="@+id/button_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Button" />
+
     </LinearLayout>
 
     <RadioGroup
@@ -75,11 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:visibility="invisible" />
+
     </RadioGroup>
 
     <RadioGroup
@@ -113,11 +104,7 @@
             android:layout_weight="1"
             android:visibility="invisible" />
 
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:visibility="invisible" />
+
     </RadioGroup>
 
     <RadioGroup
@@ -151,11 +138,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
-        <RadioButton
-            android:id="@+id/boost_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
+       
     </RadioGroup>
 
     <RadioGroup
@@ -189,11 +172,7 @@
             android:layout_weight="1"
             android:checked="true" />
 
-        <RadioButton
-            android:id="@+id/bomb_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
+
     </RadioGroup>
 
 </LinearLayout>

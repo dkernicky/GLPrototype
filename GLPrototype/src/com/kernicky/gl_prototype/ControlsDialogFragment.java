@@ -36,23 +36,67 @@ public class ControlsDialogFragment extends DialogFragment {
 
         view = inflater.inflate(R.layout.controls_layout, null);
         
-        builder.setView(view)
+        builder.setView(view);
         // Add action buttons
-               .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                   @Override
-                   public void onClick(DialogInterface dialog, int id) {
-                       // sign in the user ...
-                   }
-               })
-               .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                   public void onClick(DialogInterface dialog, int id) {
-                   }
-               });  
+//               .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                   @Override
+//                   public void onClick(DialogInterface dialog, int id) {
+//                       // sign in the user ...
+//                   }
+//               })
+//               .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                   public void onClick(DialogInterface dialog, int id) {
+//                   }
+//               });  
         
         moveRadioGroup = (RadioGroup) view.findViewById(R.id.move);
         shootRadioGroup = (RadioGroup) view.findViewById(R.id.shoot); 
         boostRadioGroup = (RadioGroup) view.findViewById(R.id.boost); 
         bombRadioGroup = (RadioGroup) view.findViewById(R.id.bomb); 
+        
+        switch(MainActivity.moveInput) {
+        case TOUCH_LEFT:
+        	moveRadioGroup.check(R.id.move_touch_left);
+        	break;
+        case TOUCH_RIGHT:
+        	moveRadioGroup.check(R.id.move_touch_right);
+        	break;
+        case TILT:
+        	moveRadioGroup.check(R.id.move_tilt);
+        	break; 	
+        }
+        switch(MainActivity.shootInput) {
+        case TOUCH_LEFT:
+        	shootRadioGroup.check(R.id.shoot_touch_left);
+        	break;
+        case TOUCH_RIGHT:
+        	shootRadioGroup.check(R.id.shoot_touch_right);
+        	break;
+	
+        }
+        switch(MainActivity.boostInput) {
+        case TOUCH_LEFT:
+        	boostRadioGroup.check(R.id.boost_touch_left);
+        	break;
+        case TOUCH_RIGHT:
+        	boostRadioGroup.check(R.id.boost_touch_right);
+        	break;
+        case TILT:
+        	boostRadioGroup.check(R.id.boost_tilt);
+        	break; 	
+        }
+        switch(MainActivity.bombInput) {
+        case TOUCH_LEFT:
+        	bombRadioGroup.check(R.id.bomb_touch_left);
+        	break;
+        case TOUCH_RIGHT:
+        	bombRadioGroup.check(R.id.bomb_touch_right);
+        	break;
+        case TILT:
+        	bombRadioGroup.check(R.id.bomb_tilt);
+        	break; 	
+        }
+        
         
         moveSelected = moveRadioGroup.getCheckedRadioButtonId();
         shootSelected = shootRadioGroup.getCheckedRadioButtonId();
@@ -182,9 +226,7 @@ public class ControlsDialogFragment extends DialogFragment {
 
 					MainActivity.boostInput = MainActivity.Input.TILT;
 					break;
-				case R.id.boost_button:
-				
-					break;
+
 				}
 			}
         });
@@ -233,8 +275,7 @@ public class ControlsDialogFragment extends DialogFragment {
 
 					MainActivity.bombInput = MainActivity.Input.TILT;
 					break;
-				case R.id.bomb_button:
-					break;
+
 				}
 			}
         });
