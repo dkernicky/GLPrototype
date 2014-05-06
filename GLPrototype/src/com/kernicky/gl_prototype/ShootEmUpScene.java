@@ -1,16 +1,8 @@
 package com.kernicky.gl_prototype;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 
-import android.graphics.Bitmap;
 import android.opengl.Matrix;
-import android.os.Environment;
-import android.view.View;
 
 import com.kernicky.gl_prototype.math.MatrixOp;
 import com.kernicky.gl_prototype.math.Quaternion;
@@ -80,7 +72,8 @@ public class ShootEmUpScene extends Scene {
 	public static ShootButton shoot = new ShootButton();
 	
 	private int numScreenShots = 0;
-
+	
+	
 	public ShootEmUpScene() {
 		//GoldenShip ship = new GoldenShip();
 
@@ -185,6 +178,7 @@ public class ShootEmUpScene extends Scene {
 //		l8.addTransform(new Transformation(1f, -1f, -1.0f));
 //		l8.addTransform(new Transformation(0.025f));
 //		lightList.add(l8);
+		
 
 	}
 	public static void updateScore() {
@@ -288,8 +282,13 @@ public class ShootEmUpScene extends Scene {
 		
 	}
 	
-	
 	public void draw() {
+
+		updateTransforms();
+		render();
+	}
+	
+	public void render() {
 	
 //		double currentUpdate = System.currentTimeMillis();
 //		System.out.println(currentUpdate-lastUpdate);
@@ -319,7 +318,7 @@ public class ShootEmUpScene extends Scene {
 		}
 		updateCount ++;
 		
-		updateTransforms();
+		//updateTransforms();
 		//enemyList.get(0).position.print();
 		
 		Matrix.setLookAtM(mView, 0, viewQ.x, viewQ.y,

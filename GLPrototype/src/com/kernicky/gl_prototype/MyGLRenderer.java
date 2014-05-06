@@ -32,7 +32,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 	
 	public static int reflectiveProgram;
 	public static int emissiveProgram;
-
+	public static int multiColorProgram;
 	
 	private final float[] mProjMatrix = new float[16];
 
@@ -81,7 +81,21 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 		GLES20.glAttachShader(emissiveProgram, mFrag); 		// add fragment shader												
 		
 
-		GLES20.glLinkProgram(emissiveProgram); 				
+		GLES20.glLinkProgram(emissiveProgram); 
+		
+		
+		mVert = MyGLRenderer.loadShader(GLES20.GL_VERTEX_SHADER,
+				ShaderData.multiColorVertexShaderCode);
+		mFrag = MyGLRenderer.loadShader(GLES20.GL_FRAGMENT_SHADER,
+				ShaderData.multiColorFragmentShaderCode);
+
+		multiColorProgram = GLES20.glCreateProgram(); 					// create empty OpenGL Program
+
+		GLES20.glAttachShader(multiColorProgram, mVert); 			// add vertex shader									
+		GLES20.glAttachShader(multiColorProgram, mFrag); 		// add fragment shader												
+		
+
+		GLES20.glLinkProgram(multiColorProgram); 			
 	}
 	
 	@Override

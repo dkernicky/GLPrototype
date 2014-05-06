@@ -19,11 +19,11 @@ public abstract class EmissiveModel extends Model {
 //	protected int mVert;
 //	protected int mFrag;
 	protected FloatBuffer vertexBuffer;
-	private FloatBuffer normalBuffer;
+	protected FloatBuffer normalBuffer;
 
 	protected int mPositionHandle;
-	private int mNormalHandle;
-	private int mAmbHandle;
+	protected int mNormalHandle;
+	protected int mAmbHandle;
 	
 	protected int mMVPMatrixHandle;
 	protected int mMVMatrixHandle;
