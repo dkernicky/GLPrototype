@@ -36,8 +36,8 @@ public class Nemesis extends MultiColourModel {
 		position.multiply(7);
 
 		transList.set(0, new Transformation(position.x, position.y, position.z));
-		transList.set(1, new Transformation(MatrixOp.identity()));
-		transList.set(2, new Transformation(MatrixOp.identity()));
+		//transList.set(1, new Transformation(MatrixOp.identity()));
+		//transList.set(2, new Transformation(MatrixOp.identity()));
 		transList.set(3, new Transformation(90.0f, 1, 0, 0));
 		transList.set(4, new Transformation(0.8f));
 		//this.setData(setCoords(), setNormals(), setAmb(), setDiff(), setSpec(), setShine(), MyGLRenderer.reflectiveProgram);
@@ -62,8 +62,8 @@ public class Nemesis extends MultiColourModel {
 		
 		position.multiply(7);
 		transList.set(0, new Transformation(position.x, position.y, position.z));
-		transList.set(1, new Transformation(MatrixOp.identity()));
-		transList.set(2, new Transformation(MatrixOp.identity()));
+		//transList.set(1, new Transformation(MatrixOp.identity()));
+		//transList.set(2, new Transformation(MatrixOp.identity()));
 		transList.set(3, new Transformation(90.0f, 1, 0, 0));
 		transList.set(4, new Transformation(0.8f));
 		//this.setData(setCoords(), setNormals(), setAmb(), setDiff(), setSpec(), setShine(), MyGLRenderer.reflectiveProgram);
