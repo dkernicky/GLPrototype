@@ -1,9 +1,15 @@
 package com.kernicky.gl_prototype;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
+import android.content.Context;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.opengl.Matrix;
 
+import com.kernicky.gl_prototype.R.raw;
 import com.kernicky.gl_prototype.math.MatrixOp;
 import com.kernicky.gl_prototype.math.Quaternion;
 import com.kernicky.gl_prototype.math.Vector;
@@ -71,12 +77,17 @@ public class ShootEmUpScene extends Scene {
 	public static DPad pad = new DPad();
 	public static ShootButton shoot = new ShootButton();
 	
-	private int numScreenShots = 0;
+	float rate = 0.5f;
 	
+	public static SoundPool sp;
+	public static SoundPool sp2;
+	public static float volume;
+	public static int s1, s2, s3;
+	public long soundStart = System.currentTimeMillis();
+	public boolean start = false;
+	MediaPlayer mp;
 	
-	public ShootEmUpScene() {
-		//GoldenShip ship = new GoldenShip();
-
+	private void createHUDElements() {
 		for(int n = 0; n < 3; n ++) {
 			bombList.add(new Bomb(n));
 			boostList.add(new Boost(n));
@@ -84,45 +95,35 @@ public class ShootEmUpScene extends Scene {
 		}
 		for(int n = 0; n < 9; n ++) {
 			Num num = new Num(0, n);
-			num.addTransform(new Transformation(MatrixOp.identity()));
-			num.addTransform(new Transformation(MatrixOp.identity()));
 			numList.add(num);
 		}
-		
-		//enemyList.add(new Nemesis(0, 0, 1));
 		for(int n = 0; n < 5; n ++) {
 			enemyList.add(new Nemesis());
 		}
+	}
 	
+	public ShootEmUpScene() {
 		
-		//modelList.add(ship);
-
-//		Lamp l1 = new Lamp(0.0f, 0.0f, 0.0f);
-//		Lamp l2 = new Lamp(0.0f, 0.0f, 0.0f);
-//		Lamp l3 = new Lamp(0.0f, 0.0f, 0.0f);
-//		Lamp l4 = new Lamp(0.0f, 0.0f, 0.0f);
-//		Lamp l5 = new Lamp(0.0f, 0.0f, 0.0f);
-//		Lamp l6 = new Lamp(0.0f, 0.0f, 0.0f);
-//		Lamp l7 = new Lamp(0.0f, 0.0f, 0.0f);
-//		Lamp l8 = new Lamp(0.0f, 0.0f, 0.0f);
-		Lamp lo = new Lamp(0.0f, 0.0f, 0.0f);
+		createHUDElements();
+		sp = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
+		//sp2 = new SoundPool(1000, AudioManager.STREAM_MUSIC, 0);
+		s1 = sp.load(MainActivity.context, raw.phaser, 1);
+		s2 = sp.load(MainActivity.context, raw.bomb, 1);
+		s3 = sp.load(MainActivity.context, raw.background, 1);
 		
-		NewIco b = new NewIco();
-		//Base b = new Base();
-		//Frame b = new Frame();
-		//PhongCube b = new PhongCube();
-		//b.addTransform(new Transformation(0, 0, -5, 0));
-		b.transList.set(0, new Transformation(0.0f, 1, 0, 0, 0, 360));
-		b.transList.set(1, new Transformation(0.0f, 1, 0, 0, 0, 360));
-
-		b.transList.set(2, new Transformation(12f));
-		//modelList.add(b);
+		AudioManager am = (AudioManager) MainActivity.context.getSystemService(Context.AUDIO_SERVICE);
+		volume = (float) am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+		
+		
+		//sp.play(s1, volume, volume, 1, 0, rate);
 		
 		ico.transList.set(0, new Transformation(0.0f, 1, 0, 0, 0, 360));
 		ico.transList.set(1, new Transformation(0.0f, 1, 0, 0, 0, 360));
 		ico.transList.set(2, new Transformation(14f));	
 
-
+		// The ship "turret" 
+		// TODO: Place this within ship class, with code to ensure lighting updates in scene
+		Lamp lo = new Lamp(0.0f, 0.0f, 0.0f);
 		lo.transList.set(0, new Transformation(MatrixOp.identity()));
 		lo.transList.set(1, new Transformation(MatrixOp.identity()));
 		lo.transList.set(2, new Transformation(MatrixOp.identity()));
@@ -130,55 +131,27 @@ public class ShootEmUpScene extends Scene {
 		lo.transList.set(4, new Transformation(0.05f));
 		lightList.add(lo);
 		
-//		
-//		l1.addTransform(new Transformation(0, 0, 0, 1));
-//		l1.addTransform(new Transformation(0, 0, 0));
-//		l1.addTransform(new Transformation(5f, 5f, 5f));
-//		l1.addTransform(new Transformation(0.025f));
-//		lightList.add(l1);
-//
-//		l2.addTransform(new Transformation(0, 0, 0, 1));
-//		l2.addTransform(new Transformation(0, 0, 0));
-//		l2.addTransform(new Transformation(-5f, 5f, 5f));
-//		l2.addTransform(new Transformation(0.025f));
-//		lightList.add(l2);
-//
-//		l3.addTransform(new Transformation(0, 0, 0, 1));
-//		l3.addTransform(new Transformation(0, 0, 0));
-//		l3.addTransform(new Transformation(-5f, -5f, 5f));
-//		l3.addTransform(new Transformation(0.025f));
-//		lightList.add(l3);
-//
-//		l4.addTransform(new Transformation(0, 0, 0, 1));
-//		l4.addTransform(new Transformation(0, 0, 0));
-//		l4.addTransform(new Transformation(5, -5f, 5f));
-//		l4.addTransform(new Transformation(0.025f));
-//		lightList.add(l4);
-//		
-//		l5.addTransform(new Transformation(0, 0, 0, 1));
-//		l5.addTransform(new Transformation(0, 0, 0));
-//		l5.addTransform(new Transformation(5f, 5f, -5f));
-//		l5.addTransform(new Transformation(0.025f));
-//		lightList.add(l5);
-//
-//		l6.addTransform(new Transformation(0, 0, 0, 1));
-//		l6.addTransform(new Transformation(0, 0, 0));
-//		l6.addTransform(new Transformation(-5f, 5f, -5f));
-//		l6.addTransform(new Transformation(0.025f));
-//		lightList.add(l6);
-//
-//		l7.addTransform(new Transformation(0, 0, 0, 1));
-//		l7.addTransform(new Transformation(0, 0, 0));
-//		l7.addTransform(new Transformation(-1f, -1.f, -1.0f));
-//		l7.addTransform(new Transformation(0.025f));
-//		lightList.add(l7);
-//
-//		l8.addTransform(new Transformation(0, 0, 0, 1));
-//		l8.addTransform(new Transformation(0, 0, 0));
-//		l8.addTransform(new Transformation(1f, -1f, -1.0f));
-//		l8.addTransform(new Transformation(0.025f));
-//		lightList.add(l8);
 		
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				//checkCollisions();
+				mp = MediaPlayer.create(MainActivity.context, raw.backgroundlarge);
+				while(true) {
+					//long time = System.currentTimeMillis();
+					if(start == false) {
+						//System.out.println("fdswafh");
+						//soundStart = time;
+						//int n = sp.play(s3, volume, volume, 1, -1, 1.0f);
+						//if(n != 0) start = true;
+						mp.start();
+					}
+				}
+			}
+			
+		}).start();
+
 
 	}
 	public static void updateScore() {
@@ -187,18 +160,15 @@ public class ShootEmUpScene extends Scene {
 			int newNum = newScore %10;
 			if(numList.get(n).getNum() != newNum) {
 				numList.set(n, new Num(newNum, n));
-				numList.get(n).addTransform(new Transformation(MatrixOp.identity()));
+				//numList.get(n).addTransform(new Transformation(MatrixOp.identity()));
 			}
 			newScore /= 10;
 		}
 	}
 	
-	public void updateTransforms() {
+	private float[] getMovementMapping() {
 		float dxMove = 0;
 		float dyMove = 0;
-		float dxShoot = 0;
-		float dyShoot = 0;
-		
 		switch(MainActivity.moveInput) {
 		case TILT:
 			dxMove = MainActivity.orientation[2];
@@ -212,7 +182,16 @@ public class ShootEmUpScene extends Scene {
 			dxMove = MyGLSurfaceView.dxRight;
 			dyMove = MyGLSurfaceView.dyRight;
 			break;
+		default:
+			dxMove = 0;
+			dyMove = 0;
 		}
+		return new float[]{dxMove, dyMove};
+	}
+	
+	private float[] getShootingMapping() {
+		float dxShoot = 0;
+		float dyShoot = 0;
 		switch(MainActivity.shootInput) {
 		case TOUCH_LEFT:
 			dxShoot = MyGLSurfaceView.dxLeft;
@@ -223,7 +202,17 @@ public class ShootEmUpScene extends Scene {
 			dyShoot = MyGLSurfaceView.dyRight;
 			break;
 		}
-
+		return new float[]{dxShoot, dyShoot};
+	}
+	
+	public void updateTransforms() {
+		float[] dMove = getMovementMapping();
+		float dxMove = dMove[0];
+		float dyMove = dMove[1];
+		
+		float[] dShoot = getShootingMapping();
+		float dxShoot = dShoot[0];
+		float dyShoot = dShoot[1];
 		
 		// if in the middle of a boost, keep last dx, dy
 		if(ship.boostInProgress()) {
@@ -283,17 +272,18 @@ public class ShootEmUpScene extends Scene {
 	}
 	
 	public void draw() {
-
+		
+			
+		
 		updateTransforms();
 		render();
 	}
 	
-	public void render() {
-	
-//		double currentUpdate = System.currentTimeMillis();
-//		System.out.println(currentUpdate-lastUpdate);
-//		lastUpdate = currentUpdate;
+	public void checkCollisions() {
 		
+	}
+	
+	public void render() {
 		
 		if(ico.radialInProgress()) {
 			ico.setRadialEffect();
@@ -314,21 +304,32 @@ public class ShootEmUpScene extends Scene {
 		if(updateCount > 1 && ((MyGLSurfaceView.rightTouch == true && MainActivity.shootInput == MainActivity.Input.TOUCH_RIGHT) || (MyGLSurfaceView.leftTouch == true && MainActivity.shootInput == MainActivity.Input.TOUCH_LEFT))) {
 			updateCount = 0;
 			projectileList.add(new Projectile(ship.position.x, ship.position.y, ship.position.z, MatrixOp.multiplyMM(shipAngle, optionAngle), ship.position.toFloat()));
+			
+			new Thread(new Runnable() {
+
+				@Override
+				public void run() {
+					rate = 1.0f;
+					sp.play(s1, volume, volume, 1, 0, rate);
+//					rate += .05f;
+//					if(rate >= 2.0f) {
+//						rate = 0.5f;
+//					}
+				}
+				
+			}).start();
 
 		}
 		updateCount ++;
 		
 		//updateTransforms();
-		//enemyList.get(0).position.print();
 		
 		Matrix.setLookAtM(mView, 0, viewQ.x, viewQ.y,
 				viewQ.z, mCenterPos[0], mCenterPos[1], mCenterPos[2],
 				MyGLSurfaceView.y_axis[0], MyGLSurfaceView.y_axis[1], MyGLSurfaceView.y_axis[2]);
 
 		lightPosList.clear();
-		
-		//MatrixOp.printM(optionAngle);
-		
+				
 		lightList.get(0).transList.set(2, new Transformation(optionAngle));
 		lightList.get(0).transList.set(1, new Transformation(shipAngle));
 		lightList.get(0).transList.set(0, new Transformation(optionQ.x, optionQ.y, optionQ.z));
@@ -337,19 +338,6 @@ public class ShootEmUpScene extends Scene {
 		for (int m = 0; m < lightList.get(0).getMELightPos().length - 1; m++) {
 			lightPosList.add(lightList.get(0).getMELightPos()[m]);
 		}
-
-
-
-//		for (int n = 1; n < lightList.size(); n++) {
-//			//lightList.get(n).transList.set(0, new Transformation(MyGLSurfaceView.angleRight, 0, 0, 1));
-//			
-//			//lightList.get(n).transList.set(1, new Transformation(MyGLSurfaceView.angleRight, shipPosition[0], shipPosition[1], shipPosition[2]));
-//			lightList.get(n).draw(mView, mProj);
-//
-//			for (int m = 0; m < lightList.get(n).getMELightPos().length - 1; m++) {
-//				lightPosList.add(lightList.get(n).getMELightPos()[m]);
-//			}
-//		}
 
 		float[] lightPos = new float[lightPosList.size()];
 		for (int n = 0; n < lightPos.length; n++) {

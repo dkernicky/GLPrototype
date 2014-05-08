@@ -34,6 +34,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 	public static int emissiveProgram;
 	public static int multiColorProgram;
 	
+	private static final double fps = 1000.0/120.0;
+	private double lastUpdate = System.currentTimeMillis();
+	
 	private final float[] mProjMatrix = new float[16];
 
 	// Declare as volatile because we are updating it from another thread
@@ -111,7 +114,13 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 	    //GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
 
 		//s.draw(mShip);
-		s.draw();
+		
+//		double currentTime = (double) System.currentTimeMillis();
+//		if(currentTime - lastUpdate > fps) {
+			//lastUpdate = currentTime;
+			s.draw();
+		
+		//}
 
 	}
 

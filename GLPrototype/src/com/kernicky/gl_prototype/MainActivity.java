@@ -168,8 +168,10 @@ public class MainActivity extends Activity implements SensorEventListener {
 			accel = event.values;
 			upAccel = event.values[2];
 			if(upAccel > 15) {
-				if(MainActivity.bombInput == MainActivity.Input.TILT)
+				if(MainActivity.bombInput == MainActivity.Input.TILT) {
 					ShootEmUpScene.ico.setRadialEffect();
+					ShootEmUpScene.sp.play(ShootEmUpScene.s2, ShootEmUpScene.volume, ShootEmUpScene.volume, 1, 0, (float) 1.0);
+				}
 				else if(MainActivity.boostInput == MainActivity.Input.TILT) 
 					ShootEmUpScene.ship.updateSpeed();
 			}
