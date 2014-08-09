@@ -80,6 +80,7 @@ public abstract class EmissiveModel extends Model {
 		
 		Matrix.setIdentityM(mModel, 0);
 		mModel = applyTransforms(mModel);
+		
 		Matrix.multiplyMM(mModelView, 0, mView, 0, mModel, 0);
 		Matrix.multiplyMM(mModelViewProj, 0, mProj, 0, mModelView, 0);	
 		

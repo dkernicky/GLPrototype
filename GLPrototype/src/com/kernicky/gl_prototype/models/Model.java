@@ -11,7 +11,7 @@ import com.kernicky.gl_prototype.math.Vector;
 public class Model {
 	public int time = 0;
 	public ArrayList<Transformation> transList = new ArrayList<Transformation>(10);
-	public ArrayList<EmissiveModel> subList = new ArrayList<EmissiveModel>();
+	public ArrayList<Model> subList = new ArrayList<Model>();
 	
 	protected int currentTick = 0;
 	protected int maxTick = 1;

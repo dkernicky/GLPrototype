@@ -1,6 +1,5 @@
 package com.kernicky.gl_prototype;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import android.content.Context;
@@ -20,6 +19,7 @@ import com.kernicky.gl_prototype.models.GoldenShip;
 import com.kernicky.gl_prototype.models.Lamp;
 import com.kernicky.gl_prototype.models.Life;
 import com.kernicky.gl_prototype.models.Nemesis;
+import com.kernicky.gl_prototype.models.NemesisDestruct;
 import com.kernicky.gl_prototype.models.NewIco;
 import com.kernicky.gl_prototype.models.Num;
 import com.kernicky.gl_prototype.models.Projectile;
@@ -85,6 +85,7 @@ public class ShootEmUpScene extends Scene {
 	public static int s1, s2, s3;
 	public long soundStart = System.currentTimeMillis();
 	public boolean start = false;
+	public static boolean running = false;
 	MediaPlayer mp;
 	
 	private void createHUDElements() {
@@ -97,17 +98,19 @@ public class ShootEmUpScene extends Scene {
 			Num num = new Num(0, n);
 			numList.add(num);
 		}
-		for(int n = 0; n < 5; n ++) {
+		for(int n = 0; n < 1; n ++) {
 			enemyList.add(new Nemesis());
+
 		}
+		
 	}
 	
 	public ShootEmUpScene() {
-		
+		running = true;
 		createHUDElements();
 		sp = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
 		//sp2 = new SoundPool(1000, AudioManager.STREAM_MUSIC, 0);
-		s1 = sp.load(MainActivity.context, raw.phaser, 1);
+		s1 = sp.load(MainActivity.context, raw.phaser2, 1);
 		s2 = sp.load(MainActivity.context, raw.bomb, 1);
 		s3 = sp.load(MainActivity.context, raw.background, 1);
 		
@@ -132,25 +135,25 @@ public class ShootEmUpScene extends Scene {
 		lightList.add(lo);
 		
 		
-		new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				//checkCollisions();
-				mp = MediaPlayer.create(MainActivity.context, raw.backgroundlarge);
-				while(true) {
-					//long time = System.currentTimeMillis();
-					if(start == false) {
-						//System.out.println("fdswafh");
-						//soundStart = time;
-						//int n = sp.play(s3, volume, volume, 1, -1, 1.0f);
-						//if(n != 0) start = true;
-						mp.start();
-					}
-				}
-			}
-			
-		}).start();
+//		new Thread(new Runnable() {
+//
+//			@Override
+//			public void run() {
+//				//checkCollisions();
+//				//mp = MediaPlayer.create(MainActivity.context, raw.backgroundlarge);
+//				while(true) {
+//					//long time = System.currentTimeMillis();
+//					//if(start == false) {
+//						//System.out.println("fdswafh");
+//						//soundStart = time;
+//						//int n = sp.play(s3, volume, volume, 1, -1, 1.0f);
+//						//if(n != 0) start = true;
+//					//	mp.start();
+//					//}
+//				}
+//			}
+//			
+//		}).start();
 
 
 	}
@@ -371,34 +374,41 @@ public class ShootEmUpScene extends Scene {
 		}
 
 		for (Nemesis m : enemyList) {
-			if(ico.radialInProgress() && ico.radialEffect > 10) {
-				m.setAmb(new float[]{0.0f, 1.0f, 0.0f});
-				m.draw(mView, mProj, lightPos);
-				enemyList.remove(m);
-				score += 1;
-				updateScore();
-				enemyList.add(new Nemesis());
-				break;
-			}
-			else if(ship.boostInProgress()){
-				m.updateKinematics();
-				float[] sp = Vector.normalize(ship.position.toFloat());
-				float[] ep = Vector.normalize(m.position.toFloat());
-				if(Vector.dot(sp, ep) >= .99) {
+			if(m.getClass().equals(Nemesis.class)) {
+				if(ico.radialInProgress() && ico.radialEffect > 10) {
 					m.setAmb(new float[]{0.0f, 1.0f, 0.0f});
 					m.draw(mView, mProj, lightPos);
-					enemyList.remove(m);
+					int index = enemyList.indexOf(m);
+					enemyList.set(index, new NemesisDestruct(m.position.x, m.position.y, m.position.z));
+					//enemyList.remove(m);
 					score += 1;
 					updateScore();
-					enemyList.add(new Nemesis());
+					//enemyList.add(new Nemesis());
 					break;
 				}
-				else
-					m.draw(mView, mProj, lightPos);
+				else if(ship.boostInProgress()){
+					m.updateKinematics();
+					float[] sp = Vector.normalize(ship.position.toFloat());
+					float[] ep = Vector.normalize(m.position.toFloat());
+					if(Vector.dot(sp, ep) >= .99) {
+						m.setAmb(new float[]{0.0f, 1.0f, 0.0f});
+						m.draw(mView, mProj, lightPos);
+						enemyList.remove(m);
+						score += 1;
+						updateScore();
+						enemyList.add(new Nemesis());
+						break;
+					}
+					else
+						m.draw(mView, mProj, lightPos);
+				}
+				else {
+					m.updateKinematics();
+					m.draw(mView, mProj, lightPos);			
+				}
 			}
 			else {
-				m.updateKinematics();
-				m.draw(mView, mProj, lightPos);			
+				m.draw(mView, mProj, lightPos);	
 			}
 
 		}
@@ -420,6 +430,7 @@ public class ShootEmUpScene extends Scene {
 				if(Vector.dot(p1, e1) >= .99) {
 					if(m.health <= 0 ) {
 						enemyList.remove(m);
+
 						score += 1;
 						updateScore();
 						p.destroyed = true;

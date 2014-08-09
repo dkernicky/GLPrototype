@@ -171,10 +171,10 @@ public class Num extends ReflectiveModel {
 		mModel = applyTransforms(mModel);
 
 		//System.out.println("****");
-		for(EmissiveModel m: subList) {
+		for(Model m: subList) {
 			//m.position.print();
 			//m.addTransformToFront(new Transformation(mModel));
-			m.draw(mModel, mView, mProj, mLightPos);
+			((EmissiveModel) m).draw(mModel, mView, mProj, mLightPos);
 		}
 		currentTick = (currentTick + 1) % maxTick;
 

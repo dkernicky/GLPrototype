@@ -26,7 +26,7 @@ public class Nemesis extends ReflectiveModel {
 		
 		position.multiply(7);
 
-		transList.set(0, new Transformation(position.x, position.y, position.z));
+		transList.set(1, new Transformation(position.x, position.y, position.z));
 		//transList.set(1, new Transformation(MatrixOp.identity()));
 		//transList.set(2, new Transformation(MatrixOp.identity()));
 		transList.set(3, new Transformation(90.0f, 1, 0, 0));

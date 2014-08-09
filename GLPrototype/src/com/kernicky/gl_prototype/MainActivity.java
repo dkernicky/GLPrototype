@@ -238,6 +238,7 @@ class MyGLSurfaceView extends GLSurfaceView {
  
     @Override
 	public void onPause() {
+    	ShootEmUpScene.running = false;
     }
     
     @Override
